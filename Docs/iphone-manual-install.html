@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>habitOS — Guía de Instalación iPhone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,500;1,500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --vanilla: #F6F3EE;
+            --ink: #1C1D1A;
+            --sage: #6F7C68;
+            --line: #DCD8CF;
+            --paper: #FEFDFB;
+            --shadow: 0 18px 48px rgba(0, 0, 0, .06);
+            --radius: 18px;
+        }
+
+        body {
+            margin: 0;
+            background: var(--vanilla);
+            color: var(--ink);
+            font-family: Inter, sans-serif;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: "Playfair Display", serif;
+            font-weight: 500;
+            font-size: 32px;
+            margin: 0 0 10px 0;
+        }
+
+        h1 .os {
+            font-style: italic;
+            color: var(--sage);
+        }
+
+        .kicker {
+            font-size: 10px;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 600;
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .number {
+            width: 30px;
+            height: 30px;
+            background: var(--sage);
+            color: var(--vanilla);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .text h3 {
+            margin: 0 0 8px 0;
+            font-family: "Playfair Display", serif;
+            font-size: 20px;
+        }
+
+        .text p {
+            margin: 0;
+            font-size: 14px;
+            color: rgba(28, 29, 26, .7);
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(111, 124, 104, .05);
+            border-radius: 12px;
+            border: 1px dashed var(--sage);
+            font-size: 13px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--line);
+            margin-top: 40px;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="kicker">Manual de Despliegue</div>
+            <h1>habit<span class="os">OS</span> en tu iPhone</h1>
+        </header>
+
+        <div class="card">
+            <div class="step">
+                <div class="number">1</div>
+                <div class="text">
+                    <h3>Conecta tu iPhone</h3>
+                    <p>Usa un cable USB/Lightning para conectar tu iPhone al Mac. Si es la primera vez, pulsa "Confiar"
+                        en la pantalla del iPhone e introduce tu código.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="number">2</div>
+                <div class="text">
+                    <h3>Selecciona el Destino</h3>
+                    <p>En la barra superior de Xcode, haz clic donde dice "iPhone 17 Pro" (o tu simulador actual) y
+                        elige tu iPhone real en la sección "iOS Devices".</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="number">3</div>
+                <div class="text">
+                    <h3>Lanza la App</h3>
+                    <p>Pulsa el botón <strong>Play</strong> (Command + R). Xcode compilará el código y lo enviará
+                        directamente a tu teléfono. Tardará menos de 1 minuto.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="number">4</div>
+                <div class="text">
+                    <h3>Confía en el Desarrollador</h3>
+                    <p>Si la app no abre sola, ve a tu iPhone: <strong>Ajustes > General > Gestión de
+                            dispositivos</strong>. Busca tu Apple ID y pulsa en "Confiar".</p>
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Tiempo estimado:</strong> 2-3 minutos.<br>
+                <em>Recuerda que con una cuenta gratuita, la app caduca cada 7 días (tendrás que volver a darle al Play
+                    en Xcode).</em>
+            </div>
+        </div>
+
+        <div class="footer">
+            © habitOS · SILENT LUXURY · 2026
+        </div>
+    </div>
+</body>
+
+</html>

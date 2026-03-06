@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>habitOS — Brand Book</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            /* Brand palette */
+            --vanilla: #F6F3EE;
+            --ink: #1C1D1A;
+            --sage: #6F7C68;
+            --line: #DCD8CF;
+
+            /* UI tokens */
+            --paper: #FEFDFB;
+            --muted: rgba(28, 29, 26, .68);
+            --muted2: rgba(28, 29, 26, .52);
+            --shadow: 0 18px 48px rgba(0, 0, 0, .06);
+            --shadow2: 0 10px 30px rgba(0, 0, 0, .05);
+            --radius: 18px;
+            --radius2: 14px;
+
+            --max: 1180px;
+            --pad: clamp(18px, 3.2vw, 44px);
+            --ease: cubic-bezier(.16, 1, .3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: var(--vanilla);
+            color: var(--ink);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: .92;
+        }
+
+        code,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        ::selection {
+            background: rgba(111, 124, 104, .18);
+        }
+
+        /* Layout */
+        .shell {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 28px 22px;
+            border-right: 1px solid var(--line);
+            background:
+                radial-gradient(closest-side, rgba(111, 124, 104, .10), rgba(111, 124, 104, 0) 70%),
+                linear-gradient(180deg, rgba(254, 253, 251, .65), rgba(246, 243, 238, .85));
+            overflow: auto;
+        }
+
+        .brandmark {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 14px 14px 18px;
+            border: 1px solid rgba(220, 216, 207, .8);
+            border-radius: var(--radius);
+            background: rgba(254, 253, 251, .75);
+            box-shadow: var(--shadow2);
+        }
+
+        .brandmark .logo {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 30px;
+            letter-spacing: -0.01em;
+            line-height: 1.05;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .brandmark .logo .os {
+            font-style: italic;
+            color: var(--sage);
+            font-weight: 500;
+        }
+
+        .brandmark .meta {
+            font-size: 12px;
+            color: var(--muted);
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            line-height: 1.4;
+        }
+
+        .nav {
+            margin-top: 18px;
+            padding: 8px 6px;
+        }
+
+        .nav .kicker {
+            font-size: 10px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: var(--muted2);
+            margin: 16px 10px 8px;
+        }
+
+        .nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 10px;
+            border-radius: 12px;
+            transition: background .35s var(--ease), border-color .35s var(--ease);
+            border: 1px solid transparent;
+            font-size: 13px;
+            color: rgba(28, 29, 26, .88);
+        }
+
+        .nav a:hover {
+            background: rgba(254, 253, 251, .8);
+            border-color: rgba(220, 216, 207, .85);
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 99px;
+            background: rgba(111, 124, 104, .6);
+            flex: 0 0 auto;
+            box-shadow: 0 0 0 6px rgba(111, 124, 104, .10);
+        }
+
+        .side-note {
+            margin-top: 20px;
+            padding: 14px 14px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(220, 216, 207, .85);
+            background: rgba(254, 253, 251, .72);
+            box-shadow: var(--shadow2);
+            color: var(--muted);
+            font-size: 12.5px;
+            line-height: 1.6;
+        }
+
+        .side-note strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        /* Main */
+        main {
+            padding: 0;
+        }
+
+        .wrap {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 0 var(--pad);
+        }
+
+        /* Section base */
+        section {
+            padding: clamp(54px, 7vw, 110px) 0;
+            border-bottom: 1px solid rgba(220, 216, 207, .85);
+            position: relative;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 26px;
+        }
+
+        .kicker {
+            font-size: 10.5px;
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            color: var(--sage);
+            font-weight: 600;
+            margin: 0 0 12px 0;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            margin: 0;
+        }
+
+        .title-xl {
+            font-size: clamp(42px, 5.4vw, 84px);
+            line-height: 1.02;
+        }
+
+        .title-lg {
+            font-size: clamp(30px, 3.2vw, 54px);
+            line-height: 1.08;
+        }
+
+        .title-md {
+            font-size: clamp(22px, 2vw, 32px);
+            line-height: 1.18;
+        }
+
+        p {
+            margin: 0 0 14px 0;
+            color: rgba(28, 29, 26, .86);
+            font-size: 15.5px;
+            line-height: 1.85;
+        }
+
+        .lead {
+            font-size: 18px;
+            line-height: 1.9;
+            color: rgba(28, 29, 26, .78);
+            max-width: 74ch;
+        }
+
+        .fine {
+            font-size: 12.5px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        /* Editorial blocks */
+        .paper {
+            background: rgba(254, 253, 251, .78);
+            border: 1px solid rgba(220, 216, 207, .9);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 22px 22px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1.25fr .75fr;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(220, 216, 207, .95);
+            margin: 18px 0;
+        }
+
+        /* Cover */
+        .cover {
+            padding-top: clamp(66px, 9vw, 128px);
+            background:
+                radial-gradient(closest-side, rgba(111, 124, 104, .12), rgba(111, 124, 104, 0) 70%),
+                radial-gradient(closest-side, rgba(220, 216, 207, .35), rgba(220, 216, 207, 0) 65%),
+                linear-gradient(180deg, rgba(246, 243, 238, .55), rgba(246, 243, 238, 1));
+        }
+
+        .cover .stamp {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 216, 207, .9);
+            background: rgba(254, 253, 251, .7);
+            color: rgba(28, 29, 26, .72);
+            font-size: 12px;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            box-shadow: var(--shadow2);
+        }
+
+        .cover .stamp .pill {
+            width: 8px;
+            height: 8px;
+            border-radius: 99px;
+            background: rgba(111, 124, 104, .7);
+            box-shadow: 0 0 0 7px rgba(111, 124, 104, .12);
+        }
+
+        .cover .meta-row {
+            margin-top: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            color: rgba(28, 29, 26, .7);
+            font-size: 13px;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .cover .meta-row span {
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(220, 216, 207, .9);
+        }
+
+        /* Logo guidance */
+        .logo-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+            border: 1px solid rgba(220, 216, 207, .9);
+            border-radius: var(--radius);
+            background:
+                linear-gradient(90deg, rgba(220, 216, 207, .35), rgba(220, 216, 207, 0) 35%, rgba(220, 216, 207, 0) 65%, rgba(220, 216, 207, .35));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-box .mark {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 56px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            color: var(--ink);
+        }
+
+        .logo-box .mark .os {
+            font-style: italic;
+            color: var(--sage);
+        }
+
+        .logo-box .guides {
+            position: absolute;
+            inset: 14px;
+            border: 1px dashed rgba(111, 124, 104, .35);
+            border-radius: calc(var(--radius) - 8px);
+            pointer-events: none;
+        }
+
+        .logo-diagram {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .rule-list {
+            margin: 0;
+            padding-left: 18px;
+            color: rgba(28, 29, 26, .82);
+            font-size: 14.5px;
+            line-height: 1.85;
+        }
+
+        .rule-list li {
+            margin: 8px 0;
+        }
+
+        .do-dont {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .card {
+            border: 1px solid rgba(220, 216, 207, .9);
+            border-radius: var(--radius2);
+            background: rgba(254, 253, 251, .72);
+            padding: 14px 14px;
+            box-shadow: var(--shadow2);
+        }
+
+        .card .tag {
+            font-size: 10px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .62);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .tag .ok {
+            width: 9px;
+            height: 9px;
+            border-radius: 99px;
+            background: rgba(111, 124, 104, .7);
+        }
+
+        .tag .bad {
+            width: 9px;
+            height: 9px;
+            border-radius: 99px;
+            background: rgba(28, 29, 26, .35);
+        }
+
+        .dont-example {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 34px;
+            color: rgba(28, 29, 26, .42);
+            letter-spacing: -0.02em;
+        }
+
+        .dont-example .os {
+            font-style: normal;
+            color: rgba(111, 124, 104, .35);
+        }
+
+        .dont-wrong {
+            filter: blur(0.2px);
+        }
+
+        /* Color palette */
+        .swatches {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        .swatch {
+            border-radius: var(--radius2);
+            border: 1px solid rgba(220, 216, 207, .9);
+            overflow: hidden;
+            background: rgba(254, 253, 251, .65);
+            box-shadow: var(--shadow2);
+        }
+
+        .swatch .chip {
+            height: 90px;
+            border-bottom: 1px solid rgba(220, 216, 207, .9);
+        }
+
+        .swatch .info {
+            padding: 12px 12px;
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: rgba(28, 29, 26, .78);
+        }
+
+        .swatch .name {
+            font-weight: 600;
+            color: rgba(28, 29, 26, .92);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .swatch code {
+            display: block;
+            margin-top: 8px;
+            color: rgba(28, 29, 26, .62);
+            font-size: 12px;
+        }
+
+        .ratio {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .ratio .bar {
+            flex: 1 1 340px;
+            height: 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(220, 216, 207, .9);
+            overflow: hidden;
+            background: rgba(254, 253, 251, .7);
+            box-shadow: var(--shadow2);
+        }
+
+        .ratio .bar span {
+            display: block;
+            height: 100%;
+            float: left;
+        }
+
+        .ratio .label {
+            font-size: 12px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .68);
+            white-space: nowrap;
+        }
+
+        /* Type scale */
+        .type-samples {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .type-row {
+            border: 1px solid rgba(220, 216, 207, .9);
+            border-radius: var(--radius2);
+            background: rgba(254, 253, 251, .72);
+            padding: 14px 14px;
+            box-shadow: var(--shadow2);
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .type-row .label {
+            font-size: 10px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .62);
+        }
+
+        .type-row .example {
+            margin: 0;
+        }
+
+        .sample-h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 46px;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            font-weight: 500;
+        }
+
+        .sample-h2 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 30px;
+            line-height: 1.14;
+            letter-spacing: -0.02em;
+            font-weight: 500;
+        }
+
+        .sample-h3 {
+            font-family: Inter, sans-serif;
+            font-size: 12px;
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--sage);
+        }
+
+        .sample-p {
+            font-family: Inter, sans-serif;
+            font-size: 15.5px;
+            line-height: 1.85;
+            color: rgba(28, 29, 26, .82);
+        }
+
+        /* Voice table */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+            border-radius: var(--radius);
+            border: 1px solid rgba(220, 216, 207, .9);
+            background: rgba(254, 253, 251, .75);
+            box-shadow: var(--shadow);
+            margin-top: 14px;
+        }
+
+        th,
+        td {
+            padding: 14px 14px;
+            vertical-align: top;
+            border-bottom: 1px solid rgba(220, 216, 207, .85);
+            font-size: 14.5px;
+            line-height: 1.75;
+        }
+
+        th {
+            font-size: 10.5px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .62);
+            text-align: left;
+            background: rgba(246, 243, 238, .65);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .quote {
+            padding: 18px 18px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(220, 216, 207, .9);
+            background: rgba(254, 253, 251, .75);
+            box-shadow: var(--shadow2);
+            margin-top: 14px;
+        }
+
+        .quote p {
+            margin: 0;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 26px;
+            line-height: 1.25;
+            color: rgba(28, 29, 26, .90);
+            letter-spacing: -0.01em;
+        }
+
+        .quote .by {
+            margin-top: 10px;
+            font-size: 11px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .58);
+            font-family: Inter, sans-serif;
+        }
+
+        /* Photo guidance */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .photo-card {
+            border-radius: var(--radius);
+            border: 1px solid rgba(220, 216, 207, .9);
+            background: rgba(254, 253, 251, .75);
+            box-shadow: var(--shadow2);
+            overflow: hidden;
+        }
+
+        .photo-card .top {
+            padding: 14px 14px;
+            border-bottom: 1px solid rgba(220, 216, 207, .85);
+            background: rgba(246, 243, 238, .65);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .photo-card .top .label {
+            font-size: 10.5px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .62);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .photo-card .top .pill {
+            width: 9px;
+            height: 9px;
+            border-radius: 99px;
+        }
+
+        .pill.ok {
+            background: rgba(111, 124, 104, .72);
+        }
+
+        .pill.no {
+            background: rgba(28, 29, 26, .34);
+        }
+
+        .photo-card .body {
+            padding: 14px 14px;
+            color: rgba(28, 29, 26, .80);
+            font-size: 14.5px;
+            line-height: 1.85;
+        }
+
+        .photo-card ul {
+            margin: 10px 0 0 0;
+            padding-left: 18px;
+            color: rgba(28, 29, 26, .78);
+            font-size: 14.5px;
+            line-height: 1.85;
+        }
+
+        .photo-card li {
+            margin: 6px 0;
+        }
+
+        /* IA + Human ecosystem */
+        .system {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        .system .box {
+            border-radius: var(--radius);
+            border: 1px solid rgba(220, 216, 207, .9);
+            background: rgba(254, 253, 251, .75);
+            box-shadow: var(--shadow2);
+            padding: 16px 16px;
+        }
+
+        .system .box .head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .system .box .head .name {
+            font-family: "Playfair Display", Georgia, serif;
+            font-weight: 500;
+            font-size: 22px;
+            letter-spacing: -0.01em;
+        }
+
+        .system .box .head .tag {
+            font-size: 10px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .62);
+            margin: 0;
+        }
+
+        .callout {
+            margin-top: 14px;
+            padding: 16px 16px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(111, 124, 104, .26);
+            background: rgba(111, 124, 104, .10);
+            box-shadow: var(--shadow2);
+        }
+
+        .callout .k {
+            font-size: 10px;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: rgba(28, 29, 26, .62);
+        }
+
+        .callout p {
+            margin: 10px 0 0 0;
+        }
+
+        /* Footer */
+        .doc-footer {
+            padding: 36px 0 70px;
+            color: rgba(28, 29, 26, .60);
+            font-size: 12.5px;
+            line-height: 1.7;
+            letter-spacing: .06em;
+        }
+
+        /* Responsive */
+        @media (max-width: 980px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: relative;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .swatches {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .photo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .system {
+                grid-template-columns: 1fr;
+            }
+
+            .type-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="shell">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="brandmark">
+                <h1 class="logo">habit<span class="os">OS</span></h1>
+                <div class="meta">
+                    Brand Book<br />
+                    Nutrición clínica & planes estratégicos<br />
+                    Lujo silencioso · IA + Humano
+                </div>
+            </div>
+
+            <nav class="nav">
+                <div class="kicker">Contenido</div>
+                <a href="#portada"><span class="dot"></span> 1. Portada</a>
+                <a href="#manifiesto"><span class="dot"></span> 2. Manifiesto</a>
+                <a href="#logotipo"><span class="dot"></span> 3. Logotipo</a>
+                <a href="#color"><span class="dot"></span> 4. Color</a>
+                <a href="#tipografia"><span class="dot"></span> 5. Tipografía</a>
+                <a href="#voz"><span class="dot"></span> 6. Voz y tono</a>
+                <a href="#foto"><span class="dot"></span> 7. Dirección fotográfica</a>
+                <a href="#ecosistema"><span class="dot"></span> 8. IA + humano</a>
+            </nav>
+
+            <div class="side-note">
+                <strong>Principio rector:</strong> Si algo se siente “gimnasio”, “dieta de internet” o “app agresiva”,
+                está mal.
+                <br /><br />
+                habitOS se comporta como una clínica suiza hablando con un cliente VIP: calma, precisión y respeto.
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <main>
+            <!-- 1. PORTADA -->
+            <section class="cover" id="portada">
+                <div class="wrap">
+                    <div class="stamp">
+                        <span class="pill"></span>
+                        Manual de Marca · Edición 1.0
+                    </div>
+
+                    <div style="margin-top:22px;">
+                        <div class="kicker">habitOS · Brand Book</div>
+                        <h1 class="title-xl">Lujo silencioso<br />para la nutrición clínica</h1>
+                        <p class="lead" style="margin-top:18px;">
+                            Este documento establece el sistema visual y verbal de <strong>habitOS</strong>. No es un
+                            conjunto de “preferencias”.
+                            Es un marco de coherencia: cómo se ve, cómo suena y cómo se siente la marca en cada punto de
+                            contacto — web,
+                            PDF de planes, emails, redes, onboarding y atención al cliente.
+                        </p>
+
+                        <div class="meta-row">
+                            <span>Fecha: <strong style="letter-spacing:0; text-transform:none;">{{ fecha
+                                    }}</strong></span>
+                            <span>Responsable: <strong style="letter-spacing:0; text-transform:none;">Mery (Head
+                                    Coach)</strong></span>
+                            <span>Versión: <strong style="letter-spacing:0; text-transform:none;">1.0</strong></span>
+                        </div>
+
+                        <div class="grid" style="margin-top:30px;">
+                            <div class="paper">
+                                <div class="kicker">Resumen ejecutivo</div>
+                                <p>
+                                    habitOS nace para el cliente que ya lo ha probado todo y no quiere volver a empezar
+                                    “otra dieta”.
+                                    Aquí no vendemos restricción: vendemos <strong>estrategia</strong>. Una arquitectura
+                                    nutricional que encaja con una
+                                    vida real — exigente, social, mediterránea — y que puede sostenerse.
+                                </p>
+                                <p>
+                                    La IA aporta precisión matemática (macros, estructura, ajustes). El humano aporta
+                                    criterio, empatía y contexto.
+                                    El resultado no es un “plan”: es un <strong>sistema</strong>.
+                                </p>
+                            </div>
+
+                            <div class="paper">
+                                <div class="kicker">Propuesta de valor</div>
+                                <p style="margin-bottom:10px;"><strong>Precisión</strong> sin obsesión.</p>
+                                <p style="margin-bottom:10px;"><strong>Elegancia</strong> sin postureo.</p>
+                                <p style="margin-bottom:10px;"><strong>Resultados</strong> sin cultura de la dieta.</p>
+                                <div class="divider"></div>
+                                <p class="fine">
+                                    “High-ticket” no significa caro: significa cuidado. La experiencia debe sentirse a
+                                    la altura de un servicio premium:
+                                    claridad, ritmo, tacto y confianza.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="doc-footer">
+                        © habitOS · Documento interno de marca. Uso restringido a proveedores autorizados.
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. MANIFIESTO -->
+            <section id="manifiesto">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">El manifiesto</div>
+                            <h2 class="title-lg">Nutrición que se sostiene.<br />Estética que inspira.</h2>
+                        </div>
+                        <div class="fine" style="max-width:44ch;">
+                            El manifiesto es el filtro creativo. Si una decisión no encaja con esto, se descarta.
+                        </div>
+                    </div>
+
+                    <div class="paper">
+                        <p>
+                            No creemos en el castigo. No creemos en el “lunes empiezo”. No creemos en una vida medida
+                            por una báscula.
+                        </p>
+                        <p>
+                            Creemos en un principio más fuerte: <strong>la adherencia</strong>. La adherencia no se
+                            compra con motivación; se diseña
+                            con contexto, con opciones, con estructura y con belleza.
+                        </p>
+                        <p>
+                            habitOS es la versión adulta de la nutrición: clínica, elegante y humana. La tecnología
+                            calcula. El humano comprende.
+                            La estrategia une ambas cosas en una sola dirección: resultados sostenibles.
+                        </p>
+                        <p>
+                            En habitOS la comida entra por los ojos porque la vida también. Mediterráneo no es una
+                            etiqueta: es luz natural,
+                            cerámica mate, ingredientes vivos, sobremesa y calma. Un estilo que no grita. Un lujo que no
+                            necesita demostrarse.
+                        </p>
+                        <div class="divider"></div>
+                        <div class="quote">
+                            <p>“El objetivo no es comer perfecto. El objetivo es vivir mejor sin pelearte con la
+                                comida.”</p>
+                            <div class="by">habitOS · Principio fundador</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" style="margin-top:18px;">
+                        <div class="paper">
+                            <div class="kicker">Lo que defendemos</div>
+                            <ul class="rule-list">
+                                <li>Planes con opciones: la estrategia se adapta, no se rompe.</li>
+                                <li>Lenguaje clínico accesible: precisión sin condescendencia.</li>
+                                <li>Estética mediterránea: inspiración sin clichés fitness.</li>
+                                <li>Progreso medible: datos útiles, no ruido.</li>
+                            </ul>
+                        </div>
+                        <div class="paper">
+                            <div class="kicker">Lo que rechazamos</div>
+                            <ul class="rule-list">
+                                <li>Cultura de la dieta: culpa, castigo, “cheat meals”.</li>
+                                <li>Visuales de básculas, cintas métricas, “antes/después”.</li>
+                                <li>Promesas mágicas o bro-science.</li>
+                                <li>Diseño agresivo: saturación, urgencia, manipulación.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. LOGOTIPO -->
+            <section id="logotipo">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">El logotipo</div>
+                            <h2 class="title-lg">habit<span style="font-style:italic; color:var(--sage);">OS</span></h2>
+                        </div>
+                        <div class="fine" style="max-width:46ch;">
+                            El logotipo es el ancla de credibilidad. No se improvisa ni se “adapta” a gusto del
+                            proveedor.
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="paper">
+                            <div class="kicker">Construcción</div>
+                            <p>
+                                El nombre se escribe siempre como <strong>habitOS</strong>. La “OS” se presenta en
+                                mayúscula e itálica cuando la tipografía lo permite:
+                                <strong>habit<span
+                                        style="font-family:'Playfair Display', Georgia, serif; font-style:italic; color:var(--sage);">OS</span></strong>.
+                            </p>
+                            <p>
+                                La intención es clara: <strong>habit</strong> representa el hábito (lo humano, lo
+                                cotidiano). <strong><em>OS</em></strong> representa el sistema operativo:
+                                la estrategia, la estructura y la precisión. La itálica introduce un gesto editorial —
+                                sutil, premium, nada tecnológico.
+                            </p>
+                            <div class="divider"></div>
+                            <ul class="rule-list">
+                                <li><strong>Tipografía:</strong> Playfair Display (o sustituto aprobado si no está
+                                    disponible).</li>
+                                <li><strong>Estilo:</strong> “OS” en itálica y color Sage (#6F7C68) en la mayoría de
+                                    usos.</li>
+                                <li><strong>Espaciado:</strong> sin tracking exagerado; la elegancia está en el blanco y
+                                    la proporción.</li>
+                                <li><strong>Jerarquía:</strong> el logotipo nunca compite con titulares o fotografías.
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <div class="logo-box">
+                                <div class="guides"></div>
+                                <div class="mark">habit<span class="os">OS</span></div>
+                            </div>
+
+                            <div class="logo-diagram">
+                                <div class="paper">
+                                    <div class="kicker">Área de respeto (clearspace)</div>
+                                    <p class="fine" style="margin:0;">
+                                        El clearspace mínimo alrededor del logotipo es <strong>1×</strong> la altura de
+                                        la “h” (x = altura de la h).
+                                        Nada puede entrar en esa zona: ni texto, ni iconos, ni bordes.
+                                    </p>
+                                    <div class="divider"></div>
+                                    <p class="fine" style="margin:0;">
+                                        Regla práctica: si dudas, deja más aire. habitOS vive del espacio.
+                                    </p>
+                                </div>
+
+                                <div class="paper">
+                                    <div class="kicker">Tamaño mínimo</div>
+                                    <p class="fine" style="margin:0;">
+                                        <strong>Digital:</strong> mínimo 120px de ancho para asegurar legibilidad de la
+                                        itálica y el contraste de color.
+                                        <br /><strong>Impresión:</strong> mínimo 25mm de ancho.
+                                    </p>
+                                    <div class="divider"></div>
+                                    <p class="fine" style="margin:0;">
+                                        Para favicon/app icon, se usa un isotipo/monograma (si existe). No se fuerza el
+                                        wordmark a tamaños microscópicos.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="paper" style="margin-top:18px;">
+                        <div class="kicker">Usos correctos e incorrectos</div>
+                        <div class="do-dont">
+                            <div class="card">
+                                <div class="tag"><span class="ok"></span> Cómo SÍ</div>
+                                <div
+                                    style="font-family:'Playfair Display', Georgia, serif; font-size:38px; letter-spacing:-0.01em;">
+                                    habit<span style="font-style:italic; color:var(--sage);">OS</span>
+                                </div>
+                                <p class="fine" style="margin-top:10px;">
+                                    Conserva la itálica en “OS”. Usa Sage para el gesto editorial. Mantén aire
+                                    alrededor.
+                                </p>
+                            </div>
+
+                            <div class="card">
+                                <div class="tag"><span class="bad"></span> Cómo NO</div>
+                                <div class="dont-example dont-wrong">
+                                    HABIT<span class="os">os</span>
+                                </div>
+                                <p class="fine" style="margin-top:10px;">
+                                    No cambies mayúsculas/minúsculas, no elimines la itálica de “OS”, no uses “os” en
+                                    minúscula.
+                                </p>
+                            </div>
+
+                            <div class="card">
+                                <div class="tag"><span class="bad"></span> Cómo NO</div>
+                                <div class="dont-example dont-wrong" style="transform:skewX(-12deg);">
+                                    habit<span class="os">OS</span>
+                                </div>
+                                <p class="fine" style="margin-top:10px;">
+                                    No deformes el logotipo (skew, stretch, condensado). La elegancia no se negocia.
+                                </p>
+                            </div>
+
+                            <div class="card">
+                                <div class="tag"><span class="bad"></span> Cómo NO</div>
+                                <div class="dont-example dont-wrong" style="letter-spacing:.18em;">
+                                    habit<span class="os">OS</span>
+                                </div>
+                                <p class="fine" style="margin-top:10px;">
+                                    No añadas tracking excesivo ni efectos “fashion” gratuitos. La marca ya es editorial
+                                    por naturaleza.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. COLOR -->
+            <section id="color">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">El color</div>
+                            <h2 class="title-lg">Calma, tacto y confianza</h2>
+                        </div>
+                        <div class="fine" style="max-width:44ch;">
+                            La paleta no es decorativa: regula el tono emocional. habitOS debe sentirse “caro” sin ser
+                            ostentoso.
+                        </div>
+                    </div>
+
+                    <div class="paper">
+                        <p>
+                            La paleta habitOS se basa en una idea simple: <strong>la comida es vida</strong>, y la vida
+                            se vive en luz natural,
+                            sobre fondos cálidos, con contraste suave. Elegimos tonos que evocan cerámica, lino, papel
+                            editorial y vegetación mediterránea.
+                        </p>
+                        <p class="fine">
+                            Norma: si un color se siente “app” o “fitness”, está fuera. Nuestro verde es botánico, no
+                            fluorescente.
+                        </p>
+
+                        <div class="swatches">
+                            <div class="swatch">
+                                <div class="chip" style="background: var(--vanilla);"></div>
+                                <div class="info">
+                                    <div class="name">Vanilla / Crema (Base)</div>
+                                    <code>HEX: #F6F3EE</code>
+                                    <code>RGB: 246, 243, 238</code>
+                                    <code>CMYK: 0, 1, 3, 4</code>
+                                </div>
+                            </div>
+
+                            <div class="swatch">
+                                <div class="chip" style="background: var(--ink);"></div>
+                                <div class="info">
+                                    <div class="name">Ink / Carbón (Texto)</div>
+                                    <code>HEX: #1C1D1A</code>
+                                    <code>RGB: 28, 29, 26</code>
+                                    <code>CMYK: 3, 0, 10, 89</code>
+                                </div>
+                            </div>
+
+                            <div class="swatch">
+                                <div class="chip" style="background: var(--sage);"></div>
+                                <div class="info">
+                                    <div class="name">Sage / Verde (Acento)</div>
+                                    <code>HEX: #6F7C68</code>
+                                    <code>RGB: 111, 124, 104</code>
+                                    <code>CMYK: 10, 0, 16, 51</code>
+                                </div>
+                            </div>
+
+                            <div class="swatch">
+                                <div class="chip" style="background: var(--line);"></div>
+                                <div class="info">
+                                    <div class="name">Line / Gris (Divisores)</div>
+                                    <code>HEX: #DCD8CF</code>
+                                    <code>RGB: 220, 216, 207</code>
+                                    <code>CMYK: 0, 2, 6, 14</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ratio">
+                            <div class="label">Proporción de uso recomendada</div>
+                            <div class="bar" aria-hidden="true">
+                                <span style="width:70%; background: var(--vanilla);"></span>
+                                <span style="width:20%; background: var(--ink);"></span>
+                                <span style="width:10%; background: var(--sage);"></span>
+                            </div>
+                            <div class="label">70% Vanilla · 20% Ink · 10% Sage</div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="grid-2">
+                            <div>
+                                <div class="kicker">Psicología del color</div>
+                                <ul class="rule-list">
+                                    <li><strong>Vanilla</strong> aporta luz editorial, calma y “papel” (no clínica).
+                                    </li>
+                                    <li><strong>Ink</strong> da credibilidad y legibilidad sin dureza (no negro puro).
+                                    </li>
+                                    <li><strong>Sage</strong> comunica salud y naturaleza sin clichés fitness.</li>
+                                    <li><strong>Line</strong> organiza con discreción: estructura sin “cajas”.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="kicker">Reglas estrictas</div>
+                                <ul class="rule-list">
+                                    <li>No usar saturación alta. Nunca “verde neon”.</li>
+                                    <li>No usar degradados como recurso principal.</li>
+                                    <li>El Sage se usa como acento: títulos clave, detalles, énfasis editorial.</li>
+                                    <li>Los fondos blancos puros (#FFF) se evitan: usa Vanilla.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. TIPOGRAFÍA -->
+            <section id="tipografia">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">La tipografía</div>
+                            <h2 class="title-lg">Editorial sin exceso</h2>
+                        </div>
+                        <div class="fine" style="max-width:46ch;">
+                            La tipografía hace el 60% del lujo silencioso. Si la tipografía está bien, no hace falta
+                            “decoración”.
+                        </div>
+                    </div>
+
+                    <div class="paper">
+                        <div class="grid-2">
+                            <div>
+                                <div class="kicker">Playfair Display</div>
+                                <p>
+                                    Se usa para titulares, secciones, citas, y el logotipo. Es una serif elegante, con
+                                    carácter editorial.
+                                    Debe respirarse: tamaños grandes, peso moderado, sin bold agresivo.
+                                </p>
+                                <ul class="rule-list">
+                                    <li>Weights recomendados: 400–600 (evitar 700+).</li>
+                                    <li>Itálica reservada para énfasis sutil y para la “OS”.</li>
+                                    <li>Usar espacios y jerarquía, no “negritas” por defecto.</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <div class="kicker">Inter</div>
+                                <p>
+                                    Se usa para cuerpo de texto, UI, microcopy, etiquetas y tablas. Es limpia y precisa:
+                                    la parte “clínica” de la marca.
+                                </p>
+                                <ul class="rule-list">
+                                    <li>Weights recomendados: 300–600.</li>
+                                    <li>En textos largos, usar 300/400 para ligereza.</li>
+                                    <li>Etiquetas uppercase: tracking alto (0.28–0.36em).</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="kicker">Jerarquía (ejemplos)</div>
+                        <div class="type-samples">
+                            <div class="type-row">
+                                <div class="label">H1</div>
+                                <p class="example sample-h1">Plan Nutricional Personalizado</p>
+                            </div>
+                            <div class="type-row">
+                                <div class="label">H2</div>
+                                <p class="example sample-h2">Estructura de opciones que se adapta a tu vida</p>
+                            </div>
+                            <div class="type-row">
+                                <div class="label">Kicker</div>
+                                <p class="example sample-h3">Nutrición & Arquitectura vital</p>
+                            </div>
+                            <div class="type-row">
+                                <div class="label">Párrafo</div>
+                                <p class="example sample-p">
+                                    La estrategia no tiene que ser perfecta para funcionar. Tiene que ser sostenible.
+                                    Diseñamos planes con opciones para que
+                                    la vida real — viajes, cenas, imprevistos — no rompa tu progreso.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="grid-2">
+                            <div class="paper" style="box-shadow:none;">
+                                <div class="kicker">Reglas de composición</div>
+                                <ul class="rule-list">
+                                    <li>Usar mucho espacio en blanco. No “rellenar”.</li>
+                                    <li>Evitar títulos en mayúsculas salvo etiquetas/kickers.</li>
+                                    <li>Evitar subrayados agresivos; preferir separadores finos (Line).</li>
+                                    <li>Los números deben ser discretos, no “fitness”: nada de contadores chillones.
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="paper" style="box-shadow:none;">
+                                <div class="kicker">Microdetalles que elevan</div>
+                                <ul class="rule-list">
+                                    <li>Kickers siempre en Inter 600, uppercase, tracking alto.</li>
+                                    <li>Textos largos: Inter 300/400, line-height generoso (1.75–1.95).</li>
+                                    <li>Usar Sage solo para énfasis clave (no para todo).</li>
+                                    <li>Evitar sombras fuertes: la jerarquía se logra con blanco y líneas.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. VOZ Y TONO -->
+            <section id="voz">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">Voz y tono</div>
+                            <h2 class="title-lg">Clínica suiza, cliente VIP</h2>
+                        </div>
+                        <div class="fine" style="max-width:46ch;">
+                            “Tú”, directo, elegante, empático. Nunca infantil, nunca bro-science. Precisión sin
+                            soberbia.
+                        </div>
+                    </div>
+
+                    <div class="paper">
+                        <div class="grid-2">
+                            <div>
+                                <div class="kicker">Reglas de escritura</div>
+                                <ul class="rule-list">
+                                    <li>Siempre tuteo: “tú”, “tu plan”, “tu contexto”.</li>
+                                    <li>Oraciones claras y cortas cuando hay instrucciones.</li>
+                                    <li>Explicar el “por qué” sin ponerse académico.</li>
+                                    <li>Evitar metáforas de guerra o castigo (“machacar”, “sufrir”, “quemar”).</li>
+                                    <li>Priorizar calma: nada de urgencias falsas.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="kicker">Palabras clave</div>
+                                <ul class="rule-list">
+                                    <li><strong>Estratégico</strong>, no “milagroso”.</li>
+                                    <li><strong>Sostenible</strong>, no “rápido”.</li>
+                                    <li><strong>Precisión</strong>, no “truco”.</li>
+                                    <li><strong>Adherencia</strong>, no “motivación”.</li>
+                                    <li><strong>Contexto</strong>, no “fuerza de voluntad”.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="kicker">Cómo lo decimos vs cómo NO lo decimos</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cómo lo decimos (habitOS)</th>
+                                    <th>Cómo NO lo decimos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>“Vamos a diseñar tu estrategia para que encaje con tu semana
+                                            real.”</strong></td>
+                                    <td>“¡Te voy a poner a tope! Esta semana toca sufrir.”</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>“Si un día no puedes, vuelves al plan sin romper nada.”</strong></td>
+                                    <td>“Si fallas, has perdido el progreso.”</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>“Ajustamos macros según tus datos y sensaciones.”</strong></td>
+                                    <td>“Este truco quema grasa en 48 horas.”</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>“La comida no se castiga: se estructura.”</strong></td>
+                                    <td>“Hoy toca compensar lo que comiste ayer.”</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>“Clínico y accesible: te explico lo justo para que lo
+                                            apliques.”</strong></td>
+                                    <td>“Bro-science: jerga, insultos, memes, infantilización.”</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="divider"></div>
+
+                        <div class="quote">
+                            <p>“Tu plan no es una jaula. Es una arquitectura. Y la arquitectura está para sostenerte.”
+                            </p>
+                            <div class="by">Mery · Head Coach</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. DIRECCIÓN FOTOGRÁFICA -->
+            <section id="foto">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">Dirección fotográfica</div>
+                            <h2 class="title-lg">Mediterráneo, natural, táctil</h2>
+                        </div>
+                        <div class="fine" style="max-width:46ch;">
+                            La fotografía es la prueba de “lujo silencioso”. Debe sentirse real, no stock, no gimnasio.
+                        </div>
+                    </div>
+
+                    <div class="paper">
+                        <p>
+                            Nuestra fotografía debe parecer un editorial de cocina mediterránea: luz natural, materias
+                            vivas, silencio.
+                            La comida no se presenta como “fitness”; se presenta como <strong>cultura</strong>.
+                        </p>
+
+                        <div class="photo-grid">
+                            <div class="photo-card">
+                                <div class="top">
+                                    <div class="label"><span class="pill ok"></span> Aprobado</div>
+                                    <div class="fine">Debe sentirse: cálido, real, elegante</div>
+                                </div>
+                                <div class="body">
+                                    <strong>Food / Flatlays</strong>
+                                    <ul>
+                                        <li>Luz natural (ventana), sombras suaves, grano leve.</li>
+                                        <li>Vistas cenitales, composición limpia, “aire”.</li>
+                                        <li>Vajilla de cerámica mate, lino, madera clara.</li>
+                                        <li>Ingredientes vivos: verdes, rojos, amarillos — sobre fondos neutros.</li>
+                                    </ul>
+                                    <div class="divider"></div>
+                                    <strong>Personas</strong>
+                                    <ul>
+                                        <li>Actitud natural en cocinas luminosas.</li>
+                                        <li>Ropa elegante pero casual: lino, punto, tonos neutros.</li>
+                                        <li>Gestos cotidianos: servir, cortar, preparar; no poses de gimnasio.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="photo-card">
+                                <div class="top">
+                                    <div class="label"><span class="pill no"></span> Rechazado</div>
+                                    <div class="fine">Se percibe: dieta, castigo, gimnasio</div>
+                                </div>
+                                <div class="body">
+                                    <strong>Prohibido</strong>
+                                    <ul>
+                                        <li>Básculas, cintas métricas, “antes/después”.</li>
+                                        <li>Comida “triste” (pollo seco + brócoli sin vida) o estética de restricción.
+                                        </li>
+                                        <li>Fotos de gimnasio, sudor, “beast mode”, poses agresivas.</li>
+                                        <li>Stock brillante con piel perfecta y luz artificial fría.</li>
+                                        <li>Exceso de saturación o filtros “instagram” llamativos.</li>
+                                    </ul>
+                                    <div class="divider"></div>
+                                    <strong>También evitar</strong>
+                                    <ul>
+                                        <li>Fondos blancos clínicos puros.</li>
+                                        <li>Composición desordenada sin intención.</li>
+                                        <li>Iconografía “fitness” (pesas, llamas, relojes de cuenta atrás).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout">
+                            <div class="k">Regla oro</div>
+                            <p>
+                                Si la foto podría estar en un anuncio de “reto 21 días”, se rechaza. Si podría estar en
+                                un editorial de lifestyle mediterráneo, se aprueba.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. ECOSISTEMA IA + HUMANO -->
+            <section id="ecosistema">
+                <div class="wrap">
+                    <div class="section-head">
+                        <div>
+                            <div class="kicker">Ecosistema IA + humano</div>
+                            <h2 class="title-lg">Precisión matemática.<br />Calidez real.</h2>
+                        </div>
+                        <div class="fine" style="max-width:46ch;">
+                            La IA no se “presume”. Se comunica con elegancia: como un motor interno que mejora tu
+                            experiencia.
+                        </div>
+                    </div>
+
+                    <div class="paper">
+                        <p>
+                            habitOS utiliza Inteligencia Artificial para calcular, estructurar y ajustar. Pero no
+                            vendemos “IA”.
+                            Vendemos <strong>resultados sostenibles</strong>. La IA es el sistema operativo silencioso:
+                            trabaja para ti.
+                        </p>
+                        <p>
+                            El elemento humano lo lidera Mery, Head Coach. Su rol es traducir precisión a realidad:
+                            hábitos, preferencias, contexto social, emociones y adherencia.
+                        </p>
+
+                        <div class="system">
+                            <div class="box">
+                                <div class="head">
+                                    <div class="name">IA — el motor</div>
+                                    <div class="tag">Precisión</div>
+                                </div>
+                                <ul class="rule-list">
+                                    <li>Calcula macros y distribuciones con consistencia.</li>
+                                    <li>Genera opciones por comida para mantener adherencia.</li>
+                                    <li>Detecta patrones (estancamiento, hambre, recuperación) y sugiere ajustes.</li>
+                                    <li>Automatiza entregables: PDF, emails, calendario, guía de raciones.</li>
+                                </ul>
+                                <div class="divider"></div>
+                                <p class="fine">
+                                    Cómo se comunica: “te hemos diseñado una estrategia precisa y adaptable”.
+                                    No: “nuestro algoritmo te cambiará la vida”.
+                                </p>
+                            </div>
+
+                            <div class="box">
+                                <div class="head">
+                                    <div class="name">Humano — el criterio</div>
+                                    <div class="tag">Empatía</div>
+                                </div>
+                                <ul class="rule-list">
+                                    <li>Ajusta el plan a tu vida real: horarios, trabajo, viajes.</li>
+                                    <li>Prioriza adherencia: el plan se sostiene porque encaja.</li>
+                                    <li>Te acompaña con claridad: directo, elegante, sin dramatismos.</li>
+                                    <li>Evita obsesión: precisión útil, no perfeccionismo.</li>
+                                </ul>
+                                <div class="divider"></div>
+                                <p class="fine">
+                                    Cómo se comunica: “estoy contigo para aterrizarlo y hacerlo tuyo”.
+                                    No: “si no lo cumples, no quieres resultados”.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="callout">
+                            <div class="k">Framework de comunicación (obligatorio)</div>
+                            <p>
+                                Siempre que se mencione tecnología, se hace bajo este orden:
+                                <strong>beneficio → proceso → garantía humana</strong>.
+                                <br /><br />
+                                Ejemplo correcto: “Hemos analizado tus respuestas para diseñar una estrategia precisa.
+                                En las próximas 24 horas recibirás tu Plan de Acción.
+                                Y si algo no encaja, lo ajustamos contigo.”
+                            </p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="kicker">Mensajes clave (copy aprobado)</div>
+                        <div class="grid-2">
+                            <div class="paper" style="box-shadow:none;">
+                                <p style="margin:0;">
+                                    <strong>“Precisión matemática, ejecutable en vida real.”</strong><br />
+                                    <span class="fine">Slogan para web y PDFs.</span>
+                                </p>
+                                <div class="divider"></div>
+                                <p style="margin:0;">
+                                    <strong>“Tu plan se adapta. Tu progreso se sostiene.”</strong><br />
+                                    <span class="fine">Para onboarding y seguimiento.</span>
+                                </p>
+                            </div>
+                            <div class="paper" style="box-shadow:none;">
+                                <p style="margin:0;">
+                                    <strong>“Diseñado con tecnología. Curado con empatía.”</strong><br />
+                                    <span class="fine">Para emails y pie de documentos.</span>
+                                </p>
+                                <div class="divider"></div>
+                                <p style="margin:0;">
+                                    <strong>“No dietas. Estrategia.”</strong><br />
+                                    <span class="fine">Para redes y titulares cortos.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="doc-footer">
+                        Fin del Brand Book · Para cualquier excepción o ampliación del sistema, se aprueba internamente
+                        y se documenta en la siguiente versión.
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

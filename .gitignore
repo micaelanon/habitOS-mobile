@@ -1,0 +1,32 @@
+# Xcode
+#
+build/
+DerivedData/
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+UserInterfaceState.xcuserstate
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+#
+.build/
+.swiftpm/
+Package.resolved
+
+# macOS
+#
+.DS_Store
+*.swp
+*~
+
+# Misc
+#
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
