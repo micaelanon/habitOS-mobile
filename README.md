@@ -1,4 +1,4 @@
-# habitOS — Silent Luxury Dashboard
+# habitOS-mobile — Silent Luxury Dashboard
 
 **habitOS** es el tablero personal definitivo diseñado bajos los principios del *Silent Luxury*: sofisticado, discreto y altamente funcional. Una herramienta creada para quienes valoran la precisión y la estética en su rutina diaria.
 
@@ -22,10 +22,10 @@ Inspirado en el diseño mediterráneo y la serenidad de una clínica suiza, habi
 
 ## Instalación
 1. Clona el repositorio.
-2. Abre `habitOS.xcodeproj` en Xcode.
+2. Abre `habitOS-mobile.xcodeproj` en Xcode.
 3. Conecta tu iPhone y pulsa ▶️.
 
 Para instrucciones detalladas de instalación en dispositivo físico, consulta [Docs/iphone-manual-install.html](Docs/iphone-manual-install.html).
 
 ---
-© 2026 habitOS · Premium Personal Dashboard.
+© 2026 habitOS-mobile · Premium Personal Dashboard.
