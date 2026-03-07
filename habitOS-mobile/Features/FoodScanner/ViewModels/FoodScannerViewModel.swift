@@ -15,39 +15,49 @@ final class FoodScannerViewModel: NSObject {
     var state: ScannerState = .scanning
     var lastScannedBarcode: String?
 
-    // AVFoundation objects must be on a background queue
+    // AVFoundation objects must be managed on a background queue
     private let captureSession = AVCaptureSession()
+    private let sessionQueue = DispatchQueue(label: "com.habitos.scanner.sessionQueue")
     private(set) var previewLayer: AVCaptureVideoPreviewLayer?
 
     // MARK: – Setup
 
     func setup() {
-        guard captureSession.inputs.isEmpty else { return }
-        guard let device = AVCaptureDevice.default(for: .video),
-              let input = try? AVCaptureDeviceInput(device: device) else { return }
+        sessionQueue.async { [weak self] in
+            guard let self = self else { return }
+            guard self.captureSession.inputs.isEmpty else { return }
+            guard let device = AVCaptureDevice.default(for: .video),
+                  let input = try? AVCaptureDeviceInput(device: device) else { return }
 
-        captureSession.beginConfiguration()
-        captureSession.addInput(input)
+            self.captureSession.beginConfiguration()
+            self.captureSession.addInput(input)
 
-        let output = AVCaptureMetadataOutput()
-        captureSession.addOutput(output)
-        output.setMetadataObjectsDelegate(self, queue: .main)
-        output.metadataObjectTypes = [.ean13, .ean8, .upce, .qr]
+            let output = AVCaptureMetadataOutput()
+            self.captureSession.addOutput(output)
+            output.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            output.metadataObjectTypes = [.ean13, .ean8, .upce, .qr]
 
-        captureSession.commitConfiguration()
+            self.captureSession.commitConfiguration()
 
-        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer?.videoGravity = .resizeAspectFill
+            DispatchQueue.main.async {
+                self.previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
+                self.previewLayer?.videoGravity = .resizeAspectFill
+            }
+        }
     }
 
     func start() {
-        guard !captureSession.isRunning else { return }
-        Task.detached { [weak self] in await self?.captureSession.startRunning() }
+        sessionQueue.async { [weak self] in
+            guard let self = self, !self.captureSession.isRunning else { return }
+            self.captureSession.startRunning()
+        }
     }
 
     func stop() {
-        guard captureSession.isRunning else { return }
-        Task.detached { [weak self] in await self?.captureSession.stopRunning() }
+        sessionQueue.async { [weak self] in
+            guard let self = self, self.captureSession.isRunning else { return }
+            self.captureSession.stopRunning()
+        }
     }
 
     // MARK: – Lookup
@@ -85,6 +95,6 @@ extension FoodScannerViewModel: AVCaptureMetadataOutputObjectsDelegate {
               let readable = metadataObject as? AVMetadataMachineReadableCodeObject,
               let barcode = readable.stringValue else { return }
 
-        Task { await lookup(barcode: barcode) }
+        Task { @MainActor in await self.lookup(barcode: barcode) }
     }
 }

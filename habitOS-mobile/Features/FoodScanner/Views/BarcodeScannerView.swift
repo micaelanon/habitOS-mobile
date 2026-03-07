@@ -180,12 +180,51 @@ struct CameraPreviewView: UIViewRepresentable {
             layer.frame = UIScreen.main.bounds
             view.layer.addSublayer(layer)
         }
+        
+#if targetEnvironment(simulator)
+        let label = UILabel()
+        label.text = "Cámara no disponible en el Simulador.\nToca aquí para simular un escaneo."
+        label.numberOfLines = 0
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(context.coordinator.simulateScan))
+        view.addGestureRecognizer(tap)
+#endif
+        
         return view
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
         viewModel.previewLayer?.frame = uiView.bounds
     }
+    
+#if targetEnvironment(simulator)
+    func makeCoordinator() -> Coordinator {
+        Coordinator(viewModel: viewModel)
+    }
+    
+    class Coordinator: NSObject {
+        let viewModel: FoodScannerViewModel
+        
+        init(viewModel: FoodScannerViewModel) {
+            self.viewModel = viewModel
+        }
+        
+        @objc func simulateScan() {
+            // Coca-Cola Zero barcode for demo
+            let demoBarcode = "5449000131805"
+            Task { @MainActor in await viewModel.lookup(barcode: demoBarcode) }
+        }
+    }
+#endif
 }
 
 // MARK: – Corner frame shape
