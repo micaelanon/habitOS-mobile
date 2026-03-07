@@ -32,10 +32,10 @@ struct FloatingTabBar: View {
         let isSelected = selectedTab == tab.index
 
         return VStack(spacing: 6) {
-            // Rounded-square icon background
+            // Rounded-square icon background (static color to avoid flicker)
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(isSelected ? Color.hbSage.opacity(0.15) : Color.hbInk.opacity(0.04))
+                    .fill(Color.hbInk.opacity(0.04))
                     .frame(width: 44, height: 44)
 
                 Image(systemName: isSelected ? tab.iconFilled : tab.icon)
