@@ -5,6 +5,26 @@ struct ContentView: View {
     @State private var hasLoaded = false
     @State private var selectedTab = 0
 
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(Color.hbVanilla)
+        
+        let itemAppearance = UITabBarItemAppearance()
+        itemAppearance.selected.iconColor = UIColor(Color.hbSage)
+        itemAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.hbSage)]
+        
+        itemAppearance.normal.iconColor = UIColor(Color.hbMuted)
+        itemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color.hbMuted)]
+        
+        appearance.inlineLayoutAppearance = itemAppearance
+        appearance.stackedLayoutAppearance = itemAppearance
+        appearance.compactInlineLayoutAppearance = itemAppearance
+        
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
+
     var body: some View {
         TabView(selection: $selectedTab) {
             dashboardTab
