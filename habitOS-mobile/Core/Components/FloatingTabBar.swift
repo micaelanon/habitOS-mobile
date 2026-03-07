@@ -32,16 +32,14 @@ struct FloatingTabBar: View {
         let isSelected = selectedTab == tab.index
 
         return VStack(spacing: 6) {
-            // Rounded-square icon background (static color to avoid flicker)
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.hbInk.opacity(0.04))
-                    .frame(width: 44, height: 44)
-
-                Image(systemName: isSelected ? tab.iconFilled : tab.icon)
-                    .font(.system(size: 18, weight: isSelected ? .semibold : .regular))
-                    .foregroundStyle(isSelected ? Color.hbSage : Color.hbMuted)
-            }
+            Image(systemName: isSelected ? tab.iconFilled : tab.icon)
+                .font(.system(size: 18, weight: isSelected ? .semibold : .regular))
+                .foregroundStyle(isSelected ? Color.hbSage : Color.hbMuted)
+                .frame(width: 44, height: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(isSelected ? Color.hbSage.opacity(0.15) : Color.hbInk.opacity(0.04))
+                )
 
             // Label
             Text(tab.label)
@@ -50,15 +48,14 @@ struct FloatingTabBar: View {
         }
         .frame(maxWidth: .infinity)
         .contentShape(Rectangle())
+        .id("tab-\(tab.index)") // FORCE identity retention so SwiftUI doesn't destroy/recreate this view
         .onTapGesture {
-            // Force completely instant state change with zero animation propagation
             var transaction = Transaction()
             transaction.disablesAnimations = true
             withTransaction(transaction) {
                 selectedTab = tab.index
             }
         }
-        .animation(nil, value: selectedTab)
     }
 
     // MARK: – Tab Data
