@@ -60,7 +60,7 @@ struct ContentView: View {
         .tint(Color.hbSage)
         .preferredColorScheme(.light)
         .overlay {
-            if viewModel.isLoading { loadingOverlay }
+            if viewModel.isLoading { AppLoadingOverlay() }
         }
         .task {
             guard !hasLoaded else { return }
@@ -168,8 +168,14 @@ struct ContentView: View {
         }
     }
 
-    // MARK: – Loading Overlay
-    private var loadingOverlay: some View {
+}
+
+// MARK: – Loading Overlay View
+
+struct AppLoadingOverlay: View {
+    @State private var loadingRotation: Double = 0
+
+    var body: some View {
         ZStack {
             Color.hbVanilla.opacity(0.97)
                 .ignoresSafeArea()
@@ -200,8 +206,6 @@ struct ContentView: View {
             }
         }
     }
-
-    @State private var loadingRotation: Double = 0
 }
 
 #Preview {
