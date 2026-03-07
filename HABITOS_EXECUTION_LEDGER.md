@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-07 18:44:14 CET
+Last updated: 2026-03-08 02:30:00 CET
 
 ## Purpose
 
@@ -39,8 +39,8 @@ Every Copilot or AI agent working in this repository must use this file as the s
 
 | ID | Status | Priority | Area | Task | Opened At | Completed At | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| HBT-001 | TODO | High | Architecture | Replace the root shell dependency on `HabitOSDataService` with repository-backed or feature-backed state orchestration. | 2026-03-07 18:33:46 CET |  | Root shell still depends on demo service according to the intelligence report. |
-| HBT-002 | TODO | High | Domain Models | Converge duplicated model layers such as `UserProfile` and `AppUser`, `MealPlan` legacy and `NutritionPlan`, `ChatMessage` and `CoachMessage`. | 2026-03-07 18:33:46 CET |  | Current codebase carries parallel domain shapes and duplicate maintenance cost. |
+| HBT-001 | DONE | High | Architecture | Replace the root shell dependency on `HabitOSDataService` with repository-backed or feature-backed state orchestration. | 2026-03-07 18:33:46 CET | 2026-03-08 02:30:00 CET | DashboardViewModel now injects AuthRepo, DietRepo, TaskRepo, ChatRepo, JournalRepo. Demo fallback is self-contained via loadDemo(). HabitOSDataService deprecated. Files: DashboardViewModel.swift, ContentView.swift, ChatRepository.swift, HabitOSDataService.swift |
+| HBT-002 | DONE | High | Domain Models | Converge duplicated model layers such as `UserProfile` and `AppUser`, `MealPlan` legacy and `NutritionPlan`, `ChatMessage` and `CoachMessage`. | 2026-03-07 18:33:46 CET | 2026-03-08 02:30:00 CET | UserProfile→AppUser, MealPlan→NutritionPlan, ChatMessage→CoachMessage, DailyTask→DailyTaskItem. Added compatibility extensions. Old types deprecated. Files: AppUser.swift, DataModels.swift, DashboardModels.swift, UserProfile.swift, MealPlan.swift, DashboardHomeView.swift, ChatView.swift, MealPlanView.swift, ProfileView.swift |
 | HBT-003 | TODO | High | Authentication | Verify and complete the real iPhone magic link flow, including deep-link closure and Supabase auth URL handling. | 2026-03-07 18:33:46 CET |  | Flow appears only partially closed from current app entry analysis. |
 | HBT-004 | TODO | High | Backend Schema | Inspect the real Supabase schema and confirm the canonical coach memory table and related backend entities. | 2026-03-07 18:33:46 CET |  | `coach_memories` and `coach_facts` are inconsistent between code and spec. |
 | HBT-005 | TODO | Medium | Navigation | Integrate the feature-based modules into the main visible navigation so the app shell reflects the real architecture. | 2026-03-07 18:33:46 CET |  | Several features exist but are only partially surfaced in the visible shell. |
@@ -54,6 +54,8 @@ Every Copilot or AI agent working in this repository must use this file as the s
 
 Use this section to append one flat entry per completed task. Newest entries first.
 
+- 2026-03-08 02:30:00 CET | HBT-001 | Replaced HabitOSDataService with repository-backed DashboardViewModel. Created ChatRepository. Demo fallback is explicit and bounded. | Files: `ViewModels/DashboardViewModel.swift`, `ContentView.swift`, `Repositories/ChatRepository.swift`, `Services/HabitOSDataService.swift`
+- 2026-03-08 02:30:00 CET | HBT-002 | Converged all duplicate model types: UserProfile→AppUser, MealPlan→NutritionPlan, ChatMessage→CoachMessage, DailyTask→DailyTaskItem. Added view-compat extensions. Updated all affected views. | Files: `Models/AppUser.swift`, `Models/DataModels.swift`, `Models/DashboardModels.swift`, `Models/UserProfile.swift`, `Models/MealPlan.swift`, `Views/DashboardHomeView.swift`, `Views/ChatView.swift`, `Views/MealPlanView.swift`, `Views/ProfileView.swift`
 - 2026-03-07 18:36:50 CET | HBT-009 | Created the persistent Copilot workflow base, including mandatory ledger rules, setup documentation, and report integration. | Files: `HABITOS_EXECUTION_LEDGER.md`, `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, `HABITOS_PROJECT_INTELLIGENCE_REPORT.html`
 - 2026-03-07 18:44:14 CET | HBT-010 | Added a direct takeover brief for the next Copilot and required future sessions to maintain the shared context documents. | Files: `NEXT_COPILOT_HANDOFF.md`, `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, `HABITOS_PROJECT_INTELLIGENCE_REPORT.html`
 

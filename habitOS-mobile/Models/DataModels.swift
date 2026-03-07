@@ -257,3 +257,38 @@ struct MealLog: Codable, Identifiable, Sendable {
         case createdAt = "created_at"
     }
 }
+
+// MARK: - DailyTaskItem View Compatibility
+
+extension DailyTaskItem {
+    /// Mirrors the old DailyTask.TaskCategory enum for view icon mapping.
+    enum TaskCategory: String, CaseIterable, Sendable {
+        case nutrition, hydration, activity, sleep, supplement, habit, other
+    }
+
+    var taskCategory: TaskCategory {
+        guard let cat = category else { return .other }
+        return TaskCategory(rawValue: cat) ?? .other
+    }
+}
+
+// MARK: - CoachMessage View Compatibility
+
+extension CoachMessage {
+    /// Shorthand used by chat and dashboard views.
+    var text: String { messageText }
+    /// Alias for createdAt, matching the old ChatMessage.timestamp.
+    var timestamp: Date { createdAt }
+}
+
+// MARK: - MealIngredient View Compatibility
+
+extension MealIngredient {
+    /// Formatted text for display in meal item lists.
+    var displayText: String {
+        if let qty = quantity {
+            return "\(name) (\(qty))"
+        }
+        return name
+    }
+}

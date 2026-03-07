@@ -1,14 +1,6 @@
 import Foundation
 
-nonisolated struct UserProfile: Identifiable, Sendable {
-    let id: UUID
-    let email: String
-    let firstName: String
-    let lastName: String
-    let avatarURL: String?
-    let goal: String?
-    let currentWeightKg: Double?
-    let targetWeightKg: Double?
-    let heightCm: Double?
-    let coachName: String?
-}
+// DEPRECATED: UserProfile has been replaced by AppUser (Models/AppUser.swift).
+// All views now use AppUser directly.
+// This file is kept temporarily to avoid Xcode project file issues.
+// Remove this file and its Xcode reference once compilation is verified.

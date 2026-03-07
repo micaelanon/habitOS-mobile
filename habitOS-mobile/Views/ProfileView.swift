@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct ProfileView: View {
-    let user: UserProfile?
+    let user: AppUser?
+    let coachName: String
     @State private var viewModel = SettingsViewModel()
     @Environment(AppState.self) private var appState
     @State private var showScanner = false
@@ -48,7 +49,7 @@ struct ProfileView: View {
                         HBSectionHeader("Información", icon: "person")
                         infoRow("Correo", value: user?.email ?? "–")
                         HBDivider()
-                        infoRow("Coach", value: user?.coachName ?? "–")
+                        infoRow("Coach", value: coachName)
                     }
                 }
                 .staggered(index: 2)
