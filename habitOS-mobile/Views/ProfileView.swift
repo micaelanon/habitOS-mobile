@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ProfileView: View {
     let user: UserProfile?
+    @State private var viewModel = SettingsViewModel()
+    @Environment(AppState.self) private var appState
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -55,9 +57,9 @@ struct ProfileView: View {
                         HBSectionHeader("Ajustes", icon: "gearshape")
                             .padding(.bottom, 14)
 
-                        navRow(icon: "bell", label: "Notificaciones")
+                        toggleRow(icon: "bell", label: "Notificaciones", isOn: $viewModel.isNotificationsEnabled)
                         HBDivider(indent: 44)
-                        navRow(icon: "heart", label: "Apple Health")
+                        toggleRow(icon: "heart", label: "Apple Health", isOn: $viewModel.isHealthKitEnabled)
                         HBDivider(indent: 44)
                         navRow(icon: "barcode.viewfinder", label: "Escáner de alimentos")
                         HBDivider(indent: 44)
@@ -68,12 +70,11 @@ struct ProfileView: View {
                         navRow(icon: "questionmark.circle", label: "Ayuda")
                     }
                 }
-                .staggered(index: 3)
 
                 // ── Version ──
                 HBLogoView(size: 16)
                     .frame(maxWidth: .infinity)
-                    .staggered(index: 4)
+                    .padding(.top, 8)
 
                 Text("v1.0.0")
                     .font(.system(size: 11))
@@ -81,7 +82,9 @@ struct ProfileView: View {
                     .frame(maxWidth: .infinity)
 
                 // ── Logout ──
-                Button {} label: {
+                Button {
+                    viewModel.showLogoutConfirm = true
+                } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                         Text("Cerrar sesión")
@@ -93,7 +96,14 @@ struct ProfileView: View {
                     .background(Color.hbPaper, in: RoundedRectangle(cornerRadius: HBTokens.radiusMedium))
                     .overlay(RoundedRectangle(cornerRadius: HBTokens.radiusMedium).stroke(Color.hbLine, lineWidth: 1))
                 }
-                .staggered(index: 5)
+                .disabled(viewModel.isAttemptingLogout)
+                .opacity(viewModel.isAttemptingLogout ? 0.5 : 1.0)
+                .confirmationDialog("¿Seguro que quieres cerrar sesión?", isPresented: $viewModel.showLogoutConfirm, titleVisibility: .visible) {
+                    Button("Cerrar sesión", role: .destructive) {
+                        Task { await viewModel.logout(appState: appState) }
+                    }
+                    Button("Cancelar", role: .cancel) {}
+                }
 
                 Spacer(minLength: 32)
             }
@@ -147,5 +157,20 @@ struct ProfileView: View {
             .padding(.vertical, 10)
         }
         .buttonStyle(.plain)
+    }
+
+    private func toggleRow(icon: String, label: String, isOn: Binding<Bool>) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color.hbSage)
+                .frame(width: 30, height: 30)
+                .background(Color.hbSageBg, in: RoundedRectangle(cornerRadius: 8))
+            Toggle(label, isOn: isOn)
+                .font(.system(size: 14))
+                .foregroundStyle(Color.hbInk)
+                .tint(Color.hbSage)
+        }
+        .padding(.vertical, 6)
     }
 }
