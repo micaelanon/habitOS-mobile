@@ -4,6 +4,7 @@ struct ContentView: View {
     @State private var viewModel = DashboardViewModel()
     @State private var hasLoaded = false
     @State private var selectedTab = 0
+    @State private var showVideoCall = false
 
     init() {
         let appearance = UITabBarAppearance()
@@ -124,13 +125,16 @@ struct ContentView: View {
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button {} label: {
+                    Button { showVideoCall = true } label: {
                         Image(systemName: "video")
                             .foregroundStyle(Color.hbSage)
                     }
                 }
             }
             .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
+            .fullScreenCover(isPresented: $showVideoCall) {
+                VideoCallView(coachName: viewModel.user?.coachName ?? "Coach")
+            }
         }
     }
 
