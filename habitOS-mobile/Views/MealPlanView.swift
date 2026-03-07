@@ -3,6 +3,7 @@ import SwiftUI
 struct MealPlanView: View {
     let mealPlan: MealPlan?
     let macroSummary: MacroSummary?
+    @State private var showShopping = false
 
     @State private var selectedDay: Int = {
         let weekday = Calendar.current.component(.weekday, from: Date())
@@ -92,8 +93,10 @@ struct MealPlanView: View {
                     .staggered(index: 3 + index)
                 }
 
-                HBPrimaryButton("Lista de la compra", icon: "cart") {}
-                    .staggered(index: 8)
+                NavigationLink(destination: ShoppingListView()) {
+                    HBPrimaryButton("Lista de la compra", icon: "cart") {}
+                }
+                .buttonStyle(.plain)
 
                 Spacer(minLength: 32)
             }

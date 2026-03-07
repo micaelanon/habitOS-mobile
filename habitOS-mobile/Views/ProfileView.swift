@@ -4,6 +4,7 @@ struct ProfileView: View {
     let user: UserProfile?
     @State private var viewModel = SettingsViewModel()
     @Environment(AppState.self) private var appState
+    @State private var showScanner = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -61,9 +62,14 @@ struct ProfileView: View {
                         HBDivider(indent: 44)
                         toggleRow(icon: "heart", label: "Apple Health", isOn: $viewModel.isHealthKitEnabled)
                         HBDivider(indent: 44)
-                        navRow(icon: "barcode.viewfinder", label: "Escáner de alimentos")
+                        Button { showScanner = true } label: {
+                            navRowLabel(icon: "barcode.viewfinder", label: "Escáner de alimentos")
+                        }
+                        .buttonStyle(.plain)
                         HBDivider(indent: 44)
-                        navRow(icon: "brain.head.profile", label: "Memoria del coach")
+                        NavigationLink(destination: CoachMemoryView(userId: appState.currentUser?.id)) {
+                            navRowLabel(icon: "brain.head.profile", label: "Memoria del coach")
+                        }
                         HBDivider(indent: 44)
                         navRow(icon: "lock.shield", label: "Privacidad")
                         HBDivider(indent: 44)
@@ -106,6 +112,9 @@ struct ProfileView: View {
                     Button("Cancelar", role: .cancel) {}
                 }
                 .staggered(index: 5)
+                .fullScreenCover(isPresented: $showScanner) {
+                    BarcodeScannerView()
+                }
 
                 Spacer(minLength: 32)
             }
@@ -144,21 +153,22 @@ struct ProfileView: View {
     }
 
     private func navRow(icon: String, label: String) -> some View {
-        Button {} label: {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(Color.hbSage)
-                    .frame(width: 30, height: 30)
-                    .background(Color.hbSageBg, in: RoundedRectangle(cornerRadius: 8))
-                Text(label).font(.system(size: 14)).foregroundStyle(Color.hbInk)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .medium)).foregroundStyle(Color.hbMuted2)
-            }
-            .padding(.vertical, 10)
+        Button {} label: { navRowLabel(icon: icon, label: label) }.buttonStyle(.plain)
+    }
+
+    private func navRowLabel(icon: String, label: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color.hbSage)
+                .frame(width: 30, height: 30)
+                .background(Color.hbSageBg, in: RoundedRectangle(cornerRadius: 8))
+            Text(label).font(.system(size: 14)).foregroundStyle(Color.hbInk)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.system(size: 11, weight: .medium)).foregroundStyle(Color.hbMuted2)
         }
-        .buttonStyle(.plain)
+        .padding(.vertical, 10)
     }
 
     private func toggleRow(icon: String, label: String, isOn: Binding<Bool>) -> some View {

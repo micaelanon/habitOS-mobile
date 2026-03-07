@@ -144,6 +144,14 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: ProgressPhotosView()) {
+                        Image(systemName: "photo.on.rectangle")
+                            .foregroundStyle(Color.hbSage)
+                    }
+                }
+            }
             .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
         }
     }
