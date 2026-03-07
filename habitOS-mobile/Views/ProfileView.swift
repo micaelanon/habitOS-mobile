@@ -5,6 +5,7 @@ struct ProfileView: View {
     @State private var viewModel = SettingsViewModel()
     @Environment(AppState.self) private var appState
     @State private var showScanner = false
+    @State private var healthStore = HealthKitManager.shared
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -126,6 +127,14 @@ struct ProfileView: View {
                 .staggered(index: 5)
                 .fullScreenCover(isPresented: $showScanner) {
                     BarcodeScannerView()
+                }
+                .alert("Error de HealthKit", isPresented: Binding(
+                    get: { healthStore.errorMessage != nil },
+                    set: { if !$0 { healthStore.errorMessage = nil } }
+                )) {
+                    Button("Entendido") { healthStore.errorMessage = nil }
+                } message: {
+                    Text(healthStore.errorMessage ?? "")
                 }
 
                 Spacer(minLength: 32)
