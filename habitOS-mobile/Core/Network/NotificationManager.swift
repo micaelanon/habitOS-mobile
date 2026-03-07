@@ -1,11 +1,17 @@
 import Foundation
 import UserNotifications
+import UIKit
+import Observation
 
 /// Manages all local notifications for habitOS
 /// Types: morning greeting, meal reminders, water reminders, journal prompt, weekly weight
-final class NotificationManager {
+@Observable
+final class NotificationManager: @unchecked Sendable {
     static let shared = NotificationManager()
     private let center = UNUserNotificationCenter.current()
+
+    var isAuthorized = false
+    var deviceToken: String?
 
     private init() {}
 
@@ -13,7 +19,14 @@ final class NotificationManager {
 
     func requestPermission() async -> Bool {
         do {
-            return try await center.requestAuthorization(options: [.alert, .badge, .sound])
+            let granted = try await center.requestAuthorization(options: [.alert, .badge, .sound])
+            await MainActor.run {
+                self.isAuthorized = granted
+            }
+            if granted {
+                await MainActor.run { UIApplication.shared.registerForRemoteNotifications() }
+            }
+            return granted
         } catch {
             return false
         }

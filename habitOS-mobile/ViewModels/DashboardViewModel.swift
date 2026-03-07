@@ -77,6 +77,16 @@ final class DashboardViewModel {
             if health.isAuthorized {
                 await health.fetchAllData()
             }
+            
+            let isAuthorized = await NotificationManager.shared.requestPermission()
+            if isAuthorized {
+                // Pass nil for meal times for now as a fallback, or we can parse `mealPlan`
+                let parsedMeals = mealPlan?.meals.map { (name: $0.mealName, time: "14:00") }
+                await NotificationManager.shared.scheduleAll(
+                    userName: user?.firstName ?? "HabitOS",
+                    mealTimes: parsedMeals
+                )
+            }
         } catch {
             errorMessage = "No pudimos cargar tu dashboard. Intenta nuevamente."
         }

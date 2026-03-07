@@ -59,6 +59,13 @@ struct ProfileView: View {
                             .padding(.bottom, 14)
 
                         toggleRow(icon: "bell", label: "Notificaciones", isOn: $viewModel.isNotificationsEnabled)
+                            .onChange(of: viewModel.isNotificationsEnabled) { _, isEnabled in
+                                if isEnabled {
+                                    Task { _ = await NotificationManager.shared.requestPermission() }
+                                } else {
+                                    NotificationManager.shared.cancelAll()
+                                }
+                            }
                         HBDivider(indent: 44)
                         toggleRow(icon: "heart", label: "Apple Health", isOn: $viewModel.isHealthKitEnabled)
                             .onChange(of: viewModel.isHealthKitEnabled) { _, isEnabled in
