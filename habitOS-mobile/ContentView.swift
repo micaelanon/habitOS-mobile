@@ -7,18 +7,22 @@ struct ContentView: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            // Tab Content
-            Group {
-                switch selectedTab {
-                case 0: dashboardTab
-                case 1: dietTab
-                case 2: chatTab
-                case 3: progressTab
-                case 4: profileTab
-                default: dashboardTab
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // All tabs stay alive — hidden via opacity to prevent re-render flicker
+            dashboardTab
+                .opacity(selectedTab == 0 ? 1 : 0)
+                .allowsHitTesting(selectedTab == 0)
+            dietTab
+                .opacity(selectedTab == 1 ? 1 : 0)
+                .allowsHitTesting(selectedTab == 1)
+            chatTab
+                .opacity(selectedTab == 2 ? 1 : 0)
+                .allowsHitTesting(selectedTab == 2)
+            progressTab
+                .opacity(selectedTab == 3 ? 1 : 0)
+                .allowsHitTesting(selectedTab == 3)
+            profileTab
+                .opacity(selectedTab == 4 ? 1 : 0)
+                .allowsHitTesting(selectedTab == 4)
 
             // Floating Tab Bar
             FloatingTabBar(selectedTab: $selectedTab)
