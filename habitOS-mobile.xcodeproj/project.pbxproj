@@ -6,12 +6,8 @@
 	objectVersion = 77;
 	objects = {
 
-
 /* Begin PBXBuildFile section */
-		AA000002SUPABUILDFILE01 /* Supabase in Frameworks */ = {
-			isa = PBXBuildFile;
-			productRef = AA000001SUPABASE00000001 /* Supabase */;
-		};
+		AA000002SUPABUILDFILE01 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = AA000001SUPABASE00000001 /* Supabase */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -20,37 +16,37 @@
 			containerPortal = 105FC5722E9EAD3100EA8BCF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 105FC5792E9EAD3100EA8BCF;
-			remoteInfo = habitOS-mobile;
+			remoteInfo = "habitOS-mobile";
 		};
 		105FC5942E9EAD3200EA8BCF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 105FC5722E9EAD3100EA8BCF /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 105FC5792E9EAD3100EA8BCF;
-			remoteInfo = habitOS-mobile;
+			remoteInfo = "habitOS-mobile";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		105FC57A2E9EAD3100EA8BCF /* habitOS-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = habitOS-mobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		105FC5892E9EAD3200EA8BCF /* habitOS-mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = habitOS-mobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		105FC5932E9EAD3200EA8BCF /* habitOS-mobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = habitOS-mobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		105FC57A2E9EAD3100EA8BCF /* habitOS-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "habitOS-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		105FC5892E9EAD3200EA8BCF /* habitOS-mobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "habitOS-mobileTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		105FC5932E9EAD3200EA8BCF /* habitOS-mobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "habitOS-mobileUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		105FC57C2E9EAD3100EA8BCF /* habitOS-mobile */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = habitOS-mobile;
+			path = "habitOS-mobile";
 			sourceTree = "<group>";
 		};
 		105FC58C2E9EAD3200EA8BCF /* habitOS-mobileTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = habitOS-mobileTests;
+			path = "habitOS-mobileTests";
 			sourceTree = "<group>";
 		};
 		105FC5962E9EAD3200EA8BCF /* habitOS-mobileUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = habitOS-mobileUITests;
+			path = "habitOS-mobileUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -119,11 +115,11 @@
 			fileSystemSynchronizedGroups = (
 				105FC57C2E9EAD3100EA8BCF /* habitOS-mobile */,
 			);
-			name = habitOS-mobile;
+			name = "habitOS-mobile";
 			packageProductDependencies = (
 				AA000001SUPABASE00000001 /* Supabase */,
 			);
-			productName = habitOS-mobile;
+			productName = "habitOS-mobile";
 			productReference = 105FC57A2E9EAD3100EA8BCF /* habitOS-mobile.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -143,10 +139,10 @@
 			fileSystemSynchronizedGroups = (
 				105FC58C2E9EAD3200EA8BCF /* habitOS-mobileTests */,
 			);
-			name = habitOS-mobileTests;
+			name = "habitOS-mobileTests";
 			packageProductDependencies = (
 			);
-			productName = habitOS-mobileTests;
+			productName = "habitOS-mobileTests";
 			productReference = 105FC5892E9EAD3200EA8BCF /* habitOS-mobileTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -166,10 +162,10 @@
 			fileSystemSynchronizedGroups = (
 				105FC5962E9EAD3200EA8BCF /* habitOS-mobileUITests */,
 			);
-			name = habitOS-mobileUITests;
+			name = "habitOS-mobileUITests";
 			packageProductDependencies = (
 			);
-			productName = habitOS-mobileUITests;
+			productName = "habitOS-mobileUITests";
 			productReference = 105FC5932E9EAD3200EA8BCF /* habitOS-mobileUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -529,7 +525,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = habitOS-mobile;
+				TEST_TARGET_NAME = "habitOS-mobile";
 			};
 			name = Debug;
 		};
@@ -549,7 +545,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = habitOS-mobile;
+				TEST_TARGET_NAME = "habitOS-mobile";
 			};
 			name = Release;
 		};
