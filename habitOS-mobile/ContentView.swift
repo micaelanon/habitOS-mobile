@@ -4,104 +4,64 @@ struct ContentView: View {
     @State private var viewModel = DashboardViewModel()
     @State private var hasLoaded = false
     @State private var selectedTab = 0
+    @State private var showVideoCall = false
+
+    init() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(Color.hbVanilla)
+        
+        let itemAppearance = UITabBarItemAppearance()
+        itemAppearance.selected.iconColor = UIColor(Color.hbSage)
+        itemAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(Color.hbSage)]
+        
+        itemAppearance.normal.iconColor = UIColor(Color.hbMuted)
+        itemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor(Color.hbMuted)]
+        
+        appearance.inlineLayoutAppearance = itemAppearance
+        appearance.stackedLayoutAppearance = itemAppearance
+        appearance.compactInlineLayoutAppearance = itemAppearance
+        
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+    }
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            // MARK: Tab 1 — Hoy
-            Tab(value: 0) {
-                NavigationStack {
-                    DashboardHomeView(
-                        user: viewModel.user,
-                        macroSummary: viewModel.macroSummary,
-                        dailyTasks: viewModel.dailyTasks,
-                        dailyProgress: viewModel.dailyProgress,
-                        completedCount: viewModel.completedTasksCount,
-                        totalCount: viewModel.totalTasksCount,
-                        nextMeal: viewModel.nextMeal,
-                        weeklySummary: viewModel.weeklySummary,
-                        lastCoachMessage: viewModel.lastCoachMessage,
-                        waterLiters: viewModel.waterLiters,
-                        waterTarget: viewModel.waterTarget,
-                        onToggleTask: { viewModel.toggleDailyTask($0) },
-                        onAddWater: { viewModel.addWater($0) }
-                    )
-                    .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
-                    .toolbarBackground(.visible, for: .navigationBar)
+            dashboardTab
+                .tabItem {
+                    Label("Hoy", systemImage: selectedTab == 0 ? "house.fill" : "house")
                 }
-            } label: {
-                Label("Hoy", systemImage: selectedTab == 0 ? "house.fill" : "house")
-            }
+                .tag(0)
 
-            // MARK: Tab 2 — Dieta
-            Tab(value: 1) {
-                NavigationStack {
-                    MealPlanView(mealPlan: viewModel.mealPlan, macroSummary: viewModel.macroSummary)
-                        .navigationTitle("Dieta")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
-                        .toolbarBackground(.visible, for: .navigationBar)
+            dietTab
+                .tabItem {
+                    Label("Dieta", systemImage: selectedTab == 1 ? "leaf.fill" : "leaf")
                 }
-            } label: {
-                Label("Dieta", systemImage: selectedTab == 1 ? "leaf.fill" : "leaf")
-            }
+                .tag(1)
 
-            // MARK: Tab 3 — Chat
-            Tab(value: 2) {
-                NavigationStack {
-                    ChatView(
-                        messages: viewModel.chatMessages,
-                        coachName: viewModel.user?.coachName ?? "Coach"
-                    )
-                    .navigationTitle(viewModel.user?.coachName ?? "Chat")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbarBackground(Color.hbPaper.opacity(0.95), for: .navigationBar)
-                    .toolbarBackground(.visible, for: .navigationBar)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {} label: {
-                                Image(systemName: "video")
-                                    .foregroundStyle(Color.hbSage)
-                            }
-                        }
-                    }
+            chatTab
+                .tabItem {
+                    Label("Chat", systemImage: selectedTab == 2 ? "message.fill" : "message")
                 }
-            } label: {
-                Label("Chat", systemImage: selectedTab == 2 ? "message.fill" : "message")
-            }
+                .tag(2)
 
-            // MARK: Tab 4 — Progreso
-            Tab(value: 3) {
-                NavigationStack {
-                    ProgressChartView(
-                        streaks: viewModel.streaks,
-                        weeklySummary: viewModel.weeklySummary
-                    )
-                    .navigationTitle("Progreso")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
-                    .toolbarBackground(.visible, for: .navigationBar)
+            progressTab
+                .tabItem {
+                    Label("Progreso", systemImage: selectedTab == 3 ? "chart.line.uptrend.xyaxis.circle.fill" : "chart.line.uptrend.xyaxis")
                 }
-            } label: {
-                Label("Progreso", systemImage: selectedTab == 3 ? "chart.line.uptrend.xyaxis.circle.fill" : "chart.line.uptrend.xyaxis")
-            }
+                .tag(3)
 
-            // MARK: Tab 5 — Perfil
-            Tab(value: 4) {
-                NavigationStack {
-                    ProfileView(user: viewModel.user)
-                        .navigationTitle("Perfil")
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
-                        .toolbarBackground(.visible, for: .navigationBar)
+            profileTab
+                .tabItem {
+                    Label("Perfil", systemImage: selectedTab == 4 ? "person.crop.circle.fill" : "person.crop.circle")
                 }
-            } label: {
-                Label("Perfil", systemImage: selectedTab == 4 ? "person.crop.circle.fill" : "person.crop.circle")
-            }
+                .tag(4)
         }
         .tint(Color.hbSage)
         .preferredColorScheme(.light)
         .overlay {
-            if viewModel.isLoading { loadingOverlay }
+            if viewModel.isLoading { AppLoadingOverlay() }
         }
         .task {
             guard !hasLoaded else { return }
@@ -115,8 +75,112 @@ struct ContentView: View {
         }
     }
 
-    // MARK: - Loading Overlay
-    private var loadingOverlay: some View {
+    // MARK: – Tab 1: Hoy
+    private var dashboardTab: some View {
+        NavigationStack {
+            DashboardHomeView(
+                user: viewModel.user,
+                macroSummary: viewModel.macroSummary,
+                dailyTasks: viewModel.dailyTasks,
+                dailyProgress: viewModel.dailyProgress,
+                completedCount: viewModel.completedTasksCount,
+                totalCount: viewModel.totalTasksCount,
+                nextMeal: viewModel.nextMeal,
+                weeklySummary: viewModel.weeklySummary,
+                lastCoachMessage: viewModel.lastCoachMessage,
+                waterLiters: viewModel.waterLiters,
+                waterTarget: viewModel.waterTarget,
+                health: viewModel.health,
+                onToggleTask: { viewModel.toggleDailyTask($0) },
+                onAddWater: { viewModel.addWater($0) }
+            )
+            .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
+        }
+    }
+
+    // MARK: – Tab 2: Dieta
+    private var dietTab: some View {
+        NavigationStack {
+            MealPlanView(mealPlan: viewModel.mealPlan, macroSummary: viewModel.macroSummary)
+                .navigationTitle("Dieta")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+                .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
+        }
+    }
+
+    // MARK: – Tab 3: Chat
+    private var chatTab: some View {
+        NavigationStack {
+            ChatView(
+                messages: viewModel.chatMessages,
+                coachName: viewModel.user?.coachName ?? "Coach"
+            )
+            .navigationTitle(viewModel.user?.coachName ?? "Chat")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.hbPaper.opacity(0.95), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button { showVideoCall = true } label: {
+                        Image(systemName: "video")
+                            .foregroundStyle(Color.hbSage)
+                    }
+                }
+            }
+            .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
+            .fullScreenCover(isPresented: $showVideoCall) {
+                VideoCallView(coachName: viewModel.user?.coachName ?? "Coach")
+            }
+        }
+    }
+
+    // MARK: – Tab 4: Progreso
+    private var progressTab: some View {
+        NavigationStack {
+            ProgressChartView(
+                streaks: viewModel.streaks,
+                weeklySummary: viewModel.weeklySummary
+            )
+            .navigationTitle("Progreso")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink(destination: ProgressPhotosView()) {
+                        Image(systemName: "photo.on.rectangle")
+                            .foregroundStyle(Color.hbSage)
+                    }
+                }
+            }
+            .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
+        }
+    }
+
+    // MARK: – Tab 5: Perfil
+    private var profileTab: some View {
+        NavigationStack {
+            ProfileView(user: viewModel.user)
+                .navigationTitle("Perfil")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+                .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
+        }
+    }
+
+}
+
+// MARK: – Loading Overlay View
+
+struct AppLoadingOverlay: View {
+    @State private var loadingRotation: Double = 0
+
+    var body: some View {
         ZStack {
             Color.hbVanilla.opacity(0.97)
                 .ignoresSafeArea()
@@ -147,8 +211,6 @@ struct ContentView: View {
             }
         }
     }
-
-    @State private var loadingRotation: Double = 0
 }
 
 #Preview {

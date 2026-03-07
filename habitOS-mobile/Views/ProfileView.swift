@@ -2,6 +2,10 @@ import SwiftUI
 
 struct ProfileView: View {
     let user: UserProfile?
+    @State private var viewModel = SettingsViewModel()
+    @Environment(AppState.self) private var appState
+    @State private var showScanner = false
+    @State private var healthStore = HealthKitManager.shared
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -55,13 +59,30 @@ struct ProfileView: View {
                         HBSectionHeader("Ajustes", icon: "gearshape")
                             .padding(.bottom, 14)
 
-                        navRow(icon: "bell", label: "Notificaciones")
+                        toggleRow(icon: "bell", label: "Notificaciones", isOn: $viewModel.isNotificationsEnabled)
+                            .onChange(of: viewModel.isNotificationsEnabled) { _, isEnabled in
+                                if isEnabled {
+                                    Task { _ = await NotificationManager.shared.requestPermission() }
+                                } else {
+                                    NotificationManager.shared.cancelAll()
+                                }
+                            }
                         HBDivider(indent: 44)
-                        navRow(icon: "heart", label: "Apple Health")
+                        toggleRow(icon: "heart", label: "Apple Health", isOn: $viewModel.isHealthKitEnabled)
+                            .onChange(of: viewModel.isHealthKitEnabled) { _, isEnabled in
+                                if isEnabled {
+                                    Task { await HealthKitManager.shared.requestAuthorization() }
+                                }
+                            }
                         HBDivider(indent: 44)
-                        navRow(icon: "barcode.viewfinder", label: "Escáner de alimentos")
+                        Button { showScanner = true } label: {
+                            navRowLabel(icon: "barcode.viewfinder", label: "Escáner de alimentos")
+                        }
+                        .buttonStyle(.plain)
                         HBDivider(indent: 44)
-                        navRow(icon: "brain.head.profile", label: "Memoria del coach")
+                        NavigationLink(destination: CoachMemoryView(userId: appState.currentUser?.id)) {
+                            navRowLabel(icon: "brain.head.profile", label: "Memoria del coach")
+                        }
                         HBDivider(indent: 44)
                         navRow(icon: "lock.shield", label: "Privacidad")
                         HBDivider(indent: 44)
@@ -81,7 +102,9 @@ struct ProfileView: View {
                     .frame(maxWidth: .infinity)
 
                 // ── Logout ──
-                Button {} label: {
+                Button {
+                    viewModel.showLogoutConfirm = true
+                } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                         Text("Cerrar sesión")
@@ -93,7 +116,26 @@ struct ProfileView: View {
                     .background(Color.hbPaper, in: RoundedRectangle(cornerRadius: HBTokens.radiusMedium))
                     .overlay(RoundedRectangle(cornerRadius: HBTokens.radiusMedium).stroke(Color.hbLine, lineWidth: 1))
                 }
+                .disabled(viewModel.isAttemptingLogout)
+                .opacity(viewModel.isAttemptingLogout ? 0.5 : 1.0)
+                .confirmationDialog("¿Seguro que quieres cerrar sesión?", isPresented: $viewModel.showLogoutConfirm, titleVisibility: .visible) {
+                    Button("Cerrar sesión", role: .destructive) {
+                        Task { await viewModel.logout(appState: appState) }
+                    }
+                    Button("Cancelar", role: .cancel) {}
+                }
                 .staggered(index: 5)
+                .fullScreenCover(isPresented: $showScanner) {
+                    BarcodeScannerView()
+                }
+                .alert("Error de HealthKit", isPresented: Binding(
+                    get: { healthStore.errorMessage != nil },
+                    set: { if !$0 { healthStore.errorMessage = nil } }
+                )) {
+                    Button("Entendido") { healthStore.errorMessage = nil }
+                } message: {
+                    Text(healthStore.errorMessage ?? "")
+                }
 
                 Spacer(minLength: 32)
             }
@@ -132,20 +174,36 @@ struct ProfileView: View {
     }
 
     private func navRow(icon: String, label: String) -> some View {
-        Button {} label: {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(Color.hbSage)
-                    .frame(width: 30, height: 30)
-                    .background(Color.hbSageBg, in: RoundedRectangle(cornerRadius: 8))
-                Text(label).font(.system(size: 14)).foregroundStyle(Color.hbInk)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .medium)).foregroundStyle(Color.hbMuted2)
-            }
-            .padding(.vertical, 10)
+        Button {} label: { navRowLabel(icon: icon, label: label) }.buttonStyle(.plain)
+    }
+
+    private func navRowLabel(icon: String, label: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color.hbSage)
+                .frame(width: 30, height: 30)
+                .background(Color.hbSageBg, in: RoundedRectangle(cornerRadius: 8))
+            Text(label).font(.system(size: 14)).foregroundStyle(Color.hbInk)
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.system(size: 11, weight: .medium)).foregroundStyle(Color.hbMuted2)
         }
-        .buttonStyle(.plain)
+        .padding(.vertical, 10)
+    }
+
+    private func toggleRow(icon: String, label: String, isOn: Binding<Bool>) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .medium))
+                .foregroundStyle(Color.hbSage)
+                .frame(width: 30, height: 30)
+                .background(Color.hbSageBg, in: RoundedRectangle(cornerRadius: 8))
+            Toggle(label, isOn: isOn)
+                .font(.system(size: 14))
+                .foregroundStyle(Color.hbInk)
+                .tint(Color.hbSage)
+        }
+        .padding(.vertical, 6)
     }
 }

@@ -3,6 +3,8 @@ import SwiftUI
 struct MealPlanView: View {
     let mealPlan: MealPlan?
     let macroSummary: MacroSummary?
+    @State private var showShopping = false
+    @State private var selectedMealToLog: MealPlanEntry?
 
     @State private var selectedDay: Int = {
         let weekday = Calendar.current.component(.weekday, from: Date())
@@ -69,9 +71,27 @@ struct MealPlanView: View {
                 ForEach(Array((mealPlan?.meals ?? []).enumerated()), id: \.element.id) { index, meal in
                     HBCard {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text(meal.mealName)
-                                .font(.hbSerif(16, weight: .bold))
-                                .foregroundStyle(Color.hbInk)
+                            HStack(spacing: 8) {
+                                // Emoji in system font (serif can't render emoji)
+                                Text(mealEmoji(meal.mealName))
+                                    .font(.system(size: 16))
+                                // Meal name text in serif font (stripped of emoji)
+                                Text(mealTitle(meal.mealName))
+                                    .font(.hbSerif(16, weight: .bold))
+                                    .foregroundStyle(Color.hbInk)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    selectedMealToLog = meal
+                                } label: {
+                                    Image(systemName: "camera")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.hbSage)
+                                        .frame(width: 32, height: 32)
+                                        .background(Color.hbSageBg, in: Circle())
+                                }
+                            }
                             VStack(alignment: .leading, spacing: 8) {
                                 ForEach(meal.items, id: \.self) { item in
                                     HStack(spacing: 10) {
@@ -81,19 +101,26 @@ struct MealPlanView: View {
                                 }
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .staggered(index: 3 + index)
                 }
 
-                HBPrimaryButton("Lista de la compra", icon: "cart") {}
-                    .staggered(index: 8)
+                NavigationLink(destination: ShoppingListView()) {
+                    HBPrimaryButton("Lista de la compra", icon: "cart") {}
+                }
+                .buttonStyle(.plain)
 
                 Spacer(minLength: 32)
             }
             .padding(.horizontal, HBTokens.padScreen)
-            .padding(.top, 8)
+            .padding(.bottom, 60)
+            .padding(.top, 24)
         }
-        .background(Color.hbVanilla)
+        .background(Color.hbVanilla.ignoresSafeArea())
+        .sheet(item: $selectedMealToLog) { meal in
+            MealLogView(mealName: mealTitle(meal.mealName), mealItems: meal.items)
+        }
     }
 
     private func macroCol(_ label: String, value: String, unit: String) -> some View {
@@ -109,5 +136,25 @@ struct MealPlanView: View {
 
     private var vdiv: some View {
         Rectangle().fill(Color.hbLine).frame(width: 1, height: 36)
+    }
+
+    /// Extract leading emoji from meal name (e.g. "🌅 Desayuno · 08:00" → "🌅")
+    private func mealEmoji(_ name: String) -> String {
+        guard let first = name.unicodeScalars.first,
+              first.properties.isEmoji && first.value > 0x238C else {
+            return "🍴"
+        }
+        return String(first)
+    }
+
+    /// Strip leading emoji from meal name (e.g. "🌅 Desayuno · 08:00" → "Desayuno · 08:00")
+    private func mealTitle(_ name: String) -> String {
+        var result = name
+        // Remove leading emoji and whitespace
+        while let first = result.unicodeScalars.first,
+              first.properties.isEmoji && first.value > 0x238C {
+            result = String(result.dropFirst())
+        }
+        return result.trimmingCharacters(in: .whitespaces)
     }
 }
