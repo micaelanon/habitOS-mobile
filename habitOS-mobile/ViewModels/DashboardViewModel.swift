@@ -17,6 +17,8 @@ final class DashboardViewModel {
     var errorMessage: String?
     var waterLiters: Double = 1.5
     var waterTarget: Double = 2.5
+    
+    let health = HealthKitManager.shared
 
     private let service: HabitOSDataService
 
@@ -71,6 +73,10 @@ final class DashboardViewModel {
             weeklySummary = summary
             nextMeal = meal
             chatMessages = messages
+            
+            if health.isAuthorized {
+                await health.fetchAllData()
+            }
         } catch {
             errorMessage = "No pudimos cargar tu dashboard. Intenta nuevamente."
         }

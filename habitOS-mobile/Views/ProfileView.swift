@@ -61,6 +61,11 @@ struct ProfileView: View {
                         toggleRow(icon: "bell", label: "Notificaciones", isOn: $viewModel.isNotificationsEnabled)
                         HBDivider(indent: 44)
                         toggleRow(icon: "heart", label: "Apple Health", isOn: $viewModel.isHealthKitEnabled)
+                            .onChange(of: viewModel.isHealthKitEnabled) { _, isEnabled in
+                                if isEnabled {
+                                    Task { await HealthKitManager.shared.requestAuthorization() }
+                                }
+                            }
                         HBDivider(indent: 44)
                         Button { showScanner = true } label: {
                             navRowLabel(icon: "barcode.viewfinder", label: "Escáner de alimentos")

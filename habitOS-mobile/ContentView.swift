@@ -89,6 +89,7 @@ struct ContentView: View {
                 lastCoachMessage: viewModel.lastCoachMessage,
                 waterLiters: viewModel.waterLiters,
                 waterTarget: viewModel.waterTarget,
+                health: viewModel.health,
                 onToggleTask: { viewModel.toggleDailyTask($0) },
                 onAddWater: { viewModel.addWater($0) }
             )

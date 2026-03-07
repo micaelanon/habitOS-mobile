@@ -12,6 +12,7 @@ struct DashboardHomeView: View {
     let lastCoachMessage: ChatMessage?
     let waterLiters: Double
     let waterTarget: Double
+    let health: HealthKitManager
     let onToggleTask: (DailyTask) -> Void
     let onAddWater: (Double) -> Void
 
@@ -244,12 +245,22 @@ struct DashboardHomeView: View {
                     statRow("Adherencia", val: "\(summary.adherencePercent)%",
                             prog: Double(summary.adherencePercent) / 100.0)
                     HBDivider()
-                    statRow("Peso", val: String(format: "%.1f kg", summary.currentWeightKg),
+                    
+                    let displayWeight = health.latestWeight ?? summary.currentWeightKg
+                    statRow("Peso", val: String(format: "%.1f kg", displayWeight),
                             badge: String(format: "%+.1f", summary.weightDeltaKg))
+                    
                     HBDivider()
                     statRow("Agua media", val: String(format: "%.1fL", summary.avgWaterLiters))
                     HBDivider()
-                    statRow("Pasos", val: "\(summary.avgSteps)")
+                    
+                    let displaySteps = health.dailySteps > 0 ? health.dailySteps : summary.avgSteps
+                    statRow("Pasos de hoy", val: "\(displaySteps)")
+                    
+                    if health.hoursOfSleep > 0 {
+                        HBDivider()
+                        statRow("Sueño", val: String(format: "%.1fh", health.hoursOfSleep))
+                    }
                 }
             }
         }

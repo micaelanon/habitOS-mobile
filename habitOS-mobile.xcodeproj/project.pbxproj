@@ -411,6 +411,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesitamos acceso a la cámara para escanear alimentos y tomar fotos de progreso.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Necesitamos leer tus datos de Apple Health para mostrarte un resumen de pasos y sueño en el Dashboard.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Necesitamos escribir en Apple Health para registrar el consumo de agua.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Necesitamos acceso a tus fotos para añadir fotos de progreso.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -446,6 +448,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesitamos acceso a la cámara para escanear alimentos y tomar fotos de progreso.";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Necesitamos leer tus datos de Apple Health para mostrarte un resumen de pasos y sueño en el Dashboard.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Necesitamos escribir en Apple Health para registrar el consumo de agua.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Necesitamos acceso a tus fotos para añadir fotos de progreso.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
