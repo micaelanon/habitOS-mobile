@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>habitOS · Project Intelligence Report</title>
+  <style>
+    :root {
+      --bg: #f6f3ee;
+      --paper: #fffdfa;
+      --paper-2: #faf7f2;
+      --ink: #1c1d1a;
+      --muted: rgba(28, 29, 26, 0.68);
+      --muted-2: rgba(28, 29, 26, 0.5);
+      --line: #dcd8cf;
+      --sage: #6f7c68;
+      --sage-soft: rgba(111, 124, 104, 0.12);
+      --gold: #a4884e;
+      --red: #9a4f4a;
+      --blue: #55738a;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
+      --radius: 20px;
+      --radius-sm: 14px;
+      --max: 1280px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(111, 124, 104, 0.12), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(164, 136, 78, 0.08), transparent 24%),
+        var(--bg);
+      line-height: 1.65;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 253, 250, 0.78), rgba(246, 243, 238, 0.94));
+      overflow: auto;
+    }
+
+    .brand-card,
+    .mini-card,
+    .panel,
+    .hero-card,
+    .metric,
+    .callout,
+    details,
+    table {
+      background: rgba(255, 253, 250, 0.88);
+      border: 1px solid rgba(220, 216, 207, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .brand-card,
+    .mini-card,
+    .panel,
+    .hero-card,
+    .metric,
+    .callout,
+    details {
+      border-radius: var(--radius);
+    }
+
+    .brand-card {
+      padding: 18px;
+    }
+
+    .logo {
+      margin: 0;
+      font-size: 34px;
+      letter-spacing: -0.02em;
+      font-weight: 700;
+    }
+
+    .logo span {
+      color: var(--sage);
+      font-style: italic;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-size: 10px;
+      color: var(--sage);
+      font-weight: 700;
+    }
+
+    .sidebar p,
+    .sidebar li,
+    .body-copy,
+    td,
+    th,
+    .chip,
+    .status,
+    .summary-list li,
+    .meta,
+    .pill,
+    .legend,
+    .timeline li,
+    .questions li {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .sidebar .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .nav {
+      margin-top: 18px;
+      padding: 8px 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 13px;
+      color: rgba(28, 29, 26, 0.86);
+    }
+
+    .nav a:hover {
+      background: rgba(255, 253, 250, 0.82);
+      border-color: var(--line);
+    }
+
+    .mini-card {
+      padding: 14px;
+      margin-top: 18px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 13px;
+    }
+
+    .content {
+      padding: 0 30px 70px;
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .hero {
+      padding-top: 44px;
+    }
+
+    .hero-card {
+      padding: 34px;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 250, 0.92), rgba(246, 243, 238, 0.96)),
+        var(--paper);
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(38px, 5vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+
+    .subtitle {
+      max-width: 78ch;
+      font-size: 18px;
+      color: rgba(28, 29, 26, 0.78);
+      margin-top: 18px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 250, 0.86);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .metric {
+      padding: 18px;
+    }
+
+    .metric .value {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    h2,
+    h3 {
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(28px, 3vw, 44px);
+    }
+
+    h3 {
+      font-size: 22px;
+    }
+
+    .body-copy {
+      color: rgba(28, 29, 26, 0.82);
+      font-size: 15px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 12px;
+      background: var(--paper-2);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .ok { background: rgba(111, 124, 104, 0.14); color: var(--sage); }
+    .warn { background: rgba(164, 136, 78, 0.14); color: var(--gold); }
+    .risk { background: rgba(154, 79, 74, 0.14); color: var(--red); }
+    .info { background: rgba(85, 115, 138, 0.14); color: var(--blue); }
+
+    ul,
+    ol {
+      margin: 12px 0 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+      margin-top: 14px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: rgba(246, 243, 238, 0.76);
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 10px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .callout {
+      padding: 18px 20px;
+      margin-top: 16px;
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    details {
+      padding: 16px 18px;
+      margin-top: 14px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 600;
+    }
+
+    pre {
+      overflow: auto;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(246, 243, 238, 0.7);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline li {
+      padding: 14px 14px 14px 18px;
+      border-left: 3px solid var(--sage);
+      background: rgba(255, 253, 250, 0.7);
+      border-radius: 0 14px 14px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .section-head .legend {
+      max-width: 42ch;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .questions {
+      margin-top: 10px;
+    }
+
+    .footer {
+      padding: 20px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+      }
+      .grid-2,
+      .grid-3,
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+      .content {
+        padding: 0 18px 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand-card">
+        <p class="eyebrow">habitOS · Project Intelligence</p>
+        <h1 class="logo">habit<span>OS</span></h1>
+        <p class="meta">
+          Informe generado tras analizar documentación, código SwiftUI, capas de datos, widget, configuración del proyecto y estado funcional visible del repositorio.
+        </p>
+      </div>
+
+      <nav class="nav">
+        <a href="#resumen">01. Resumen ejecutivo</a>
+        <a href="#que-es">02. Qué es habitOS</a>
+        <a href="#fuentes">03. Fuentes analizadas</a>
+        <a href="#arquitectura">04. Arquitectura real</a>
+        <a href="#estado">05. Estado funcional</a>
+        <a href="#hallazgos">06. Hallazgos críticos</a>
+        <a href="#dependencias">07. Dependencias externas</a>
+        <a href="#preguntas">08. Respuestas consolidadas</a>
+        <a href="#copilot">09. Protocolo para otro Copilot</a>
+        <a href="#ia">10. Bloque para IA</a>
+      </nav>
+
+      <div class="mini-card">
+        <strong>Diagnóstico corto</strong>
+        <div class="chips">
+          <span class="status ok">Producto bien definido</span>
+          <span class="status warn">Implementación parcial</span>
+          <span class="status risk">Arquitectura duplicada</span>
+          <span class="status info">Demo-first</span>
+        </div>
+      </div>
+
+      <div class="mini-card">
+        <strong>Idea central</strong>
+        <p class="meta">
+          El proyecto ya transmite muy bien el universo de marca y varias piezas del MVP, pero todavía conviven dos apps en una: una versión demo/editorial visible y otra base de features más cercana al producto real con Supabase.
+        </p>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="wrap">
+        <section class="hero" id="resumen">
+          <div class="hero-card">
+            <p class="eyebrow">Resumen ejecutivo</p>
+            <h1 class="title">habitOS ya tiene identidad, dirección y muchas piezas construidas; lo que falta es decidir cuál es la app canónica y cerrar las brechas entre spec, demo y backend real.</h1>
+            <p class="subtitle body-copy">
+              Tras revisar la documentación funcional, el brand book, el manual de usuario, la app iOS SwiftUI, el widget y la configuración del proyecto, mi lectura es que habitOS no es una app genérica de hábitos: es una herramienta premium de seguimiento nutricional y coaching, con una capa emocional y estética muy cuidada. El código confirma esa intención, pero también muestra una transición en curso entre una primera app demo muy presentacional y una segunda capa más real conectada a Supabase.
+            </p>
+
+            <div class="hero-meta">
+              <span class="pill">Fecha del análisis: 7 marzo 2026</span>
+              <span class="pill">Tipo: revisión profunda de producto + código</span>
+              <span class="pill">Formato: válido para IA y lectura no técnica</span>
+              <span class="pill">Salida principal: mapa, decisiones y protocolo operativo</span>
+            </div>
+
+            <div class="metrics">
+              <div class="metric">
+                <span class="value">4</span>
+                <span class="label">Fuentes documentales principales</span>
+              </div>
+              <div class="metric">
+                <span class="value">60</span>
+                <span class="label">Swift files detectados</span>
+              </div>
+              <div class="metric">
+                <span class="value">2</span>
+                <span class="label">Capas funcionales coexistiendo</span>
+              </div>
+              <div class="metric">
+                <span class="value">8</span>
+                <span class="label">Decisiones aclaradas o encauzadas</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="que-es">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Qué es habitOS</p>
+              <h2>Modelo mental consolidado del producto</h2>
+            </div>
+            <div class="legend">Lo que sigue es mi interpretación unificada a partir del spec, README, manual de marca y manual de usuario.</div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>Definición operativa</h3>
+              <p class="body-copy">
+                habitOS es la app de seguimiento diario para clientes de un nutricionista o coach. Su función no es “enseñar nutrición” ni “dar recetas genéricas”, sino ejecutar un plan ya diseñado: dieta, adherencia, chat, diario, progreso, escaneo de productos, listas y seguimiento corporal.
+              </p>
+              <ul class="summary-list">
+                <li>Es un producto de retención, no de captación.</li>
+                <li>La promesa es estrategia sostenible, no gamificación agresiva.</li>
+                <li>La experiencia mezcla precisión clínica con una estética editorial y calmada.</li>
+                <li>La IA es motor interno, no protagonista de marketing.</li>
+              </ul>
+            </div>
+
+            <div class="panel">
+              <h3>Lo que no es</h3>
+              <ul class="summary-list">
+                <li>No es una app social.</li>
+                <li>No es una calculadora manual de calorías para el usuario final.</li>
+                <li>No es una simple agenda de hábitos sin contexto nutricional.</li>
+                <li>No es una “fitness app” chillona ni basada en culpa.</li>
+              </ul>
+              <div class="callout">
+                <strong>Conclusión de negocio</strong>
+                <p class="body-copy">La identidad del proyecto está muy bien pensada. El mayor riesgo no está en la idea, sino en que varias decisiones técnicas y visuales todavía no están completamente alineadas con esa idea.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="fuentes">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Fuentes analizadas</p>
+              <h2>Qué he leído para construir este contexto</h2>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Fuente</th>
+                <th>Qué aporta</th>
+                <th>Lectura principal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Docs/HABITOS-IOS-APP-SPEC.md</td>
+                <td>Visión completa del producto, backend esperado, pantallas, tablas, copy y fases</td>
+                <td>Es la especificación canónica más ambiciosa del producto.</td>
+              </tr>
+              <tr>
+                <td>Docs/brand-manual.html</td>
+                <td>Sistema de marca, tono, color, fotografía y narrativa premium</td>
+                <td>Define un habitOS claro, mediterráneo, editorial, de lujo silencioso y con fuerte criterio estético.</td>
+              </tr>
+              <tr>
+                <td>README.md</td>
+                <td>Resumen corto del proyecto y posicionamiento general</td>
+                <td>Está alineado con el brand book más que con el spec oscuro.</td>
+              </tr>
+              <tr>
+                <td>Docs/manual-usuario.html</td>
+                <td>Qué se considera hoy usable en Fase 1 MVP</td>
+                <td>Confirma que la app visible actual es en gran parte demo-first y que varios módulos existen pero no están integrados del todo.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="arquitectura">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Arquitectura real</p>
+              <h2>Cómo está construido el proyecto hoy</h2>
+            </div>
+            <div class="legend">Aquí separo la intención arquitectónica del spec y la arquitectura realmente activa en el código.</div>
+          </div>
+
+          <div class="grid-3">
+            <div class="panel">
+              <h3>Capa visible principal</h3>
+              <p class="body-copy">La app arranca con <code>HabitOSUserDashboardApp</code> y acaba renderizando <code>ContentView</code>, que sigue alimentándose de un <code>DashboardViewModel</code> respaldado por <code>HabitOSDataService</code>.</p>
+              <div class="chips">
+                <span class="status warn">Servicio demo</span>
+                <span class="status info">Root Views legacy</span>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Capa moderna por features</h3>
+              <p class="body-copy">Existe una segunda arquitectura más seria y más cercana al spec: <code>Features/*</code> + <code>Repositories/*</code> + <code>Models/*</code> con tipos para Supabase, diario, peso, chat, scanner y plan nutricional.</p>
+              <div class="chips">
+                <span class="status ok">Supabase modelado</span>
+                <span class="status ok">MVVM por módulos</span>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Infraestructura de plataforma</h3>
+              <p class="body-copy">Hay soporte preparado para APNs, notificaciones locales, HealthKit, cámara, librería de fotos, WidgetKit y Keychain. El proyecto usa SPM para Supabase Swift.</p>
+              <div class="chips">
+                <span class="status ok">Permisos configurados</span>
+                <span class="status ok">Widget incluido</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>Hallazgo arquitectónico principal</strong>
+            <p class="body-copy">
+              No hay una sola app coherente de punta a punta. Hay una app demostrable y bonita que usa modelos demo, y otra base más cercana al producto real que ya habla con Supabase pero aún no gobierna completamente la navegación ni todas las pantallas principales. Esto no es necesariamente malo si estáis en migración, pero sí exige una decisión explícita.
+            </p>
+          </div>
+
+          <details>
+            <summary>Mapa resumido de capas</summary>
+            <pre>APP ENTRY
+  HabitOSUserDashboardApp
+    -> AppState
+    -> AuthViewModel
+    -> ContentView
+
+VISIBLE HOY EN CONTENTVIEW
+  DashboardHomeView
+  MealPlanView
+  ChatView
+  ProgressChartView
+  ProfileView
+
+ESTAS VISTAS SE ALIMENTAN PRINCIPALMENTE DE
+  DashboardViewModel
+    -> HabitOSDataService (datos mock/demo)
+
+CAPA MODERNA DISPONIBLE EN PARALELO
+  Features/Auth
+  Features/Diet
+  Features/Journal
+  Features/Tracking
+  Features/FoodScanner
+  Features/Shopping
+  Features/CoachMemory
+  Features/ProgressPhotos
+  Features/Chat
+
+DATOS REALES / PREPARADOS
+  Repositories/AuthRepository
+  Repositories/DataRepositories
+  Core/Network/SupabaseManager
+  Core/Health/HealthKitManager
+  Core/Network/NotificationManager
+  Core/Storage/SecureStorage</pre>
+          </details>
+        </section>
+
+        <section id="estado">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Estado funcional</p>
+              <h2>Qué está hecho, qué está a medias y qué parece todavía aspiracional</h2>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Módulo</th>
+                <th>Estado</th>
+                <th>Lectura</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Branding y diseño visual</td>
+                <td><span class="status ok">Fuerte</span></td>
+                <td>Es la parte más madura y consistente del repositorio. El lenguaje visual silent luxury está muy trabajado.</td>
+              </tr>
+              <tr>
+                <td>Auth básica</td>
+                <td><span class="status warn">Parcial</span></td>
+                <td>Hay repositorio real y login por magic link/password, pero el flujo móvil profundo no está totalmente cerrado en el entry point.</td>
+              </tr>
+              <tr>
+                <td>Dashboard principal</td>
+                <td><span class="status warn">Funciona en demo</span></td>
+                <td>La UI está bien, pero los datos vienen de un servicio mock y no de la capa real de repositorios.</td>
+              </tr>
+              <tr>
+                <td>Dieta / plan nutricional</td>
+                <td><span class="status warn">Duplicado</span></td>
+                <td>Hay una versión legacy en root y otra mejor estructurada en Features/Diet. Parece haber transición incompleta.</td>
+              </tr>
+              <tr>
+                <td>Chat coach</td>
+                <td><span class="status warn">Mixto</span></td>
+                <td>Existe chat demo visible y un ChatViewModel con Supabase Realtime y fallback demo. Buena base, integración final parcial.</td>
+              </tr>
+              <tr>
+                <td>Journal</td>
+                <td><span class="status ok">Construido</span></td>
+                <td>La feature está bastante completa y conectada a repositorio de diario; falta verla integrada como parte central del flujo actual.</td>
+              </tr>
+              <tr>
+                <td>Tracking de peso</td>
+                <td><span class="status ok">Construido</span></td>
+                <td>La pantalla y el repositorio están listos. Buena coherencia con el spec.</td>
+              </tr>
+              <tr>
+                <td>Shopping list</td>
+                <td><span class="status warn">Mock funcional</span></td>
+                <td>La UI está lista, pero genera datos fijos; todavía no emerge realmente del plan nutricional persistido.</td>
+              </tr>
+              <tr>
+                <td>Food scanner</td>
+                <td><span class="status warn">Base operativa</span></td>
+                <td>Hay scanner AVFoundation y lookup real a Open Food Facts, pero la lógica de compatibilidad con el plan todavía es superficial.</td>
+              </tr>
+              <tr>
+                <td>Coach memory</td>
+                <td><span class="status risk">Modelo inconsistente</span></td>
+                <td>La intención es buena, pero la tabla consultada no coincide con el spec.</td>
+              </tr>
+              <tr>
+                <td>Fotos de progreso</td>
+                <td><span class="status warn">Local-only</span></td>
+                <td>La experiencia visual está bien, pero hoy guarda en almacenamiento local, no en Supabase Storage privado como dice el spec.</td>
+              </tr>
+              <tr>
+                <td>Widget</td>
+                <td><span class="status warn">Decorativo</span></td>
+                <td>Existe, pero parece usar timeline estático sin integración real con datos del usuario.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="hallazgos">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Hallazgos críticos</p>
+              <h2>Lo más importante que deberíais decidir o corregir</h2>
+            </div>
+          </div>
+
+          <ol class="timeline">
+            <li>
+              <strong>Hay una inconsistencia de dirección visual y de producto entre documentos.</strong><br>
+              El spec técnico describe una app oscura por defecto, mientras que el brand book, el README y la app implementada empujan una identidad clara, cálida, editorial y mediterránea. La sensación actual del código coincide mucho más con el brand book que con el spec oscuro.
+            </li>
+            <li>
+              <strong>La navegación principal sigue gobernada por la capa demo.</strong><br>
+              El corazón visible de la app todavía depende de <code>HabitOSDataService</code> y modelos root, no de la capa de repositorios y features conectada a Supabase.
+            </li>
+            <li>
+              <strong>Hay duplicación de dominio y riesgo de divergencia.</strong><br>
+              Conviven tipos y pantallas equivalentes en <code>Views/</code>, <code>ViewModels/</code>, <code>Services/</code> y en <code>Features/</code>. Esto aumenta el coste mental y el riesgo de mantener dos versiones distintas del producto.
+            </li>
+            <li>
+              <strong>El flujo de magic link no parece estar completamente cerrado para iOS nativo.</strong><br>
+              La documentación oficial de Supabase Swift recomienda manejar deep links con <code>supabase.auth.handle(url)</code> usando <code>onOpenURL</code> o lifecycle UIKit/Scene. En el entry point revisado no aparece esa pieza.
+            </li>
+            <li>
+              <strong>Coach Memory consulta una tabla distinta a la definida en el spec.</strong><br>
+              El spec habla de <code>coach_facts</code>; el código consulta <code>coach_memories</code>. Eso sugiere un backend alternativo, una migración sin terminar o una nomenclatura que debo confirmar.
+            </li>
+            <li>
+              <strong>El scanner ya usa Open Food Facts real, pero la lógica de decisión todavía no usa el perfil del usuario.</strong><br>
+              El spec promete compatibilidad con alergias, Nutri-Score, NOVA y azúcar. La implementación actual se queda en mostrar el producto y algunos macros.
+            </li>
+            <li>
+              <strong>Las fotos de progreso no siguen todavía el modelo de seguridad final.</strong><br>
+              El spec pide bucket privado con URLs firmadas en Supabase; la implementación actual guarda JPGs en documentos locales del dispositivo.
+            </li>
+            <li>
+              <strong>Hay una anomalía llamativa en tests.</strong><br>
+              El archivo de unit tests visible parece contener contenido del proyecto Xcode en lugar de XCTest real. Los UI tests sí existen pero son casi plantillas. Esto me hace pensar que la cobertura real hoy es prácticamente nula.
+            </li>
+          </ol>
+        </section>
+
+        <section id="dependencias">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Dependencias externas</p>
+              <h2>Contraste rápido con documentación oficial actual</h2>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div class="panel">
+              <h3>Supabase Swift</h3>
+              <p class="body-copy">El proyecto usa SPM con <code>supabase-swift</code>. La documentación actual confirma el patrón base del cliente, filtros, CRUD, Storage y Realtime que ya usáis.</p>
+              <ul>
+                <li><code>SupabaseClient(supabaseURL:supabaseKey:)</code> encaja con vuestro <code>SupabaseManager</code>.</li>
+                <li><code>signInWithOTP</code> es correcto para magic link.</li>
+                <li>Para iOS nativo falta confirmar el manejo de deep links con <code>auth.handle(url)</code>.</li>
+                <li>La documentación actual también recomienda escuchar auth state changes en lugar de consultar sesión de forma repetitiva.</li>
+              </ul>
+            </div>
+
+            <div class="panel">
+              <h3>Open Food Facts</h3>
+              <p class="body-copy">La API actual sigue en versión 2. La doc oficial insiste en usar un <code>User-Agent</code> identificable y respetar límites de lectura.</p>
+              <ul>
+                <li>El código ya envía un User-Agent, lo cual es correcto.</li>
+                <li>La API v2 está confirmada como actual.</li>
+                <li>La app debería tratar sus datos como abiertos pero no garantizados; esto importa para UX y messaging.</li>
+                <li>La lógica de producto debería asumir que no todos los barcodes tendrán datos completos.</li>
+              </ul>
+            </div>
+
+            <div class="panel">
+              <h3>HealthKit</h3>
+              <p class="body-copy">La documentación de Apple confirma que <code>HKHealthStore</code> es el punto central para permisos, lectura, escritura y queries.</p>
+              <ul>
+                <li>La app ya tiene descripciones de permisos configuradas en el proyecto.</li>
+                <li>El uso de <code>requestAuthorization(toShare:read:)</code> es correcto.</li>
+                <li>La implementación actual comprueba sobre todo pasos, sueño y peso.</li>
+                <li>Si queréis modo realmente productivo, falta completar escritura y sincronización de varios tipos prometidos por el spec.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="preguntas">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Respuestas consolidadas</p>
+              <h2>Decisiones de dirección ya aclaradas y criterio recomendado para seguir</h2>
+            </div>
+            <div class="legend">Aquí mezclo dos cosas: lo que ya habéis respondido explícitamente y mi criterio técnico cuando la respuesta todavía no es definitiva.</div>
+          </div>
+
+          <div class="panel">
+            <ol class="questions">
+              <li><strong>Dirección visual canónica.</strong> Queda resuelto: debe mandar el <code>brand book</code>. Por tanto, la referencia visual válida es una app clara, cálida, mediterránea y editorial. El spec técnico debería corregirse para alinearse con esa identidad y dejar de empujar dark mode por defecto como verdad de producto.</li>
+              <li><strong>Capa root actual.</strong> No hay confirmación cerrada de que <code>ContentView + DashboardViewModel + HabitOSDataService</code> sea la shell final, y por el estado del repositorio mi lectura es que debe tratarse como capa transitoria. Recomendación: asumir desde ya que la root actual es un scaffold útil para demo, pero no la arquitectura objetivo.</li>
+              <li><strong>Memoria del coach en backend.</strong> No hay verdad confirmada todavía y es razonable asumir que esa parte puede ni existir aún en base de datos. Decisión práctica: no fijar el nombre de tabla en el dominio hasta inspeccionar la BBDD real. Recomendación: encapsular esta feature detrás de repositorio/protocolo y posponer cualquier acoplamiento duro a <code>coach_memories</code> o <code>coach_facts</code> hasta validarlo.</li>
+              <li><strong>Magic link en dispositivo real.</strong> No está confirmado como flujo cerrado. El hecho de que se use sobre todo un botón de prueba y que no aparezca el cierre completo de deep link en el entry point refuerza que esta autenticación móvil no debe darse por terminada. Recomendación: tratarla como parcialmente implementada hasta probarla end to end en iPhone real.</li>
+              <li><strong>Rol del modo demo.</strong> La intención actual parece ser operativa, no estratégica: está ahí porque faltan conexiones reales con la BBDD y sirve para visualizar la app mientras se construye. Recomendación: mantenerlo como herramienta de desarrollo, QA y demo interna, pero no como pilar de producto definitivo salvo decisión posterior explícita.</li>
+              <li><strong>Modelos definitivos.</strong> Aquí sí conviene tomar una postura fuerte: no deberíais tolerar mucho tiempo más la convivencia entre <code>UserProfile</code> y <code>AppUser</code>, <code>MealPlan</code> legacy y <code>NutritionPlan</code>, o <code>ChatMessage</code> demo y <code>CoachMessage</code>. Mi criterio es converger pronto, antes de ampliar más funcionalidades visibles.</li>
+              <li><strong>Fotos de progreso.</strong> Dado que el producto sigue en construcción, no movería esta feature de inmediato a Supabase Storage si eso obliga a montar backend y seguridad deprisa y mal. Mi recomendación es preparar ya una abstracción de almacenamiento y mantener local-only de forma temporal, con migración posterior a storage privado cuando la base de datos y la auth estén sólidas.</li>
+              <li><strong>Prioridad inmediata.</strong> La respuesta operativa más sensata es: construir el MVP, pero sobre una base corregida. No recomiendo una reescritura total previa, pero sí una refactorización dirigida a unificar shell, modelos y repositorios antes de seguir añadiendo capas duplicadas. En otras palabras: refactorizar lo suficiente ahora para que el MVP que terminéis sea la base buena, no otra rama temporal.</li>
+            </ol>
+          </div>
+
+          <div class="callout">
+            <strong>Mi recomendación</strong>
+            <p class="body-copy">
+              Con tus respuestas, la dirección correcta ya se ve bastante clara: conservar el lenguaje de marca actual, tratar la shell demo como transitoria, usar el modo demo sólo como soporte de construcción y converger pronto hacia una sola capa de modelos y repositorios. El siguiente paso sano no es “hacer una app nueva”, sino convertir la app visible en una versión cada vez menos mockeada y menos duplicada.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <div class="panel">
+              <h3>Lo que yo fijaría ya</h3>
+              <ul>
+                <li>Brand book como fuente visual superior.</li>
+                <li>Feature layer + repositories como arquitectura destino.</li>
+                <li>Modo demo como herramienta temporal de soporte.</li>
+              </ul>
+            </div>
+
+            <div class="panel">
+              <h3>Lo que aún debe verificarse</h3>
+              <ul>
+                <li>Esquema real de Supabase para memoria del coach.</li>
+                <li>Cierre real del magic link en iPhone.</li>
+                <li>Qué tablas y buckets existen realmente hoy.</li>
+              </ul>
+            </div>
+
+            <div class="panel">
+              <h3>Traducción técnica</h3>
+              <ul>
+                <li>Eliminar progresivamente servicios mock del flujo principal.</li>
+                <li>Unificar modelos duplicados por dominio.</li>
+                <li>Dejar storage remoto para el momento en que auth y backend estén estabilizados.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="copilot">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Protocolo para otro Copilot</p>
+              <h2>Base persistente para que futuras sesiones no empiecen desde cero</h2>
+            </div>
+            <div class="legend">Esta sección resume la configuración que ya he dejado creada dentro del repositorio.</div>
+          </div>
+
+          <div class="grid-3">
+            <div class="panel">
+              <h3>Archivo always-on</h3>
+              <p class="body-copy">He creado <code>.github/copilot-instructions.md</code> para que GitHub Copilot cargue automáticamente el contexto base del proyecto, su dirección visual, la política de demo mode y el flujo obligatorio de trabajo.</p>
+            </div>
+
+            <div class="panel">
+              <h3>Ledger obligatorio</h3>
+              <p class="body-copy">He creado <code>HABITOS_EXECUTION_LEDGER.md</code> como backlog y registro de ejecución obligatorio. A partir de ahora, cualquier cambio o refactor debe aparecer ahí antes de tocar código y marcarse con hora real al terminar.</p>
+            </div>
+
+            <div class="panel">
+              <h3>Guía de configuración</h3>
+              <p class="body-copy">He creado <code>COPILOT_SETUP_HABITOS.md</code> para explicar cómo verificar en VS Code que las instrucciones están cargadas y qué comportamiento debe seguir otro Copilot en este repositorio.</p>
+            </div>
+
+            <div class="panel">
+              <h3>Handoff directo</h3>
+              <p class="body-copy">He creado <code>NEXT_COPILOT_HANDOFF.md</code> como documento de arranque directo para el siguiente Copilot. Su función es evitar que cada nuevo agente tenga que reconstruir desde cero qué debe leer, cómo debe trabajar y qué documentos debe mantener vivos.</p>
+            </div>
+          </div>
+
+          <div class="callout">
+            <strong>Regla operativa básica</strong>
+            <p class="body-copy">
+              Ningún futuro agente debería necesitar que le repitas qué es HabitOS, qué estética manda o cómo debe registrar su trabajo. Si cambia algo en el repo, debe reflejarlo en el ledger; si termina algo, debe dejar hora, evidencia y validación.
+            </p>
+          </div>
+
+          <div class="panel">
+            <h3>Comportamiento esperado del otro Copilot</h3>
+            <ol class="questions">
+              <li>Leer primero el ledger y el intelligence report.</li>
+              <li>Leer <code>NEXT_COPILOT_HANDOFF.md</code> como briefing inicial de takeover.</li>
+              <li>Añadir o actualizar la tarea correspondiente antes de editar archivos.</li>
+              <li>Marcar la tarea como <code>IN PROGRESS</code> al empezar.</li>
+              <li>Marcarla como <code>DONE</code> al terminar con timestamp real.</li>
+              <li>Documentar archivos tocados, validaciones realizadas y follow-ups descubiertos.</li>
+              <li>Actualizar los documentos de contexto si el entendimiento del proyecto o la guía de takeover cambia.</li>
+            </ol>
+          </div>
+        </section>
+
+        <section id="ia">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Bloque para IA</p>
+              <h2>Resumen estructurado y reutilizable</h2>
+            </div>
+            <div class="legend">Este bloque está pensado para que una IA futura pueda recuperar rápidamente el contexto del repositorio sin releer todo el documento.</div>
+          </div>
+
+          <details open>
+            <summary>Resumen narrativo para IA</summary>
+            <pre>habitOS es una app iOS de seguimiento nutricional premium para clientes de coach/nutricionista.
+
+Objetivo del producto:
+- ejecutar un plan nutricional ya diseñado
+- registrar adherencia, agua, peso, diario y progreso
+- hablar con un coach en tiempo real
+- escanear productos y decidir compatibilidad
+- construir una experiencia premium, calmada, editorial y no fitness-agresiva
+
+Estado del repositorio:
+- la identidad y el posicionamiento están bien definidos
+- existe una capa visible basada en datos demo
+- existe una capa de features más real con Supabase, pero no gobierna toda la app
+- varias features están construidas pero integradas parcialmente
+
+Decisiones ya aclaradas:
+- la dirección visual canónica debe seguir el brand book
+- la shell demo actual debe leerse como transición, no como destino ideal
+- el modo demo existe para suplir la falta de backend plenamente conectado
+- conviene converger pronto a un único conjunto de modelos
+- la refactorización debe apoyar al MVP, no frenarlo indefinidamente
+
+Riesgos principales:
+- duplicación de modelos y pantallas
+- inconsistencia entre spec oscuro y marca/implementación clara
+- dudas sobre flujo de auth profundo y tabla real de memoria del coach
+- tests muy flojos o potencialmente corruptos
+
+Hipótesis fuerte:
+- el proyecto está en transición de dashboard demostrable hacia producto real conectado a backend</pre>
+          </details>
+
+          <details>
+            <summary>JSON de contexto rápido</summary>
+            <pre>{
+  "project": "habitOS",
+  "platform": "iOS native app",
+  "stack": {
+    "ui": "SwiftUI",
+    "state": "Observation / @Observable",
+    "backend": "Supabase",
+    "health": "HealthKit",
+    "scanner": "AVFoundation + Open Food Facts",
+    "widget": "WidgetKit"
+  },
+  "product_intent": {
+    "category": "premium nutrition coaching companion",
+    "target_user": "existing nutrition client",
+    "not": [
+      "generic habit app",
+      "social app",
+      "manual calorie counter"
+    ]
+  },
+  "active_code_reality": {
+    "visible_shell": "legacy/demo driven",
+    "feature_layer": "more real, partially integrated",
+    "data_mode": "mixed demo + Supabase"
+  },
+  "confirmed_direction": {
+    "visual_source_of_truth": "Docs/brand-manual.html",
+    "demo_mode_role": "temporary support for development and internal demo",
+    "target_architecture": "feature layer + repositories + real models",
+    "delivery_strategy": "refactor enough now so the MVP is built on the right base"
+  },
+  "major_documents": [
+    "Docs/HABITOS-IOS-APP-SPEC.md",
+    "Docs/brand-manual.html",
+    "Docs/manual-usuario.html",
+    "README.md"
+  ],
+  "still_to_verify": [
+    "real coach memory schema in Supabase",
+    "magic link deep-link closure on real iPhone",
+    "whether progress photos should move to storage in the next implementation phase"
+  ]
+}</pre>
+          </details>
+        </section>
+
+        <section>
+          <div class="footer">
+            Informe generado en la raíz del proyecto para servir como base de alineación entre negocio, diseño, ingeniería y futuras IAs de soporte.
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
