@@ -27,7 +27,6 @@ struct ContentView: View {
             // Floating Tab Bar
             FloatingTabBar(selectedTab: $selectedTab)
         }
-        .animation(nil, value: selectedTab)
         .preferredColorScheme(.light)
         .overlay {
             if viewModel.isLoading { loadingOverlay }

@@ -70,11 +70,12 @@ struct ProfileView: View {
                         navRow(icon: "questionmark.circle", label: "Ayuda")
                     }
                 }
+                .staggered(index: 3)
 
                 // ── Version ──
                 HBLogoView(size: 16)
                     .frame(maxWidth: .infinity)
-                    .padding(.top, 8)
+                    .staggered(index: 4)
 
                 Text("v1.0.0")
                     .font(.system(size: 11))
@@ -104,6 +105,7 @@ struct ProfileView: View {
                     }
                     Button("Cancelar", role: .cancel) {}
                 }
+                .staggered(index: 5)
 
                 Spacer(minLength: 32)
             }

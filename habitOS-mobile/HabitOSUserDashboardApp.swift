@@ -35,6 +35,7 @@ struct HabitOSUserDashboardApp: App {
             }
             .animation(.easeInOut(duration: 0.3), value: appState.isAuthenticated)
             .animation(.easeInOut(duration: 0.3), value: appState.showOnboarding)
+            .environment(appState)
             .task {
                 await checkSession()
             }
