@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Custom floating tab bar with rounded-square icon backgrounds
-/// Inspired by the Settings section icon style — minimal, clean, soft backgrounds
+/// Clean, minimal transitions — no bounce effects
 struct FloatingTabBar: View {
     @Binding var selectedTab: Int
 
@@ -15,7 +15,7 @@ struct FloatingTabBar: View {
         .padding(.vertical, 10)
         .background(
             RoundedRectangle(cornerRadius: 28)
-                .fill(Color.hbPaper.opacity(0.95))
+                .fill(.ultraThinMaterial)
                 .shadow(color: .black.opacity(0.08), radius: 20, y: 8)
                 .overlay(
                     RoundedRectangle(cornerRadius: 28)
@@ -32,9 +32,7 @@ struct FloatingTabBar: View {
         let isSelected = selectedTab == tab.index
 
         return Button {
-            withAnimation(.spring(duration: 0.25, bounce: 0.15)) {
-                selectedTab = tab.index
-            }
+            selectedTab = tab.index
         } label: {
             VStack(spacing: 6) {
                 // Rounded-square icon background
@@ -46,7 +44,6 @@ struct FloatingTabBar: View {
                     Image(systemName: isSelected ? tab.iconFilled : tab.icon)
                         .font(.system(size: 18, weight: isSelected ? .semibold : .regular))
                         .foregroundStyle(isSelected ? Color.hbSage : Color.hbMuted)
-                        .symbolEffect(.bounce, value: isSelected)
                 }
 
                 // Label
@@ -55,7 +52,9 @@ struct FloatingTabBar: View {
                     .foregroundStyle(isSelected ? Color.hbSage : Color.hbMuted)
             }
             .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
     }
 
     // MARK: – Tab Data

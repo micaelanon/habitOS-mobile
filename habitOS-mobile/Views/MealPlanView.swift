@@ -69,9 +69,15 @@ struct MealPlanView: View {
                 ForEach(Array((mealPlan?.meals ?? []).enumerated()), id: \.element.id) { index, meal in
                     HBCard {
                         VStack(alignment: .leading, spacing: 12) {
-                            Text(meal.mealName)
-                                .font(.hbSerif(16, weight: .bold))
-                                .foregroundStyle(Color.hbInk)
+                            HStack(spacing: 8) {
+                                // Emoji in system font (serif can't render emoji)
+                                Text(mealEmoji(meal.mealName))
+                                    .font(.system(size: 16))
+                                // Meal name text in serif font (stripped of emoji)
+                                Text(mealTitle(meal.mealName))
+                                    .font(.hbSerif(16, weight: .bold))
+                                    .foregroundStyle(Color.hbInk)
+                            }
                             VStack(alignment: .leading, spacing: 8) {
                                 ForEach(meal.items, id: \.self) { item in
                                     HStack(spacing: 10) {
@@ -81,6 +87,7 @@ struct MealPlanView: View {
                                 }
                             }
                         }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .staggered(index: 3 + index)
                 }
@@ -109,5 +116,25 @@ struct MealPlanView: View {
 
     private var vdiv: some View {
         Rectangle().fill(Color.hbLine).frame(width: 1, height: 36)
+    }
+
+    /// Extract leading emoji from meal name (e.g. "🌅 Desayuno · 08:00" → "🌅")
+    private func mealEmoji(_ name: String) -> String {
+        guard let first = name.unicodeScalars.first,
+              first.properties.isEmoji && first.value > 0x238C else {
+            return "🍴"
+        }
+        return String(first)
+    }
+
+    /// Strip leading emoji from meal name (e.g. "🌅 Desayuno · 08:00" → "Desayuno · 08:00")
+    private func mealTitle(_ name: String) -> String {
+        var result = name
+        // Remove leading emoji and whitespace
+        while let first = result.unicodeScalars.first,
+              first.properties.isEmoji && first.value > 0x238C {
+            result = String(result.dropFirst())
+        }
+        return result.trimmingCharacters(in: .whitespaces)
     }
 }
