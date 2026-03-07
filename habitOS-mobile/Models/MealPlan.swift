@@ -1,14 +1,7 @@
 import Foundation
 
-nonisolated struct MealPlan: Identifiable, Sendable {
-    let id: UUID
-    let userID: UUID
-    let title: String
-    let meals: [MealPlanEntry]
-}
-
-nonisolated struct MealPlanEntry: Identifiable, Sendable {
-    let id: UUID
-    let mealName: String
-    let items: [String]
-}
+// DEPRECATED: MealPlan and MealPlanEntry have been replaced by
+// NutritionPlan + DayMeals + MealDetail (Models/NutritionPlan.swift).
+// All views now use NutritionPlan directly.
+// This file is kept temporarily to avoid Xcode project file issues.
+// Remove this file and its Xcode reference once compilation is verified.
