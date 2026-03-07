@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>habitOS — Manual de Usuario</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+        :root {
+            --vanilla: #F5F0E8;
+            --paper: #FAFAF7;
+            --sage: #7C8B6F;
+            --sage-light: rgba(124, 139, 111, 0.12);
+            --ink: #2C2C2C;
+            --muted: #9A9A9A;
+            --line: #E8E4DC;
+            --gold: #C4A962;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--vanilla);
+            color: var(--ink);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 60px 0 40px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 48px;
+        }
+
+        .header .logo {
+            width: 56px;
+            height: 56px;
+            background: var(--sage);
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .header .logo span {
+            color: white;
+            font-family: 'Playfair Display';
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--sage-light);
+            color: var(--sage);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 12px;
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--sage);
+            color: white;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--sage);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            margin-top: 28px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: var(--ink);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .card.highlight {
+            border-left: 4px solid var(--sage);
+        }
+
+        .card.warning {
+            border-left: 4px solid var(--gold);
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--ink);
+            margin-bottom: 8px;
+        }
+
+        .card-body {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        /* Steps */
+        .step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--sage-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        /* Keyboard shortcut style */
+        kbd {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-family: 'SF Mono', monospace;
+            font-size: 13px;
+            color: var(--sage);
+        }
+
+        /* Tab bar reference */
+        .tab-bar {
+            display: flex;
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            padding: 12px;
+            gap: 4px;
+            margin: 16px 0;
+        }
+
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--muted);
+            cursor: default;
+        }
+
+        .tab-item.active {
+            background: var(--sage-light);
+            color: var(--sage);
+            font-weight: 600;
+        }
+
+        .tab-item .emoji {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Feature status */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .status-item {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .status-item .emoji {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .status-item .name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .status-item .state {
+            font-size: 12px;
+            color: var(--sage);
+        }
+
+        .status-item .state.pending {
+            color: var(--muted);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0 20px;
+            border-top: 1px solid var(--line);
+            margin-top: 48px;
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .updated {
+            font-size: 12px;
+            color: var(--muted);
+            text-align: center;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <div class="logo"><span>h</span></div>
+            <h1>habitOS</h1>
+            <p>Manual de Usuario — Fase 1 MVP</p>
+            <span class="badge">v1.0 · Marzo 2026</span>
+        </div>
+
+        <!-- 1. Getting Started -->
+        <div class="section">
+            <h2><span class="section-number">1</span> Primeros pasos</h2>
+
+            <div class="card highlight">
+                <div class="card-title">🎮 Modo Demo</div>
+                <div class="card-body">
+                    La app incluye un <strong>modo demo</strong> que te permite explorar todas las funcionalidades sin
+                    necesidad de una cuenta real de Supabase. Al abrir la app en el simulador, pulsa <kbd>Entrar en modo
+                        demo</kbd> — entrarás como <strong>Micael García</strong> (micaelanon@gmail.com) con datos de
+                    ejemplo pre-cargados.
+                </div>
+            </div>
+
+            <h3>¿Cómo abrir la app?</h3>
+
+            <div class="step">
+                <div class="step-icon">📱</div>
+                <div class="step-content">
+                    <strong>Opción A: Simulador (recomendada)</strong>
+                    <p>La app ya está instalada en el simulador de iPhone 17 Pro. Simplemente abre la app "Simulator" y
+                        busca el icono de habitOS.</p>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-icon">🔧</div>
+                <div class="step-content">
+                    <strong>Opción B: Desde Xcode</strong>
+                    <p>Abre <kbd>habitOS-mobile.xcodeproj</kbd> en Xcode → selecciona un iPhone como destino → pulsa ▶
+                        (Run).</p>
+                </div>
+            </div>
+
+            <h3>Login</h3>
+            <div class="step">
+                <div class="step-icon">1️⃣</div>
+                <div class="step-content">
+                    <strong>Pantalla de bienvenida</strong>
+                    <p>Al abrir, verás el logo de habitOS y el campo de email. Tienes 3 opciones:</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">🎮</div>
+                <div class="step-content">
+                    <strong>Modo Demo (la más rápida)</strong>
+                    <p>Pulsa <kbd>Entrar en modo demo</kbd> al final de la pantalla. Entras directamente al dashboard
+                        como Micael.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">✉️</div>
+                <div class="step-content">
+                    <strong>Magic Link</strong>
+                    <p>Introduce tu email y pulsa "Entrar con mi email". Recibirás un enlace por correo. <em>(Requiere
+                            cuenta en Supabase)</em></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">🔑</div>
+                <div class="step-content">
+                    <strong>Email + Contraseña</strong>
+                    <p>Pulsa "Usar contraseña" para ver el campo de password. <em>(Requiere cuenta en Supabase)</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Navigation -->
+        <div class="section">
+            <h2><span class="section-number">2</span> Navegación</h2>
+            <p>La app tiene <strong>5 tabs</strong> en la barra inferior:</p>
+
+            <div class="tab-bar">
+                <div class="tab-item active">
+                    <span class="emoji">🏠</span>
+                    Hoy
+                </div>
+                <div class="tab-item">
+                    <span class="emoji">🌿</span>
+                    Dieta
+                </div>
+                <div class="tab-item">
+                    <span class="emoji">💬</span>
+                    Chat
+                </div>
+                <div class="tab-item">
+                    <span class="emoji">📊</span>
+                    Progreso
+                </div>
+                <div class="tab-item">
+                    <span class="emoji">👤</span>
+                    Perfil
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Tab: Hoy (Dashboard) -->
+        <div class="section">
+            <h2><span class="section-number">3</span> Tab: Hoy</h2>
+            <p>Tu dashboard principal. De un vistazo ves:</p>
+
+            <div class="card">
+                <div class="card-title">📊 Progreso del día</div>
+                <div class="card-body">Anillo circular con el % de tareas completadas. Muestra tareas completadas /
+                    total y los macros del día.</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">☑️ Objetivos de hoy</div>
+                <div class="card-body">Lista de tareas diarias: comidas según plan, agua, pasos, suplementos.
+                    <strong>Toca una tarea</strong> para marcarla como completada (con vibración).</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">💧 Hidratación</div>
+                <div class="card-body">Indicador visual de agua. Pulsa <kbd>+250ml</kbd> o <kbd>+500ml</kbd> para sumar.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">🍽 Próxima comida</div>
+                <div class="card-body">La siguiente comida de tu plan según la hora actual, con los ingredientes
+                    principales.</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📈 Esta semana</div>
+                <div class="card-body">Resumen: adherencia %, peso, agua media, pasos media de los últimos 7 días.</div>
+            </div>
+        </div>
+
+        <!-- 4. Tab: Dieta -->
+        <div class="section">
+            <h2><span class="section-number">4</span> Tab: Dieta</h2>
+            <p>Tu plan nutricional semanal con todas las comidas detalladas.</p>
+
+            <div class="card">
+                <div class="card-title">Plan semanal</div>
+                <div class="card-body">Muestra las comidas del día: desayuno, media mañana, almuerzo, merienda, cena.
+                    Cada una con sus ingredientes.</div>
+            </div>
+        </div>
+
+        <!-- 5. Tab: Chat -->
+        <div class="section">
+            <h2><span class="section-number">5</span> Tab: Chat</h2>
+            <p>Chat con tu coach / nutricionista. Estilo iMessage con burbujas.</p>
+
+            <div class="card">
+                <div class="card-title">Mensajes</div>
+                <div class="card-body">Burbujas a la izquierda (coach, color claro) y a la derecha (tú, color sage). En
+                    modo demo, hay 3 mensajes de ejemplo mostrando una conversación sobre comer fuera.</div>
+            </div>
+        </div>
+
+        <!-- 6. Tab: Progreso -->
+        <div class="section">
+            <h2><span class="section-number">6</span> Tab: Progreso</h2>
+            <p>Gráficas y seguimiento de tu evolución.</p>
+
+            <div class="card">
+                <div class="card-title">📊 Racha semanal</div>
+                <div class="card-body">Gráfico de barras con tu racha de los últimos 7 días.</div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 Resumen</div>
+                <div class="card-body">Adherencia, peso, agua y pasos de la semana.</div>
+            </div>
+        </div>
+
+        <!-- 7. Módulos nuevos -->
+        <div class="section">
+            <h2><span class="section-number">7</span> Módulos en desarrollo</h2>
+            <p>Estos módulos ya están construidos pero aún no están conectados a las tabs principales. Se integrarán en
+                las próximas iteraciones:</p>
+
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="emoji">📝</div>
+                    <div class="name">Diario</div>
+                    <div class="state">✅ Construido</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">⚖️</div>
+                    <div class="name">Peso</div>
+                    <div class="state">✅ Construido</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">🔔</div>
+                    <div class="name">Notificaciones</div>
+                    <div class="state">✅ Construido</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">🔐</div>
+                    <div class="name">Auth real</div>
+                    <div class="state">✅ Construido</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">🛒</div>
+                    <div class="name">Lista compra</div>
+                    <div class="state pending">⏳ Fase 2</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">📷</div>
+                    <div class="name">Escáner</div>
+                    <div class="state pending">⏳ Fase 2</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">📸</div>
+                    <div class="name">Fotos progreso</div>
+                    <div class="state pending">⏳ Fase 2</div>
+                </div>
+                <div class="status-item">
+                    <div class="emoji">⌚</div>
+                    <div class="name">HealthKit</div>
+                    <div class="state pending">⏳ Fase 2</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Shortcuts -->
+        <div class="section">
+            <h2><span class="section-number">8</span> Acciones rápidas</h2>
+
+            <div class="card">
+                <div class="card-title">Marcar tarea como hecha</div>
+                <div class="card-body">En el Dashboard (tab Hoy), toca cualquier tarea → se marca con ✅ y vibración.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Añadir agua</div>
+                <div class="card-body">En el Dashboard, pulsa <kbd>+250ml</kbd> o <kbd>+500ml</kbd> en la sección de
+                    hidratación.</div>
+            </div>
+
+            <div class="card warning">
+                <div class="card-title">⚠️ Nota sobre el modo demo</div>
+                <div class="card-body">Los datos en modo demo son estáticos y se resetean cada vez que cierras la app.
+                    Para datos persistentes, necesitas una sesión real de Supabase.</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="logo" style="margin: 0 auto 12px;"><span>h</span></div>
+            <p><strong>habitOS</strong> · Silent Luxury Dashboard</p>
+            <p class="updated">Última actualización: 7 marzo 2026</p>
+        </div>
+
+    </div>
+</body>
+
+</html>
