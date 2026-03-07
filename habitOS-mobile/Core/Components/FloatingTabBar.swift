@@ -41,10 +41,20 @@ struct FloatingTabBar: View {
                         .fill(isSelected ? Color.hbSage.opacity(0.15) : Color.hbInk.opacity(0.04))
                         .frame(width: 44, height: 44)
 
-                    Image(systemName: isSelected ? tab.iconFilled : tab.icon)
-                        .font(.system(size: 18, weight: isSelected ? .semibold : .regular))
-                        .foregroundStyle(isSelected ? Color.hbSage : Color.hbMuted)
+                    // Overlap two static images + opacity to bypass iOS 17 automatic symbol transitions
+                    ZStack {
+                        Image(systemName: tab.icon)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(Color.hbMuted)
+                            .opacity(isSelected ? 0 : 1)
+
+                        Image(systemName: tab.iconFilled)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(Color.hbSage)
+                            .opacity(isSelected ? 1 : 0)
+                    }
                 }
+                .animation(nil, value: isSelected)
 
                 // Label
                 Text(tab.label)
