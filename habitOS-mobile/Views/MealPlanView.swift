@@ -4,6 +4,7 @@ struct MealPlanView: View {
     let mealPlan: MealPlan?
     let macroSummary: MacroSummary?
     @State private var showShopping = false
+    @State private var selectedMealToLog: MealPlanEntry?
 
     @State private var selectedDay: Int = {
         let weekday = Calendar.current.component(.weekday, from: Date())
@@ -78,6 +79,18 @@ struct MealPlanView: View {
                                 Text(mealTitle(meal.mealName))
                                     .font(.hbSerif(16, weight: .bold))
                                     .foregroundStyle(Color.hbInk)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    selectedMealToLog = meal
+                                } label: {
+                                    Image(systemName: "camera")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(Color.hbSage)
+                                        .frame(width: 32, height: 32)
+                                        .background(Color.hbSageBg, in: Circle())
+                                }
                             }
                             VStack(alignment: .leading, spacing: 8) {
                                 ForEach(meal.items, id: \.self) { item in
@@ -101,9 +114,13 @@ struct MealPlanView: View {
                 Spacer(minLength: 32)
             }
             .padding(.horizontal, HBTokens.padScreen)
-            .padding(.top, 8)
+            .padding(.bottom, 60)
+            .padding(.top, 24)
         }
-        .background(Color.hbVanilla)
+        .background(Color.hbVanilla.ignoresSafeArea())
+        .sheet(item: $selectedMealToLog) { meal in
+            MealLogView(mealName: mealTitle(meal.mealName), mealItems: meal.items)
+        }
     }
 
     private func macroCol(_ label: String, value: String, unit: String) -> some View {
