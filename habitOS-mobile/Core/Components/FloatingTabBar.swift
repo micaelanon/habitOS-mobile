@@ -32,7 +32,12 @@ struct FloatingTabBar: View {
         let isSelected = selectedTab == tab.index
 
         return Button {
-            selectedTab = tab.index
+            // Force completely instant state change with zero animation propagation
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                selectedTab = tab.index
+            }
         } label: {
             VStack(spacing: 6) {
                 // Rounded-square icon background
@@ -41,20 +46,10 @@ struct FloatingTabBar: View {
                         .fill(isSelected ? Color.hbSage.opacity(0.15) : Color.hbInk.opacity(0.04))
                         .frame(width: 44, height: 44)
 
-                    // Overlap two static images + opacity to bypass iOS 17 automatic symbol transitions
-                    ZStack {
-                        Image(systemName: tab.icon)
-                            .font(.system(size: 18, weight: .regular))
-                            .foregroundStyle(Color.hbMuted)
-                            .opacity(isSelected ? 0 : 1)
-
-                        Image(systemName: tab.iconFilled)
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(Color.hbSage)
-                            .opacity(isSelected ? 1 : 0)
-                    }
+                    Image(systemName: isSelected ? tab.iconFilled : tab.icon)
+                        .font(.system(size: 18, weight: isSelected ? .semibold : .regular))
+                        .foregroundStyle(isSelected ? Color.hbSage : Color.hbMuted)
                 }
-                .animation(nil, value: isSelected)
 
                 // Label
                 Text(tab.label)
@@ -65,6 +60,7 @@ struct FloatingTabBar: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .animation(nil, value: selectedTab)
     }
 
     // MARK: – Tab Data
