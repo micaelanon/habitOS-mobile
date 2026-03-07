@@ -6,27 +6,38 @@ struct ContentView: View {
     @State private var selectedTab = 0
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            // All tabs stay alive — hidden via opacity to prevent re-render flicker
+        TabView(selection: $selectedTab) {
             dashboardTab
-                .opacity(selectedTab == 0 ? 1 : 0)
-                .allowsHitTesting(selectedTab == 0)
-            dietTab
-                .opacity(selectedTab == 1 ? 1 : 0)
-                .allowsHitTesting(selectedTab == 1)
-            chatTab
-                .opacity(selectedTab == 2 ? 1 : 0)
-                .allowsHitTesting(selectedTab == 2)
-            progressTab
-                .opacity(selectedTab == 3 ? 1 : 0)
-                .allowsHitTesting(selectedTab == 3)
-            profileTab
-                .opacity(selectedTab == 4 ? 1 : 0)
-                .allowsHitTesting(selectedTab == 4)
+                .tabItem {
+                    Label("Hoy", systemImage: selectedTab == 0 ? "house.fill" : "house")
+                }
+                .tag(0)
 
-            // Floating Tab Bar
-            FloatingTabBar(selectedTab: $selectedTab)
+            dietTab
+                .tabItem {
+                    Label("Dieta", systemImage: selectedTab == 1 ? "leaf.fill" : "leaf")
+                }
+                .tag(1)
+
+            chatTab
+                .tabItem {
+                    Label("Chat", systemImage: selectedTab == 2 ? "message.fill" : "message")
+                }
+                .tag(2)
+
+            progressTab
+                .tabItem {
+                    Label("Progreso", systemImage: selectedTab == 3 ? "chart.line.uptrend.xyaxis.circle.fill" : "chart.line.uptrend.xyaxis")
+                }
+                .tag(3)
+
+            profileTab
+                .tabItem {
+                    Label("Perfil", systemImage: selectedTab == 4 ? "person.crop.circle.fill" : "person.crop.circle")
+                }
+                .tag(4)
         }
+        .tint(Color.hbSage)
         .preferredColorScheme(.light)
         .overlay {
             if viewModel.isLoading { loadingOverlay }
