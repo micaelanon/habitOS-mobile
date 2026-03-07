@@ -71,22 +71,13 @@ extension Font {
     }
 }
 
-// MARK: – Staggered Animation
-struct StaggeredAppearModifier: ViewModifier {
-    let index: Int
-    @State private var isVisible = false
-
-    func body(content: Content) -> some View {
-        content
-            .opacity(isVisible ? 1 : 0)
-            .offset(y: isVisible ? 0 : 6)
-            .animation(.easeOut(duration: 0.4).delay(Double(index) * 0.06), value: isVisible)
-            .onAppear { isVisible = true }
-    }
-}
-
+// MARK: – Staggered Animation (disabled — was causing flicker)
 extension View {
+    /// Previously applied a staggered fade-in + slide animation.
+    /// Disabled because it caused visible flickering on tab switches.
+    /// Views now appear instantly.
     func staggered(index: Int) -> some View {
-        modifier(StaggeredAppearModifier(index: index))
+        self // no-op: content shown instantly
     }
 }
+
