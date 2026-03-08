@@ -153,7 +153,6 @@ struct ContentView: View {
                     }
                 }
             }
-            .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
             .fullScreenCover(isPresented: $showVideoCall) {
                 VideoCallView(coachName: viewModel.coachName)
             }

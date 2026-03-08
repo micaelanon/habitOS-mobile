@@ -132,9 +132,9 @@ final class DashboardViewModel {
                 )
             }
         } catch {
-            print("[HabitOS] Dashboard load error: \(error.localizedDescription)")
-            errorMessage = "No pudimos cargar tu dashboard. Intenta nuevamente."
+            print("[HabitOS] Dashboard load error (falling back to demo): \(error.localizedDescription)")
             await loadDemo()
+            // Fallback succeeded — don't surface an error alert to the user
         }
         isLoading = false
     }

@@ -7,6 +7,7 @@ struct ChatView: View {
 
     @State private var newMessage: String = ""
     @State private var showQuickReplies = true
+    @FocusState private var isTextFieldFocused: Bool
 
     private let quickReplies = [
         "Seguí el plan ✓",
@@ -36,6 +37,8 @@ struct ChatView: View {
                     }
                     .padding(.horizontal, HBTokens.padScreen)
                     .padding(.bottom, 12)
+                    .contentShape(Rectangle())
+                    .onTapGesture { isTextFieldFocused = false }
                 }
                 .onAppear {
                     if let lastId = messages.last?.id { proxy.scrollTo(lastId, anchor: .bottom) }
@@ -45,6 +48,7 @@ struct ChatView: View {
                         withAnimation { proxy.scrollTo(lastId, anchor: .bottom) }
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
             }
 
             // Quick replies
@@ -82,6 +86,7 @@ struct ChatView: View {
                     .background(Color.hbVanilla, in: RoundedRectangle(cornerRadius: HBTokens.radiusMedium))
                     .overlay(RoundedRectangle(cornerRadius: HBTokens.radiusMedium)
                         .stroke(Color.hbLine, lineWidth: 1))
+                    .focused($isTextFieldFocused)
                     .onSubmit {
                         sendCurrentMessage()
                     }
@@ -111,6 +116,7 @@ struct ChatView: View {
     private func sendCurrentMessage() {
         let text = newMessage.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
+        isTextFieldFocused = false
         onSend?(text)
         newMessage = ""
     }
