@@ -18,6 +18,10 @@ struct DashboardHomeView: View {
     let onAddWater: (Double) -> Void
 
     @State private var isFABExpanded = false
+    @State private var showJournal = false
+    @State private var showMealLog = false
+    @State private var showWeightLog = false
+    @State private var showScanner = false
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -84,9 +88,32 @@ struct DashboardHomeView: View {
                     }
             }
 
-            HBFloatingActionButton(isExpanded: $isFABExpanded)
+            HBFloatingActionButton(isExpanded: $isFABExpanded) { action in
+                switch action {
+                case .journal:   showJournal = true
+                case .mealPhoto: showMealLog = true
+                case .weightLog: showWeightLog = true
+                case .scanner:   showScanner = true
+                }
+            }
                 .padding(.trailing, HBTokens.padScreen)
                 .padding(.bottom, 20)
+        }
+        .sheet(isPresented: $showJournal) {
+            if let uid = user?.id {
+                NavigationStack { JournalView(userId: uid) }
+            }
+        }
+        .sheet(isPresented: $showMealLog) {
+            NavigationStack { MealLogView(mealName: "Registro libre", mealItems: []) }
+        }
+        .sheet(isPresented: $showWeightLog) {
+            if let uid = user?.id {
+                NavigationStack { WeightLogView(userId: uid) }
+            }
+        }
+        .fullScreenCover(isPresented: $showScanner) {
+            BarcodeScannerView()
         }
     }
 

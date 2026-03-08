@@ -193,6 +193,11 @@ struct HBGhostButton: View {
 // ═══════════════════════════════════════════════════════════════
 struct HBFloatingActionButton: View {
     @Binding var isExpanded: Bool
+    var onAction: ((FABAction) -> Void)?
+
+    enum FABAction: Int, CaseIterable {
+        case journal, mealPhoto, weightLog, scanner
+    }
 
     private let actions: [(icon: String, label: String)] = [
         ("pencil.line",        "Diario"),
@@ -205,6 +210,12 @@ struct HBFloatingActionButton: View {
         VStack(alignment: .trailing, spacing: 10) {
             if isExpanded {
                 ForEach(Array(actions.enumerated()), id: \.offset) { index, action in
+                    Button {
+                        withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) { isExpanded = false }
+                        if let fabAction = FABAction(rawValue: index) {
+                            onAction?(fabAction)
+                        }
+                    } label: {
                     HStack(spacing: 10) {
                         Text(action.label)
                             .font(.system(size: 13, weight: .medium))
@@ -220,6 +231,7 @@ struct HBFloatingActionButton: View {
                             .foregroundStyle(Color.hbVanilla)
                             .frame(width: 40, height: 40)
                             .background(Color.hbSage, in: Circle())
+                    }
                     }
                     .transition(.asymmetric(
                         insertion: .move(edge: .trailing).combined(with: .opacity)
