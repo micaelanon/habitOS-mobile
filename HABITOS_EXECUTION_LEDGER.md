@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-07 18:44:14 CET
+Last updated: 2026-03-08 18:05:00 CET
 
 ## Purpose
 
@@ -49,12 +49,14 @@ Every Copilot or AI agent working in this repository must use this file as the s
 | HBT-008 | TODO | Medium | Testing | Repair the testing baseline, verify unit test target contents, and establish at least a minimal trustworthy regression suite. | 2026-03-07 18:33:46 CET |  | Test coverage appears weak and one visible test file looked anomalous. |
 | HBT-009 | DONE | High | Project Governance | Create persistent Copilot operating rules, configuration guidance, and a mandatory execution ledger for future sessions. | 2026-03-07 18:33:46 CET | 2026-03-07 18:36:50 CET | Created `HABITOS_EXECUTION_LEDGER.md`, `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, and updated `HABITOS_PROJECT_INTELLIGENCE_REPORT.html`. |
 | HBT-010 | DONE | High | Project Governance | Create a direct handoff document for the next Copilot and require future agents to keep the handoff/context documents updated so switching agents stays seamless. | 2026-03-07 18:43:22 CET | 2026-03-07 18:44:14 CET | Created `NEXT_COPILOT_HANDOFF.md` and updated `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, and `HABITOS_PROJECT_INTELLIGENCE_REPORT.html` so future agents keep the shared context current. |
+| HBT-012 | DONE | High | UI Wiring | Wire all dead/placeholder UI buttons found during user testing: FAB actions, chat send, quick replies, "Ir al chat", "Ver receta", "Ya comí", "Registrar peso", shopping list, Privacidad, Ayuda, and fix logout bug. | 2026-03-08 17:00:00 CET | 2026-03-08 18:05:00 CET | 8 files changed across Views, Core, ContentView, and SettingsViewModel. Issue #17, PR #18, commit `53bfc4b`. |
 
 ## Session Change Log
 
 Use this section to append one flat entry per completed task. Newest entries first.
 
 - 2026-03-07 18:36:50 CET | HBT-009 | Created the persistent Copilot workflow base, including mandatory ledger rules, setup documentation, and report integration. | Files: `HABITOS_EXECUTION_LEDGER.md`, `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, `HABITOS_PROJECT_INTELLIGENCE_REPORT.html`
+- 2026-03-08 18:05:00 CET | HBT-012 | Wired all dead/placeholder UI buttons: FAB actions → sheets, chat send + quick replies → demo auto-reply, Ir al chat → tab switch, Ver receta → diet tab, Ya comí → MealLogView, Registrar peso → WeightLogView, shopping list NavigationLink fix, Privacidad/Ayuda → placeholder views, logout bug fix (appState.signOut always runs). | Files: `ContentView.swift`, `Components.swift`, `SettingsViewModel.swift`, `ChatView.swift`, `DashboardHomeView.swift`, `MealPlanView.swift`, `ProfileView.swift`, `ProgressChartView.swift`
 - 2026-03-07 18:44:14 CET | HBT-010 | Added a direct takeover brief for the next Copilot and required future sessions to maintain the shared context documents. | Files: `NEXT_COPILOT_HANDOFF.md`, `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, `HABITOS_PROJECT_INTELLIGENCE_REPORT.html`
 
 ## Update Protocol

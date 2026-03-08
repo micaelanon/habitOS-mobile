@@ -87,11 +87,16 @@ If the user simply says to continue, your default sequence is:
 
 At the time of this handoff, the likely top-value areas are:
 
-- removing root-shell dependence on `HabitOSDataService`
-- converging duplicated models
-- verifying and closing the real iPhone magic-link flow
-- confirming the real Supabase schema for coach memory
-- strengthening the testing baseline
+- removing root-shell dependence on `HabitOSDataService` (HBT-001, PR #4 pending merge)
+- converging duplicated models (HBT-002, PR #4 pending merge)
+- verifying and closing the real iPhone magic-link flow (HBT-003, PR #6 pending merge)
+- confirming the real Supabase schema for coach memory (HBT-004, PR #6 pending merge)
+- strengthening the testing baseline (HBT-008, PR #12 pending merge)
+- merging the 8 open PRs (#4, #6, #8, #10, #12, #14, #16, #18) to develop in sequence
+- replacing the demo chat auto-reply in ContentView with real ChatViewModel + Supabase once model convergence (HBT-002) is merged
+- the day selector in MealPlanView works but shows all meals flat (not per-day) — needs per-day filtering once NutritionPlan model is adopted
+- profile avatar photo editing (not yet wired, deferred)
+- progress time period filtering (buttons animate but don't filter chart data, deferred)
 
 ## Final Requirement
 
