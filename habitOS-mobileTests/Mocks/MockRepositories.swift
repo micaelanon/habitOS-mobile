@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 @testable import habitOS_mobile
 
 // MARK: - Mock Diet Repository
@@ -131,6 +132,30 @@ final class MockAuthRepository: AuthRepositoryProtocol, @unchecked Sendable {
     func fetchCurrentUser() async throws -> AppUser? {
         if shouldThrow { throw MockError.forced }
         return currentUser
+    }
+}
+
+// MARK: - Mock Photo Storage Repository
+
+final class MockPhotoStorageRepository: PhotoStorageRepositoryProtocol {
+    var photos: [ProgressPhoto] = []
+    var shouldThrow = false
+
+    func savePhoto(_ image: UIImage, date: Date) async throws -> ProgressPhoto {
+        if shouldThrow { throw MockError.forced }
+        let photo = ProgressPhoto(date: date, image: image)
+        photos.insert(photo, at: 0)
+        return photo
+    }
+
+    func loadPhotos() async throws -> [ProgressPhoto] {
+        if shouldThrow { throw MockError.forced }
+        return photos
+    }
+
+    func deletePhoto(_ photo: ProgressPhoto) async throws {
+        if shouldThrow { throw MockError.forced }
+        photos.removeAll { $0.id == photo.id }
     }
 }
 
