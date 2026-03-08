@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-08 21:55:00 CET
+Last updated: 2026-03-08 22:15:00 CET
 
 ## Purpose
 
@@ -61,6 +61,8 @@ Every Copilot or AI agent working in this repository must use this file as the s
 ## Session Change Log
 
 Use this section to append one flat entry per completed task. Newest entries first.
+
+- 2026-03-08 22:15:00 CET | PR-CONSOLIDATION | Merged PR #23 (HBT-013/014/015 bug fixes, squash) and PR #25 (HBT-018 AccountMode Phase 1, squash) to develop. PR #25 required rebase — conflicts in docs only (HABITOS_EXECUTION_LEDGER.md, NEXT_COPILOT_HANDOFF.md), zero Swift conflicts. Both modes (solo_ai, coach_connected) validated at code-tracing level across all 10 modified files. Zero compile errors. Zero open PRs. Foundation phase closed. | PRs merged: #23, #25.
 
 - 2026-03-08 21:15:00 CET | HBT-018 | AccountMode Phase 1: introduced AccountMode enum (soloAI/hybridTransition/coachConnected) derived from coachProfileId. Conditionalized VideoCall, coach section, chat icon, demo fixtures, and all hardcoded coach copy. 10 files, 163 insertions, 72 deletions. PR #25, Issue #24. | Files: `Models/AppUser.swift`, `App/AppState.swift`, `ViewModels/DashboardViewModel.swift`, `ContentView.swift`, `Features/Auth/Views/LoginView.swift`, `Features/Auth/Views/OnboardingView.swift`, `Features/CoachMemory/Views/CoachMemoryView.swift`, `Views/ChatView.swift`, `Views/DashboardHomeView.swift`, `Views/ProfileView.swift`
 
