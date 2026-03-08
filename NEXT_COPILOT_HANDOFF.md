@@ -85,27 +85,29 @@ If the user simply says to continue, your default sequence is:
 
 ## Current Highest-Value Areas
 
-At the time of this handoff (2026-03-08), ALL backlog tasks are DONE and merged to develop:
+At the time of this handoff (2026-03-08), tasks through HBT-018 are DONE:
 
-- **DONE + MERGED**: HBT-001+002 — Architecture convergence
-- **DONE + MERGED**: HBT-003+004 — Auth magic link + coach_facts schema
-- **DONE + MERGED**: HBT-005 — FAB navigation wiring
-- **DONE + MERGED**: HBT-006 — Photo storage abstraction with DI
-- **DONE + MERGED**: HBT-007 — Demo mode isolation
-- **DONE + MERGED**: HBT-008 — Testing baseline: mocks + 15+ tests
-- **DONE + MERGED**: HBT-009+010 — Project governance + handoff docs
-- **DONE + MERGED**: HBT-011 — SQL migrations for 11 tables + 2 storage buckets
-- **DONE + MERGED**: HBT-012 — Wire all dead/placeholder UI buttons
+- **DONE + MERGED**: HBT-001–012 — Architecture convergence, auth, schema, navigation, photos, demo isolation, testing, governance, migrations, UI wiring
 - **DONE + MERGED**: HBT-013 — Dashboard false error: removed blocking alert on graceful fallback
 - **DONE + MERGED**: HBT-014 — Chat keyboard/spacing: @FocusState, scroll dismiss, removed 90pt inset
 - **DONE + MERGED**: HBT-015 — Avatar editing: PhotosPicker, local storage, camera badge
 - **DONE + MERGED**: HBT-016 — CI/CD bootstrap with GitHub Actions
+- **DONE**: HBT-017 — Full product audit (40+ hardcoded coach refs cataloged, phased plan produced)
+- **DONE + MERGED**: HBT-018 — AccountMode Phase 1: conditionalized UI per mode, dual demo fixtures, dynamic copy/icons
 
-Zero open PRs remain. All work is unified on develop.
+Open PRs: None. All work through HBT-018 is merged to develop.
 
 The immediate next-value areas are:
 
 - **Supabase dashboard config** — Add `habitos://auth-callback` as allowed redirect URL (manual step).
+
+AccountMode Phase 2 follow-ups (after validation):
+
+- **Hybrid transition flows** — `hybridTransition` currently behaves as `soloAI`. If needed, implement migration UX for users transitioning between modes.
+- **Backend accountMode column** — Consider persisting `account_mode` to `app_users` table instead of only deriving from `coachProfileId`.
+- **CoachMessage type rename** — CoachMessage still named "coach" even in solo_ai mode; cosmetic rename deferred to reduce churn.
+
+Secondary follow-ups:
 - **Shared scheme for tests** — CI is bootstrapped, but full test execution still needs a versioned shared `.xcscheme`.
 - **Remote photo storage** — Create `SupabasePhotoStorageRepository` when `body-photos` bucket is provisioned.
 - **Remote avatar storage** — Current avatar is local-only. Wire to Supabase Storage when an `avatars` bucket exists.
@@ -115,9 +117,9 @@ The immediate next-value areas are:
 
 ## Git Branch State
 
-Active working branch for the next pass may differ, but `develop` contains all merged product work through HBT-016. NEVER merge to main.
+`develop` contains all merged work through HBT-018 inclusive. No open PRs. NEVER merge to main.
 
-Zero open PRs at the moment this handoff was updated. `develop` contains all HBT-001 through HBT-016 work including the three stability bug fixes (HBT-013/014/015).
+**Note on GPG signing**: Global git config has `commit.gpgsign=true` with key `C54A120A74978FF7`. If GPG agent is not running, commits will silently fail. Use `--no-gpg-sign` as workaround.
 
 Note: PR #16 (SQL migrations) was a squash merge that included all stacked commits from HBT-001 through HBT-011. PRs #4, #6, #8, #10, #12, #14 were closed as their changes were already included. HBT-012 was rebased onto the new develop and merged via PR #19. HBT-016 then added `.github/workflows/ios-ci.yml`, which performs GitHub Actions bootstrap validation with explicit Xcode 26.2 selection and simulator builds, but still does not run tests because no shared scheme is versioned in the repo.
 

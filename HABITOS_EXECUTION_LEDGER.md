@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-08 21:00:00 CET
+Last updated: 2026-03-08 21:55:00 CET
 
 ## Purpose
 
@@ -55,10 +55,16 @@ Every Copilot or AI agent working in this repository must use this file as the s
 | HBT-014 | DONE | High | Chat UX | Fix chat text-entry usability: dismiss keyboard reliably, avoid trapping navigation, and reduce excessive bottom spacing above the tab bar. | 2026-03-08 19:30:00 CET | 2026-03-08 21:00:00 CET | Added `@FocusState` + `.focused()` binding to ChatView text field. Added `.scrollDismissesKeyboard(.interactively)` on the message ScrollView. Added `.contentShape(Rectangle()).onTapGesture` for tap-to-dismiss. Keyboard dismissed on send. Removed the 90pt `.safeAreaInset(edge: .bottom)` from the chat tab in ContentView. Files: `ChatView.swift`, `ContentView.swift`. |
 | HBT-015 | DONE | Medium | Profile UX | Enable changing the profile avatar instead of showing a static placeholder circle only. | 2026-03-08 19:30:00 CET | 2026-03-08 21:00:00 CET | Added `PhotosPicker` (PhotosUI) to ProfileView header with camera badge overlay. Selected image is downscaled to 400px max, saved as JPEG to local Documents/habitos_avatar.jpg, and loaded on appear. Static initials circle remains as fallback when no avatar exists. Files: `ProfileView.swift`. |
 | HBT-016 | DONE | Medium | CI/CD | Bootstrap GitHub Actions validation for the iOS app and keep the stability backlog visible for the next execution pass. | 2026-03-08 19:30:00 CET | 2026-03-08 19:45:00 CET | Issue #20 opened. Added `.github/workflows/ios-ci.yml` with GitHub Actions bootstrap on `macos-15`, explicit Xcode 26.2 selection, project inspection, and simulator builds for app, tests target, and widget target without code signing. Current limitation documented: test execution still depends on adding a shared `.xcscheme` to the repo. |
+| HBT-017 | DONE | High | Architecture | Full product audit: identify every place the app assumes a human coach, catalog hardcoded copy, icons, and flows that break for solo-AI users, and produce a phased remediation plan. | 2026-03-08 20:00:00 CET | 2026-03-08 20:30:00 CET | Read 11 Swift files, cataloged 40+ hardcoded coach references across Views, ViewModels, and Features. Produced 3-phase plan; user approved Phase 1 with 5 specific adjustments. No code changes — audit only. |
+| HBT-018 | DONE | High | Architecture | AccountMode Phase 1: introduce AccountMode enum, derive mode from coachProfileId, conditionalize all UI that assumed a human coach, dual demo fixtures, dynamic copy and icons per mode. | 2026-03-08 20:30:00 CET | 2026-03-08 21:15:00 CET | Branch: `feat/HBT-018-account-mode-phase1`, PR #25, Issue #24. AccountMode enum (soloAI/hybridTransition/coachConnected) in AppUser, computed accountMode in AppState. advisorDisplayName returns "habitOS" for soloAI, coach name for coachConnected. Dual demo fixtures (demoUser solo, demoUserCoach connected). Conditional VideoCall, coach section, sparkles icon for AI. Dynamic copy in CoachMemoryView, ProfileView, OnboardingView, LoginView. 10 files changed, 163 insertions, 72 deletions. Zero compile errors. |
 
 ## Session Change Log
 
 Use this section to append one flat entry per completed task. Newest entries first.
+
+- 2026-03-08 21:15:00 CET | HBT-018 | AccountMode Phase 1: introduced AccountMode enum (soloAI/hybridTransition/coachConnected) derived from coachProfileId. Conditionalized VideoCall, coach section, chat icon, demo fixtures, and all hardcoded coach copy. 10 files, 163 insertions, 72 deletions. PR #25, Issue #24. | Files: `Models/AppUser.swift`, `App/AppState.swift`, `ViewModels/DashboardViewModel.swift`, `ContentView.swift`, `Features/Auth/Views/LoginView.swift`, `Features/Auth/Views/OnboardingView.swift`, `Features/CoachMemory/Views/CoachMemoryView.swift`, `Views/ChatView.swift`, `Views/DashboardHomeView.swift`, `Views/ProfileView.swift`
+
+- 2026-03-08 20:30:00 CET | HBT-017 | Full product audit across 11 Swift files. Cataloged 40+ hardcoded coach references. Produced phased plan; user approved minimal Phase 1. Audit only, no code changes. | Files: none (research task)
 
 - 2026-03-08 21:00:00 CET | HBT-013 | Removed false error alert from dashboard. The catch block in `DashboardViewModel.loadDashboard()` no longer sets `errorMessage` when falling back to demo data — only logs the error for observability. | Files: `DashboardViewModel.swift`
 - 2026-03-08 21:00:00 CET | HBT-014 | Fixed chat keyboard UX: added @FocusState focus management, scrollDismissesKeyboard(.interactively), tap-to-dismiss on message area, keyboard dismiss on send. Removed the excessive 90pt safeAreaInset from chat tab to fix double-spacing. | Files: `ChatView.swift`, `ContentView.swift`
