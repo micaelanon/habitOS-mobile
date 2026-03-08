@@ -10,7 +10,10 @@ final class AuthRepository: AuthRepositoryProtocol {
     }
 
     func signInWithMagicLink(email: String) async throws {
-        try await client.auth.signInWithOTP(email: email)
+        try await client.auth.signInWithOTP(
+            email: email,
+            redirectTo: Config.authRedirectURL
+        )
     }
 
     func signOut() async throws {

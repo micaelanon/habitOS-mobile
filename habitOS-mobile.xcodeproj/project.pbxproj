@@ -522,6 +522,7 @@
 				DEVELOPMENT_TEAM = LG7ZPY7EB2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "habitOS-mobile/Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesitamos acceso a la cámara para escanear alimentos y tomar fotos de progreso.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Necesitamos leer tus datos de Apple Health para mostrarte un resumen de pasos y sueño en el Dashboard.";
@@ -559,6 +560,7 @@
 				DEVELOPMENT_TEAM = LG7ZPY7EB2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "habitOS-mobile/Info.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSCameraUsageDescription = "Necesitamos acceso a la cámara para escanear alimentos y tomar fotos de progreso.";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Necesitamos leer tus datos de Apple Health para mostrarte un resumen de pasos y sueño en el Dashboard.";
