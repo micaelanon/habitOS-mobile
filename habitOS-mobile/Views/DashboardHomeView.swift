@@ -16,12 +16,15 @@ struct DashboardHomeView: View {
     let health: HealthKitManager
     let onToggleTask: (DailyTaskItem) -> Void
     let onAddWater: (Double) -> Void
+    var onGoToChat: (() -> Void)?
+    var onGoToDiet: (() -> Void)?
 
     @State private var isFABExpanded = false
     @State private var showJournal = false
     @State private var showMealLog = false
     @State private var showWeightLog = false
     @State private var showScanner = false
+    @State private var showNextMealLog = false
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -109,7 +112,14 @@ struct DashboardHomeView: View {
         }
         .sheet(isPresented: $showWeightLog) {
             if let uid = user?.id {
-                NavigationStack { WeightLogView(userId: uid) }
+                NavigationStack {
+                    WeightLogView(userId: uid, startWeight: user?.currentWeightKg, goalWeight: nil)
+                }
+            }
+        }
+        .sheet(isPresented: $showNextMealLog) {
+            NavigationStack {
+                MealLogView(mealName: nextMeal?.mealName ?? "Comida", mealItems: nextMeal?.items ?? [])
             }
         }
         .fullScreenCover(isPresented: $showScanner) {
@@ -254,9 +264,9 @@ struct DashboardHomeView: View {
                         }
                     }
                     HStack {
-                        HBGhostButton("Ver receta", icon: "book") {}
+                        HBGhostButton("Ver receta", icon: "book") { onGoToDiet?() }
                         Spacer()
-                        HBPrimaryButton("Ya comí ✓") {}.frame(width: 130)
+                        HBPrimaryButton("Ya comí ✓") { showNextMealLog = true }.frame(width: 130)
                     }
                     .padding(.top, 4)
                 }
@@ -323,7 +333,7 @@ struct DashboardHomeView: View {
                         .foregroundStyle(Color.hbMuted)
                         .lineSpacing(4)
                         .lineLimit(3)
-                    HStack { Spacer(); HBGhostButton("Ir al chat →") {} }
+                    HStack { Spacer(); HBGhostButton("Ir al chat →") { onGoToChat?() } }
                 }
             }
         }

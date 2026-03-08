@@ -4,8 +4,12 @@ import Charts
 struct ProgressChartView: View {
     let streaks: [StreakPoint]
     let weeklySummary: WeeklySummary?
+    var userId: UUID?
+    var startWeight: Double?
+    var goalWeight: Double?
 
     @State private var selectedTimeRange = 0
+    @State private var showWeightLog = false
     private let timeRanges = ["1S", "1M", "3M", "Todo"]
 
     var body: some View {
@@ -21,13 +25,22 @@ struct ProgressChartView: View {
                 }
                 adherenceChart.staggered(index: 2)
                 streakChart.staggered(index: 3)
-                HBPrimaryButton("Registrar peso", icon: "scalemass") {}.staggered(index: 4)
+                HBPrimaryButton("Registrar peso", icon: "scalemass") {
+                    if userId != nil { showWeightLog = true }
+                }.staggered(index: 4)
                 Spacer(minLength: 32)
             }
             .padding(.horizontal, HBTokens.padScreen)
             .padding(.top, 8)
         }
         .background(Color.hbVanilla)
+        .sheet(isPresented: $showWeightLog) {
+            if let uid = userId {
+                NavigationStack {
+                    WeightLogView(userId: uid, startWeight: startWeight, goalWeight: goalWeight)
+                }
+            }
+        }
     }
 
     private func weightCard(_ s: WeeklySummary) -> some View {
