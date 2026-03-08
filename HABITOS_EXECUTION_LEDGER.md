@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-08 03:10:00 CET
+Last updated: 2026-03-08 03:15:00 CET
 
 ## Purpose
 
@@ -43,7 +43,7 @@ Every Copilot or AI agent working in this repository must use this file as the s
 | HBT-002 | DONE | High | Domain Models | Converge duplicated model layers such as `UserProfile` and `AppUser`, `MealPlan` legacy and `NutritionPlan`, `ChatMessage` and `CoachMessage`. | 2026-03-07 18:33:46 CET | 2026-03-08 02:30:00 CET | UserProfile→AppUser, MealPlan→NutritionPlan, ChatMessage→CoachMessage, DailyTask→DailyTaskItem. Added compatibility extensions. Old types deprecated. Files: AppUser.swift, DataModels.swift, DashboardModels.swift, UserProfile.swift, MealPlan.swift, DashboardHomeView.swift, ChatView.swift, MealPlanView.swift, ProfileView.swift |
 | HBT-003 | DONE | High | Authentication | Verify and complete the real iPhone magic link flow, including deep-link closure and Supabase auth URL handling. | 2026-03-07 18:33:46 CET | 2026-03-08 03:07:00 CET | Added habitos:// URL scheme (Info.plist), .onOpenURL handler in app entry, redirectTo in signInWithMagicLink, authRedirectURL in Config, INFOPLIST_FILE in pbxproj. Branch: feature/HBT-003-004-auth-schema-fixes, PR #6, Issue #5. NOTE: Supabase dashboard must add habitos://auth-callback as allowed redirect URL. |
 | HBT-004 | DONE | High | Backend Schema | Inspect the real Supabase schema and confirm the canonical coach memory table and related backend entities. | 2026-03-07 18:33:46 CET | 2026-03-08 03:07:00 CET | Fixed coach_memories->coach_facts table name, profile_id/fact_kind/title/fact_text column mapping. Added computed category/fact backward-compat properties. Expanded category list. Updated demo data. 8 tables still missing migrations (see HBT-011). Branch: feature/HBT-003-004-auth-schema-fixes, PR #6, Issue #5. |
-| HBT-005 | TODO | Medium | Navigation | Integrate the feature-based modules into the main visible navigation so the app shell reflects the real architecture. | 2026-03-07 18:33:46 CET |  | Several features exist but are only partially surfaced in the visible shell. |
+| HBT-005 | DONE | Medium | Navigation | Integrate the feature-based modules into the main visible navigation so the app shell reflects the real architecture. | 2026-03-07 18:33:46 CET | 2026-03-08 03:12:00 CET | Wired FAB actions to JournalView, MealLogView, WeightLogView, BarcodeScannerView via sheets/fullScreenCover. Added FABAction enum and onAction callback. Branch: feature/HBT-005-wire-fab-navigation, PR #8, Issue #7. |
 | HBT-006 | TODO | Medium | Progress Photos | Introduce a storage abstraction for progress photos and prepare later migration from local-only storage to private remote storage. | 2026-03-07 18:33:46 CET |  | Current implementation is local-only and should not hard-code long-term storage assumptions. |
 | HBT-007 | TODO | Medium | Demo Mode | Isolate demo-only behavior behind explicit boundaries so it supports development without polluting the production architecture. | 2026-03-07 18:33:46 CET |  | Demo mode is currently useful but should stop driving architectural decisions. |
 | HBT-008 | TODO | Medium | Testing | Repair the testing baseline, verify unit test target contents, and establish at least a minimal trustworthy regression suite. | 2026-03-07 18:33:46 CET |  | Test coverage appears weak and one visible test file looked anomalous. |
@@ -55,6 +55,7 @@ Every Copilot or AI agent working in this repository must use this file as the s
 
 Use this section to append one flat entry per completed task. Newest entries first.
 
+- 2026-03-08 03:12:00 CET | HBT-005 | Wired FAB actions: Diario->JournalView, Foto comida->MealLogView, Registrar peso->WeightLogView, Escaner->BarcodeScannerView. Added FABAction enum + onAction callback. | Files: `Core/Components.swift`, `Views/DashboardHomeView.swift`
 - 2026-03-08 03:07:00 CET | HBT-003 | Fixed auth magic link flow: URL scheme registration, .onOpenURL handler, redirectTo parameter, Config.authRedirectURL, INFOPLIST_FILE in pbxproj. | Files: `Config/Config.swift`, `Repositories/AuthRepository.swift`, `HabitOSUserDashboardApp.swift`, `Info.plist`, `project.pbxproj`
 - 2026-03-08 03:07:00 CET | HBT-004 | Aligned CoachMemory model + ViewModel with real coach_facts schema. Fixed table name, column mapping, demo data. Added backward-compat computed props. | Files: `Features/CoachMemory/Models/CoachMemory.swift`, `Features/CoachMemory/ViewModels/CoachMemoryViewModel.swift`
 - 2026-03-08 02:30:00 CET | HBT-001 | Replaced HabitOSDataService with repository-backed DashboardViewModel. Created ChatRepository. Demo fallback is explicit and bounded. | Files: `ViewModels/DashboardViewModel.swift`, `ContentView.swift`, `Repositories/ChatRepository.swift`, `Services/HabitOSDataService.swift`
