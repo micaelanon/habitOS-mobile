@@ -3,6 +3,7 @@ import SwiftUI
 struct ChatView: View {
     let messages: [CoachMessage]
     let coachName: String
+    var isCoachConnected: Bool = true
     var onSend: ((String) -> Void)?
 
     @State private var newMessage: String = ""
@@ -130,7 +131,7 @@ struct ChatView: View {
                     .fill(Color.hbSageBg)
                     .frame(width: 28, height: 28)
                     .overlay(
-                        Image(systemName: "person")
+                        Image(systemName: isCoachConnected ? "person" : "sparkles")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Color.hbSage)
                     )

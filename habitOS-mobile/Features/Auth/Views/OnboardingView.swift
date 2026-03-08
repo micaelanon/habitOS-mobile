@@ -7,7 +7,7 @@ struct OnboardingView: View {
 
     private let slides: [(icon: String, title: String, description: String)] = [
         ("fork.knife", "Tu dieta, día a día", "Sigue tu plan nutricional personalizado con recetas, macros e ingredientes detallados."),
-        ("message.fill", "Habla con tu coach", "Chat en tiempo real con tu nutricionista. Pregunta, comparte y recibe apoyo directo."),
+        ("message.fill", "Tu asistente de nutrición", "Resuelve dudas, comparte tu progreso y recibe recomendaciones personalizadas."),
         ("chart.line.uptrend.xyaxis", "Ve tu progreso", "Gráficas de peso, adherencia y hábitos para ver tu evolución semana a semana.")
     ]
 

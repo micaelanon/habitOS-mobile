@@ -21,6 +21,11 @@ final class AppState {
     var isLoading: Bool = true
     var errorMessage: String?
 
+    // MARK: – Account Mode
+    var accountMode: AccountMode {
+        currentUser?.accountMode ?? .soloAI
+    }
+
     // MARK: – Methods
     func signOut() {
         isAuthenticated = false

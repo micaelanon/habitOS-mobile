@@ -3,6 +3,7 @@ import SwiftUI
 struct DashboardHomeView: View {
     let user: AppUser?
     let coachName: String
+    let accountMode: AccountMode
     let macroSummary: MacroSummary?
     let dailyTasks: [DailyTaskItem]
     let dailyProgress: Double
@@ -76,7 +77,7 @@ struct DashboardHomeView: View {
                     if let summary = weeklySummary { weeklySection(summary).staggered(index: 6) }
 
                     // ── Coach ──
-                    if let msg = lastCoachMessage { coachSection(msg).staggered(index: 7) }
+                    if accountMode == .coachConnected, let msg = lastCoachMessage { coachSection(msg).staggered(index: 7) }
 
                     Spacer(minLength: 80)
                 }
@@ -307,7 +308,7 @@ struct DashboardHomeView: View {
     // ═══ Coach ═══
     private func coachSection(_ msg: CoachMessage) -> some View {
         VStack(alignment: .leading, spacing: 14) {
-            HBSectionHeader("Tu coach", icon: "message")
+            HBSectionHeader("Tu nutricionista", icon: "message")
             HBCard {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(spacing: 10) {

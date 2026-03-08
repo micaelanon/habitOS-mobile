@@ -4,6 +4,7 @@ import SwiftUI
 struct CoachMemoryView: View {
     @State private var viewModel = CoachMemoryViewModel()
     let userId: UUID?
+    let accountMode: AccountMode
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -16,10 +17,12 @@ struct CoachMemoryView: View {
                             .font(.system(size: 26))
                             .foregroundStyle(Color.hbSage)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Memoria del Coach")
+                            Text(accountMode == .coachConnected ? "Memoria del Coach" : "Lo que habitOS sabe de ti")
                                 .font(.hbSerifBold(18))
                                 .foregroundStyle(Color.hbInk)
-                            Text("Tu coach recuerda estos datos para personalizar tus planes y recomendaciones.")
+                            Text(accountMode == .coachConnected
+                                 ? "Tu coach recuerda estos datos para personalizar tus planes y recomendaciones."
+                                 : "habitOS usa estos datos para personalizar tus planes y recomendaciones.")
                                 .font(.system(size: 12))
                                 .foregroundStyle(Color.hbMuted)
                         }
@@ -44,7 +47,7 @@ struct CoachMemoryView: View {
             .padding(.top, 8)
         }
         .background(Color.hbVanilla)
-        .navigationTitle("Memoria del Coach")
+        .navigationTitle(accountMode == .coachConnected ? "Memoria del Coach" : "Lo que habitOS sabe de ti")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -116,7 +119,9 @@ struct CoachMemoryView: View {
             Text("Aún sin recuerdos")
                 .font(.hbSerifBold(20))
                 .foregroundStyle(Color.hbInk)
-            Text("Tu coach irá guardando datos relevantes a medida que interactúes con él.")
+            Text(accountMode == .coachConnected
+                 ? "Tu coach irá guardando datos relevantes a medida que interactúes con él."
+                 : "habitOS irá guardando datos relevantes a medida que uses la app.")
                 .font(.system(size: 13))
                 .foregroundStyle(Color.hbMuted)
                 .multilineTextAlignment(.center)

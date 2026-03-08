@@ -165,29 +165,39 @@ struct LoginView: View {
                     }
                     .padding(.horizontal, 32)
 
-                    // Demo Mode Button
-                    Button {
-                        onAuthenticated(AppUser.demoUser)
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "play.circle.fill")
-                            Text("Entrar en modo demo")
-                                .fontWeight(.medium)
+                    // Demo Mode Buttons
+                    VStack(spacing: 10) {
+                        Button {
+                            onAuthenticated(AppUser.demoUser)
+                        } label: {
+                            HStack(spacing: 8) {
+                                Image(systemName: "play.circle.fill")
+                                Text("Entrar en modo demo")
+                                    .fontWeight(.medium)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(Color.hbInk.opacity(0.06))
+                            .foregroundStyle(Color.hbInk.opacity(0.7))
+                            .cornerRadius(14)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(Color.hbLine, lineWidth: 1)
+                            )
                         }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(Color.hbInk.opacity(0.06))
-                        .foregroundStyle(Color.hbInk.opacity(0.7))
-                        .cornerRadius(14)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(Color.hbLine, lineWidth: 1)
-                        )
+
+                        Button {
+                            onAuthenticated(AppUser.demoUserCoach)
+                        } label: {
+                            Text("Demo con nutricionista")
+                                .font(.caption)
+                                .foregroundStyle(Color.hbMuted)
+                        }
                     }
                     .padding(.horizontal, 32)
 
                     // Footer
-                    Text("¿No tienes cuenta? Habla con tu nutricionista")
+                    Text("Tu plan nutricional, siempre contigo")
                         .font(.caption)
                         .foregroundStyle(Color.hbInk.opacity(0.4))
 
@@ -201,8 +211,37 @@ struct LoginView: View {
 // MARK: – Demo User Factory
 
 extension AppUser {
-    /// Mock user for development/demo mode
+    /// Demo user — solo IA mode (no coach assigned)
     static let demoUser = AppUser(
+        id: UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
+        authUserId: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
+        coachProfileId: nil,
+        firstName: "Micael",
+        lastName: "García",
+        email: "micaelanon@gmail.com",
+        phone: nil,
+        avatarUrl: nil,
+        sex: "male",
+        dateOfBirth: nil,
+        heightCm: 168,
+        currentWeightKg: 81.2,
+        goal: "Perder grasa, ganar energía",
+        activityLevel: "moderate",
+        foodAllergies: [],
+        foodDislikes: [],
+        dietType: "balanced",
+        medicalConditions: [],
+        timezone: "Europe/Madrid",
+        locale: "es",
+        notificationsEnabled: true,
+        healthkitEnabled: false,
+        onboardingCompleted: true,
+        createdAt: Date(),
+        updatedAt: Date()
+    )
+
+    /// Demo user — coach connected mode (with assigned professional)
+    static let demoUserCoach = AppUser(
         id: UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
         authUserId: UUID(uuidString: "00000000-0000-0000-0000-000000000001")!,
         coachProfileId: UUID(uuidString: "CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC")!,

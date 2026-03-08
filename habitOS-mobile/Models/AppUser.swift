@@ -70,3 +70,19 @@ extension AppUser {
     /// Parsed avatar URL from the stored string.
     var avatarURL: URL? { avatarUrl.flatMap { URL(string: $0) } }
 }
+
+// MARK: - Account Mode
+
+/// Determines which experience the user gets based on their relationship with a professional.
+enum AccountMode: String, Codable, Sendable {
+    case soloAI = "solo_ai"
+    case hybridTransition = "hybrid_transition"
+    case coachConnected = "coach_connected"
+}
+
+extension AppUser {
+    /// Derived from coachProfileId. hybrid_transition will be refined with additional fields later.
+    var accountMode: AccountMode {
+        coachProfileId != nil ? .coachConnected : .soloAI
+    }
+}
