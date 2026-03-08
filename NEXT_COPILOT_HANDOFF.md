@@ -85,38 +85,37 @@ If the user simply says to continue, your default sequence is:
 
 ## Current Highest-Value Areas
 
-At the time of this handoff (2026-03-08), ALL original backlog tasks are DONE:
+At the time of this handoff (2026-03-08), ALL backlog tasks are DONE and merged to develop:
 
-- **DONE**: HBT-001+002 — Architecture convergence (PR #4)
-- **DONE**: HBT-003+004 — Auth magic link + coach_facts schema (PR #6)
-- **DONE**: HBT-005 — FAB navigation wiring (PR #8)
-- **DONE**: HBT-006 — Photo storage abstraction with DI (PR #14)
-- **DONE**: HBT-007 — Demo mode isolation (PR #10)
-- **DONE**: HBT-008 — Testing baseline: mocks + 15+ tests (PR #12)
-- **DONE**: HBT-009+010 — Project governance + handoff docs
-- **DONE**: HBT-011 — SQL migrations for 11 tables + 2 storage buckets (PR #16)
+- **DONE + MERGED**: HBT-001+002 — Architecture convergence
+- **DONE + MERGED**: HBT-003+004 — Auth magic link + coach_facts schema
+- **DONE + MERGED**: HBT-005 — FAB navigation wiring
+- **DONE + MERGED**: HBT-006 — Photo storage abstraction with DI
+- **DONE + MERGED**: HBT-007 — Demo mode isolation
+- **DONE + MERGED**: HBT-008 — Testing baseline: mocks + 15+ tests
+- **DONE + MERGED**: HBT-009+010 — Project governance + handoff docs
+- **DONE + MERGED**: HBT-011 — SQL migrations for 11 tables + 2 storage buckets
+- **DONE + MERGED**: HBT-012 — Wire all dead/placeholder UI buttons
+
+Zero open PRs remain. All work is unified on develop.
 
 The likely next-value areas are:
 
-- **Merge PRs to develop** — 7 PRs pending review, must merge in order (#4 → #6 → #8 → #10 → #12 → #14 → #16)
 - **Supabase dashboard config** — Add `habitos://auth-callback` as allowed redirect URL (manual step)
 - **CI/CD** — Add GitHub Actions workflow for build + test execution
 - **Remote photo storage** — Create `SupabasePhotoStorageRepository` when `body-photos` bucket is provisioned
 - **ShoppingRepository implementation** — Protocol exists but no Supabase implementation
 - **App Group + widget data** — Widget shows placeholder until shared data layer is implemented
+- **Real chat integration** — Replace demo auto-reply in ContentView with ChatViewModel + Supabase real-time
+- **Time period filtering** — ProgressChartView time range buttons animate but do not filter data yet
 
 ## Git Branch State
 
-All work is on feature branches off develop. NEVER merge to main.
+All work is on develop. NEVER merge to main.
 
-Open PRs targeting develop (merge in this order):
-- PR #4: HBT-001+002 architecture convergence
-- PR #6: HBT-003+004 auth + schema fixes
-- PR #8: HBT-005 FAB navigation wiring
-- PR #10: HBT-007 demo isolation
-- PR #12: HBT-008 testing baseline
-- PR #14: HBT-006 photo storage abstraction
-- PR #16: HBT-011 SQL migrations
+Zero open PRs. The develop branch contains all HBT-001 through HBT-012 work.
+
+Note: PR #16 (SQL migrations) was a squash merge that included all stacked commits from HBT-001 through HBT-011. PRs #4, #6, #8, #10, #12, #14 were closed as their changes were already included. HBT-012 was rebased onto the new develop and merged via PR #19.
 
 ## Final Requirement
 
