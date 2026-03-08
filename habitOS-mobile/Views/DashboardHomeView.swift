@@ -79,6 +79,11 @@ struct DashboardHomeView: View {
                     // ── Coach ──
                     if accountMode == .coachConnected, let msg = lastCoachMessage { coachSection(msg).staggered(index: 7) }
 
+                    // ── AI Recommendation (solo_ai / hybrid only) ──
+                    if accountMode != .coachConnected {
+                        aiRecommendationSection.staggered(index: 8)
+                    }
+
                     Spacer(minLength: 80)
                 }
                 .padding(.horizontal, HBTokens.padScreen)
@@ -303,6 +308,59 @@ struct DashboardHomeView: View {
                 }
             }
         }
+    }
+
+    // ═══ AI Recommendation (solo_ai / hybrid) ═══
+    private var aiRecommendationSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HBSectionHeader("Siguiente paso", icon: "sparkles")
+            HBCard {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(spacing: 10) {
+                        Circle()
+                            .fill(Color.hbSageBg)
+                            .frame(width: 32, height: 32)
+                            .overlay(
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundStyle(Color.hbSage)
+                            )
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("habitOS")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(Color.hbInk)
+                            Text("Recomendación para ti")
+                                .font(.system(size: 11))
+                                .foregroundStyle(Color.hbMuted2)
+                        }
+                    }
+                    Text(aiRecommendationText)
+                        .font(.system(size: 14))
+                        .foregroundStyle(Color.hbMuted)
+                        .lineSpacing(4)
+                    HStack {
+                        Spacer()
+                        HBGhostButton("Pregúntame más →") { onGoToChat?() }
+                    }
+                }
+            }
+        }
+    }
+
+    private var aiRecommendationText: String {
+        if dailyProgress >= 0.8 {
+            return "Vas muy bien hoy — \(completedCount) de \(totalCount) objetivos completados. Mantén el ritmo y cierra el día con buen descanso."
+        }
+        if waterLiters < waterTarget * 0.4 {
+            return "Llevas \(String(format: "%.1f", waterLiters))L de \(String(format: "%.1f", waterTarget))L de agua. Un vaso ahora te acerca al objetivo."
+        }
+        if completedCount == 0 && totalCount > 0 {
+            return "Hoy tienes \(totalCount) objetivos por delante. Empieza por el primero — los pequeños pasos cuentan."
+        }
+        if let meal = nextMeal {
+            return "Tu próxima comida es \(meal.mealName.lowercased()). Revisa los ingredientes y prepárate con calma."
+        }
+        return "Revisa tu plan de hoy y elige un objetivo para completar. La constancia es lo que marca la diferencia."
     }
 
     // ═══ Coach ═══

@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-08 22:15:00 CET
+Last updated: 2026-03-08 22:45:00 CET
 
 ## Purpose
 
@@ -57,10 +57,13 @@ Every Copilot or AI agent working in this repository must use this file as the s
 | HBT-016 | DONE | Medium | CI/CD | Bootstrap GitHub Actions validation for the iOS app and keep the stability backlog visible for the next execution pass. | 2026-03-08 19:30:00 CET | 2026-03-08 19:45:00 CET | Issue #20 opened. Added `.github/workflows/ios-ci.yml` with GitHub Actions bootstrap on `macos-15`, explicit Xcode 26.2 selection, project inspection, and simulator builds for app, tests target, and widget target without code signing. Current limitation documented: test execution still depends on adding a shared `.xcscheme` to the repo. |
 | HBT-017 | DONE | High | Architecture | Full product audit: identify every place the app assumes a human coach, catalog hardcoded copy, icons, and flows that break for solo-AI users, and produce a phased remediation plan. | 2026-03-08 20:00:00 CET | 2026-03-08 20:30:00 CET | Read 11 Swift files, cataloged 40+ hardcoded coach references across Views, ViewModels, and Features. Produced 3-phase plan; user approved Phase 1 with 5 specific adjustments. No code changes — audit only. |
 | HBT-018 | DONE | High | Architecture | AccountMode Phase 1: introduce AccountMode enum, derive mode from coachProfileId, conditionalize all UI that assumed a human coach, dual demo fixtures, dynamic copy and icons per mode. | 2026-03-08 20:30:00 CET | 2026-03-08 21:15:00 CET | Branch: `feat/HBT-018-account-mode-phase1`, PR #25, Issue #24. AccountMode enum (soloAI/hybridTransition/coachConnected) in AppUser, computed accountMode in AppState. advisorDisplayName returns "habitOS" for soloAI, coach name for coachConnected. Dual demo fixtures (demoUser solo, demoUserCoach connected). Conditional VideoCall, coach section, sparkles icon for AI. Dynamic copy in CoachMemoryView, ProfileView, OnboardingView, LoginView. 10 files changed, 163 insertions, 72 deletions. Zero compile errors. |
+| HBT-019 | DONE | Medium | Dashboard UX | Phase 2 reduced: add contextual AI recommendation card for solo_ai users on the dashboard. No structural refactor, no new models, no backend changes. | 2026-03-08 22:30:00 CET | 2026-03-08 22:45:00 CET | Branch: `feat/HBT-019-solo-ai-recommendation-card`, PR #27, Issue #26. Added `aiRecommendationSection` card to DashboardHomeView. Visible only when `accountMode != .coachConnected`. Derives contextual tip from existing dashboard state (dailyProgress, water, tasks, nextMeal). Uses HBCard + HBSectionHeader per design system. CTA "Pregúntame más →" navigates to chat. CTA a profesional postponed — no real destination exists yet. 1 file changed. Zero compile errors. |
 
 ## Session Change Log
 
 Use this section to append one flat entry per completed task. Newest entries first.
+
+- 2026-03-08 22:45:00 CET | HBT-019 | Phase 2 reduced: AI recommendation card for solo_ai on dashboard. Contextual copy derived from existing state. HBCard + sparkles icon + ghost CTA to chat. Coach section unaffected. CTA to professional postponed (no destination). | Files: `Views/DashboardHomeView.swift`
 
 - 2026-03-08 22:15:00 CET | PR-CONSOLIDATION | Merged PR #23 (HBT-013/014/015 bug fixes, squash) and PR #25 (HBT-018 AccountMode Phase 1, squash) to develop. PR #25 required rebase — conflicts in docs only (HABITOS_EXECUTION_LEDGER.md, NEXT_COPILOT_HANDOFF.md), zero Swift conflicts. Both modes (solo_ai, coach_connected) validated at code-tracing level across all 10 modified files. Zero compile errors. Zero open PRs. Foundation phase closed. | PRs merged: #23, #25.
 
