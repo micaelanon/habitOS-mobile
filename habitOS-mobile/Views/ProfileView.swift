@@ -1,4 +1,5 @@
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     let user: AppUser?
@@ -7,6 +8,8 @@ struct ProfileView: View {
     @Environment(AppState.self) private var appState
     @State private var showScanner = false
     @State private var healthStore = HealthKitManager.shared
+    @State private var selectedItem: PhotosPickerItem?
+    @State private var avatarImage: UIImage?
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -14,13 +17,37 @@ struct ProfileView: View {
 
                 // ── Header ──
                 VStack(spacing: 16) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.hbSageBg)
-                            .frame(width: 80, height: 80)
-                        Text(String(user?.firstName.prefix(1) ?? "?"))
-                            .font(.hbSerifBold(32))
-                            .foregroundStyle(Color.hbSage)
+                    PhotosPicker(selection: $selectedItem, matching: .images) {
+                        ZStack(alignment: .bottomTrailing) {
+                            if let avatarImage {
+                                Image(uiImage: avatarImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 80, height: 80)
+                                    .clipShape(Circle())
+                            } else {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.hbSageBg)
+                                        .frame(width: 80, height: 80)
+                                    Text(String(user?.firstName.prefix(1) ?? "?"))
+                                        .font(.hbSerifBold(32))
+                                        .foregroundStyle(Color.hbSage)
+                                }
+                            }
+                            Circle()
+                                .fill(Color.hbSage)
+                                .frame(width: 26, height: 26)
+                                .overlay(
+                                    Image(systemName: "camera.fill")
+                                        .font(.system(size: 11, weight: .semibold))
+                                        .foregroundStyle(Color.hbVanilla)
+                                )
+                                .shadow(color: .black.opacity(0.15), radius: 4, y: 2)
+                        }
+                    }
+                    .onChange(of: selectedItem) { _, newItem in
+                        Task { await loadAndSaveAvatar(from: newItem) }
                     }
 
                     VStack(spacing: 6) {
@@ -148,6 +175,43 @@ struct ProfileView: View {
             .padding(.top, 8)
         }
         .background(Color.hbVanilla)
+        .onAppear { avatarImage = Self.loadAvatarFromDisk() }
+    }
+
+    // MARK: – Avatar Helpers
+
+    private static var avatarFileURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("habitos_avatar.jpg")
+    }
+
+    private static func loadAvatarFromDisk() -> UIImage? {
+        guard FileManager.default.fileExists(atPath: avatarFileURL.path) else { return nil }
+        return UIImage(contentsOfFile: avatarFileURL.path)
+    }
+
+    private func loadAndSaveAvatar(from item: PhotosPickerItem?) async {
+        guard let item,
+              let data = try? await item.loadTransferable(type: Data.self),
+              let image = UIImage(data: data) else { return }
+
+        // Downscale to 400px max for avatar
+        let maxDim: CGFloat = 400
+        let size = image.size
+        let resized: UIImage
+        if max(size.width, size.height) > maxDim {
+            let scale = maxDim / max(size.width, size.height)
+            let newSize = CGSize(width: size.width * scale, height: size.height * scale)
+            let renderer = UIGraphicsImageRenderer(size: newSize)
+            resized = renderer.image { _ in image.draw(in: CGRect(origin: .zero, size: newSize)) }
+        } else {
+            resized = image
+        }
+
+        if let jpegData = resized.jpegData(compressionQuality: 0.85) {
+            try? jpegData.write(to: Self.avatarFileURL)
+        }
+        avatarImage = resized
     }
 
     private func placeholderView(title: String, icon: String, body: String) -> some View {
