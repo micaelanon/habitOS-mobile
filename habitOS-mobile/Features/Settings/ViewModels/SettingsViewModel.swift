@@ -17,12 +17,13 @@ final class SettingsViewModel {
 
         do {
             try await AuthRepository().signOut()
-            // Reset AppState to bump back to authentication screen
-            await MainActor.run {
-                appState.signOut()
-            }
         } catch {
             print("Error logging out: \(error)")
+        }
+
+        // Always reset AppState regardless of Supabase result
+        await MainActor.run {
+            appState.signOut()
         }
     }
 }
