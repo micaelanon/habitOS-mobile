@@ -66,12 +66,18 @@ final class DashboardViewModel {
 
     // MARK: – Load
 
-    /// Main entry point. Pass the authenticated user or nil for demo mode.
-    func loadDashboard(user: AppUser?) async {
+    /// Main entry point. Pass the authenticated user, or nil if the user
+    /// explicitly chose demo mode (appState.isDemo should also be true).
+    func loadDashboard(user: AppUser?, isDemo: Bool = false) async {
         isLoading = true
         errorMessage = nil
 
         guard let user = user else {
+            if isDemo {
+                print("[HabitOS] Loading demo dashboard (explicit demo mode)")
+            } else {
+                print("[HabitOS] Warning: loadDashboard called with nil user outside demo mode")
+            }
             await loadDemo()
             isLoading = false
             return
@@ -126,6 +132,7 @@ final class DashboardViewModel {
                 )
             }
         } catch {
+            print("[HabitOS] Dashboard load error: \(error.localizedDescription)")
             errorMessage = "No pudimos cargar tu dashboard. Intenta nuevamente."
             await loadDemo()
         }

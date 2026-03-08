@@ -41,7 +41,7 @@ final class CoachMemoryViewModel {
                 .value
             await MainActor.run { memories = fetched }
         } catch {
-            // Use demo data if table doesn't exist yet or user has no memories
+            print("[HabitOS] CoachMemory load error: \(error.localizedDescription). Using demo data.")
             await MainActor.run { memories = Self.demo }
         }
     }

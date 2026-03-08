@@ -31,6 +31,7 @@ struct HabitOSUserDashboardApp: App {
                     // Not logged in
                     LoginView { user in
                         appState.currentUser = user
+                        appState.isDemo = (user.id == UUID(uuidString: "11111111-1111-1111-1111-111111111111"))
                         appState.isAuthenticated = true
                         if !user.onboardingCompleted {
                             appState.showOnboarding = true

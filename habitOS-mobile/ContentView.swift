@@ -67,7 +67,7 @@ struct ContentView: View {
         .task {
             guard !hasLoaded else { return }
             hasLoaded = true
-            await viewModel.loadDashboard(user: appState.currentUser)
+            await viewModel.loadDashboard(user: appState.currentUser, isDemo: appState.isDemo)
         }
         .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
             Button("OK") { viewModel.errorMessage = nil }
