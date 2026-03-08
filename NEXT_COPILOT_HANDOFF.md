@@ -85,13 +85,33 @@ If the user simply says to continue, your default sequence is:
 
 ## Current Highest-Value Areas
 
-At the time of this handoff, the likely top-value areas are:
+At the time of this handoff (2026-03-08), the completed work includes:
 
-- removing root-shell dependence on `HabitOSDataService`
-- converging duplicated models
-- verifying and closing the real iPhone magic-link flow
-- confirming the real Supabase schema for coach memory
-- strengthening the testing baseline
+- **DONE**: Root-shell dependency on HabitOSDataService replaced with 5 repository-backed DI (HBT-001+002, PR #4)
+- **DONE**: Auth magic link flow fixed: URL scheme, .onOpenURL, redirectTo (HBT-003, PR #6)
+- **DONE**: coach_facts schema alignment in CoachMemory model + ViewModel (HBT-004, PR #6)
+- **DONE**: FAB actions wired to JournalView, MealLogView, WeightLogView, BarcodeScannerView (HBT-005, PR #8)
+- **DONE**: Demo mode isolated: widget fixed, isDemo flag in AppState, error logging (HBT-007, PR #10)
+- **DONE**: Testing baseline: mock repos, 15+ model/ViewModel tests (HBT-008, PR #12)
+
+The likely top-value remaining areas are:
+
+- **HBT-006**: Storage abstraction for progress photos (prepare migration from local to remote)
+- **HBT-011**: Create migration SQL files for 8 core tables (app_users, nutrition_plans, etc.)
+- **Supabase dashboard**: Add `habitos://auth-callback` as allowed redirect URL
+- **CI/CD**: Add GitHub Actions workflow for test execution
+- Merge all open PRs into develop (4-5 PRs pending review)
+
+## Git Branch State
+
+All work is on feature branches off develop. NEVER merge to main.
+
+Open PRs targeting develop:
+- PR #4: HBT-001+002 architecture convergence
+- PR #6: HBT-003+004 auth + schema fixes
+- PR #8: HBT-005 FAB navigation wiring
+- PR #10: HBT-007 demo isolation
+- PR #12: HBT-008 testing baseline
 
 ## Final Requirement
 
