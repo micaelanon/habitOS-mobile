@@ -85,33 +85,38 @@ If the user simply says to continue, your default sequence is:
 
 ## Current Highest-Value Areas
 
-At the time of this handoff (2026-03-08), the completed work includes:
+At the time of this handoff (2026-03-08), ALL original backlog tasks are DONE:
 
-- **DONE**: Root-shell dependency on HabitOSDataService replaced with 5 repository-backed DI (HBT-001+002, PR #4)
-- **DONE**: Auth magic link flow fixed: URL scheme, .onOpenURL, redirectTo (HBT-003, PR #6)
-- **DONE**: coach_facts schema alignment in CoachMemory model + ViewModel (HBT-004, PR #6)
-- **DONE**: FAB actions wired to JournalView, MealLogView, WeightLogView, BarcodeScannerView (HBT-005, PR #8)
-- **DONE**: Demo mode isolated: widget fixed, isDemo flag in AppState, error logging (HBT-007, PR #10)
-- **DONE**: Testing baseline: mock repos, 15+ model/ViewModel tests (HBT-008, PR #12)
+- **DONE**: HBT-001+002 — Architecture convergence (PR #4)
+- **DONE**: HBT-003+004 — Auth magic link + coach_facts schema (PR #6)
+- **DONE**: HBT-005 — FAB navigation wiring (PR #8)
+- **DONE**: HBT-006 — Photo storage abstraction with DI (PR #14)
+- **DONE**: HBT-007 — Demo mode isolation (PR #10)
+- **DONE**: HBT-008 — Testing baseline: mocks + 15+ tests (PR #12)
+- **DONE**: HBT-009+010 — Project governance + handoff docs
+- **DONE**: HBT-011 — SQL migrations for 11 tables + 2 storage buckets (PR #16)
 
-The likely top-value remaining areas are:
+The likely next-value areas are:
 
-- **HBT-006**: Storage abstraction for progress photos (prepare migration from local to remote)
-- **HBT-011**: Create migration SQL files for 8 core tables (app_users, nutrition_plans, etc.)
-- **Supabase dashboard**: Add `habitos://auth-callback` as allowed redirect URL
-- **CI/CD**: Add GitHub Actions workflow for test execution
-- Merge all open PRs into develop (4-5 PRs pending review)
+- **Merge PRs to develop** — 7 PRs pending review, must merge in order (#4 → #6 → #8 → #10 → #12 → #14 → #16)
+- **Supabase dashboard config** — Add `habitos://auth-callback` as allowed redirect URL (manual step)
+- **CI/CD** — Add GitHub Actions workflow for build + test execution
+- **Remote photo storage** — Create `SupabasePhotoStorageRepository` when `body-photos` bucket is provisioned
+- **ShoppingRepository implementation** — Protocol exists but no Supabase implementation
+- **App Group + widget data** — Widget shows placeholder until shared data layer is implemented
 
 ## Git Branch State
 
 All work is on feature branches off develop. NEVER merge to main.
 
-Open PRs targeting develop:
+Open PRs targeting develop (merge in this order):
 - PR #4: HBT-001+002 architecture convergence
 - PR #6: HBT-003+004 auth + schema fixes
 - PR #8: HBT-005 FAB navigation wiring
 - PR #10: HBT-007 demo isolation
 - PR #12: HBT-008 testing baseline
+- PR #14: HBT-006 photo storage abstraction
+- PR #16: HBT-011 SQL migrations
 
 ## Final Requirement
 
