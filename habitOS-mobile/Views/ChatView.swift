@@ -3,6 +3,7 @@ import SwiftUI
 struct ChatView: View {
     let messages: [ChatMessage]
     let coachName: String
+    var onSend: ((String) -> Void)?
 
     @State private var newMessage: String = ""
     @State private var showQuickReplies = true
@@ -39,6 +40,11 @@ struct ChatView: View {
                 .onAppear {
                     if let lastId = messages.last?.id { proxy.scrollTo(lastId, anchor: .bottom) }
                 }
+                .onChange(of: messages.count) {
+                    if let lastId = messages.last?.id {
+                        withAnimation { proxy.scrollTo(lastId, anchor: .bottom) }
+                    }
+                }
             }
 
             // Quick replies
@@ -47,7 +53,7 @@ struct ChatView: View {
                     HStack(spacing: 8) {
                         ForEach(quickReplies, id: \.self) { reply in
                             Button {
-                                newMessage = reply
+                                onSend?(reply)
                                 withAnimation { showQuickReplies = false }
                             } label: {
                                 Text(reply)
@@ -76,8 +82,13 @@ struct ChatView: View {
                     .background(Color.hbVanilla, in: RoundedRectangle(cornerRadius: HBTokens.radiusMedium))
                     .overlay(RoundedRectangle(cornerRadius: HBTokens.radiusMedium)
                         .stroke(Color.hbLine, lineWidth: 1))
+                    .onSubmit {
+                        sendCurrentMessage()
+                    }
 
-                Button {} label: {
+                Button {
+                    sendCurrentMessage()
+                } label: {
                     Image(systemName: "arrow.up")
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundStyle(newMessage.isEmpty ? Color.hbMuted2 : Color.hbVanilla)
@@ -95,6 +106,13 @@ struct ChatView: View {
             .background(Color.hbPaper)
         }
         .background(Color.hbVanilla)
+    }
+
+    private func sendCurrentMessage() {
+        let text = newMessage.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !text.isEmpty else { return }
+        onSend?(text)
+        newMessage = ""
     }
 
     private func messageBubble(_ message: ChatMessage) -> some View {

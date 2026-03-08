@@ -107,9 +107,15 @@ struct MealPlanView: View {
                 }
 
                 NavigationLink(destination: ShoppingListView()) {
-                    HBPrimaryButton("Lista de la compra", icon: "cart") {}
+                    HStack(spacing: 8) {
+                        Image(systemName: "cart").font(.system(size: 14, weight: .medium))
+                        Text("Lista de la compra").font(.system(size: 14, weight: .semibold))
+                    }
+                    .foregroundStyle(Color.hbVanilla)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 46)
+                    .background(Color.hbSage, in: RoundedRectangle(cornerRadius: HBTokens.radiusMedium))
                 }
-                .buttonStyle(.plain)
 
                 Spacer(minLength: 32)
             }

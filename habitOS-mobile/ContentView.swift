@@ -92,7 +92,9 @@ struct ContentView: View {
                 waterTarget: viewModel.waterTarget,
                 health: viewModel.health,
                 onToggleTask: { viewModel.toggleDailyTask($0) },
-                onAddWater: { viewModel.addWater($0) }
+                onAddWater: { viewModel.addWater($0) },
+                onGoToChat: { selectedTab = 2 },
+                onGoToDiet: { selectedTab = 1 }
             )
             .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -117,7 +119,22 @@ struct ContentView: View {
         NavigationStack {
             ChatView(
                 messages: viewModel.chatMessages,
-                coachName: viewModel.user?.coachName ?? "Coach"
+                coachName: viewModel.user?.coachName ?? "Coach",
+                onSend: { text in
+                    // Add user message
+                    let userMsg = ChatMessage(id: UUID(), role: .user, text: text, timestamp: Date())
+                    viewModel.chatMessages.append(userMsg)
+                    // Demo auto-reply
+                    Task {
+                        try? await Task.sleep(for: .milliseconds(1200))
+                        let reply = ChatMessage(
+                            id: UUID(), role: .coach,
+                            text: demoReply(for: text),
+                            timestamp: Date()
+                        )
+                        viewModel.chatMessages.append(reply)
+                    }
+                }
             )
             .navigationTitle(viewModel.user?.coachName ?? "Chat")
             .navigationBarTitleDisplayMode(.inline)
@@ -143,7 +160,10 @@ struct ContentView: View {
         NavigationStack {
             ProgressChartView(
                 streaks: viewModel.streaks,
-                weeklySummary: viewModel.weeklySummary
+                weeklySummary: viewModel.weeklySummary,
+                userId: viewModel.user?.id,
+                startWeight: viewModel.user?.currentWeightKg,
+                goalWeight: viewModel.user?.targetWeightKg
             )
             .navigationTitle("Progreso")
             .navigationBarTitleDisplayMode(.inline)
@@ -173,6 +193,21 @@ struct ContentView: View {
         }
     }
 
+    // MARK: – Demo Chat Replies
+    private func demoReply(for text: String) -> String {
+        let lower = text.lowercased()
+        if lower.contains("plan") || lower.contains("seguí") {
+            return "¡Genial! Seguir el plan es lo más importante. Sigue así 💪"
+        } else if lower.contains("hambre") {
+            return "Es normal tener algo de hambre entre comidas. Prueba beber agua o tomar un snack ligero como frutos secos."
+        } else if lower.contains("no pude") {
+            return "No pasa nada, un día no define tu progreso. Mañana volvemos con todo 🙌"
+        } else if lower.contains("duda") {
+            return "Claro, cuéntame. Estoy aquí para ayudarte con lo que necesites."
+        } else {
+            return "Gracias por contarme. Reviso tu progreso y te digo cómo vas esta semana."
+        }
+    }
 }
 
 // MARK: – Loading Overlay View

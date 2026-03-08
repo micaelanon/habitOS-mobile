@@ -84,9 +84,13 @@ struct ProfileView: View {
                             navRowLabel(icon: "brain.head.profile", label: "Memoria del coach")
                         }
                         HBDivider(indent: 44)
-                        navRow(icon: "lock.shield", label: "Privacidad")
+                        NavigationLink(destination: placeholderView(title: "Privacidad", icon: "lock.shield", body: "Tu información está protegida. HabitOS solo comparte datos con tu coach asignado y nunca con terceros.")) {
+                            navRowLabel(icon: "lock.shield", label: "Privacidad")
+                        }
                         HBDivider(indent: 44)
-                        navRow(icon: "questionmark.circle", label: "Ayuda")
+                        NavigationLink(destination: placeholderView(title: "Ayuda", icon: "questionmark.circle", body: "¿Necesitas ayuda? Escríbele a tu coach desde el chat. También puedes contactarnos en soporte@habitos.app.")) {
+                            navRowLabel(icon: "questionmark.circle", label: "Ayuda")
+                        }
                     }
                 }
                 .staggered(index: 3)
@@ -143,6 +147,27 @@ struct ProfileView: View {
             .padding(.top, 8)
         }
         .background(Color.hbVanilla)
+    }
+
+    private func placeholderView(title: String, icon: String, body: String) -> some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                Image(systemName: icon)
+                    .font(.system(size: 40))
+                    .foregroundStyle(Color.hbSage)
+                Text(body)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Color.hbMuted)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(4)
+                    .padding(.horizontal, 32)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, 60)
+        }
+        .background(Color.hbVanilla)
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 
     private func statCard(_ label: String, value: String, unit: String) -> some View {
