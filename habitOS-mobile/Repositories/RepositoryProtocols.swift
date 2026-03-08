@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 /// Repository protocols for dependency injection and testability
 /// Each protocol defines CRUD operations for a Supabase table
@@ -58,4 +59,12 @@ protocol TaskRepositoryProtocol: Sendable {
 protocol ShoppingRepositoryProtocol: Sendable {
     func fetchCurrentList(userId: UUID) async throws -> ShoppingList?
     func updateList(_ list: ShoppingList) async throws
+}
+
+// MARK: – Photo Storage
+
+protocol PhotoStorageRepositoryProtocol {
+    func savePhoto(_ image: UIImage, date: Date) async throws -> ProgressPhoto
+    func loadPhotos() async throws -> [ProgressPhoto]
+    func deletePhoto(_ photo: ProgressPhoto) async throws
 }

@@ -1,63 +1,60 @@
 import Foundation
 import UIKit
 
-/// Manages saving, loading and deleting progress photos from local storage
+/// Manages saving, loading and deleting progress photos via a storage repository
 @Observable
 final class ProgressPhotosViewModel {
     var photos: [ProgressPhoto] = []
     var isLoading = false
+    var errorMessage: String?
 
-    private let folderName = "progress_photos"
+    private let repository: PhotoStorageRepositoryProtocol
 
-    private var folder: URL {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(folderName)
-    }
-
-    struct ProgressPhoto: Identifiable {
-        let id: UUID
-        let url: URL
-        let date: Date
-        var image: UIImage?
+    init(repository: PhotoStorageRepositoryProtocol = LocalPhotoStorageRepository()) {
+        self.repository = repository
     }
 
     // MARK: – Load
 
     func loadPhotos() {
         isLoading = true
-        defer { isLoading = false }
-
-        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-
-        let files = (try? FileManager.default.contentsOfDirectory(atPath: folder.path)) ?? []
-        photos = files
-            .filter { $0.hasSuffix(".jpg") }
-            .compactMap { filename -> ProgressPhoto? in
-                let url = folder.appendingPathComponent(filename)
-                let dateStr = String(filename.dropLast(4)) // strip .jpg
-                let date = ISO8601DateFormatter().date(from: dateStr) ?? Date()
-                let image = UIImage(contentsOfFile: url.path)
-                return ProgressPhoto(id: UUID(), url: url, date: date, image: image)
+        errorMessage = nil
+        Task { @MainActor in
+            defer { isLoading = false }
+            do {
+                photos = try await repository.loadPhotos()
+            } catch {
+                print("[HabitOS] ProgressPhotos load error: \(error)")
+                errorMessage = error.localizedDescription
             }
-            .sorted { $0.date > $1.date }
+        }
     }
 
     // MARK: – Save
 
     func savePhoto(_ image: UIImage) {
-        let dateStr = ISO8601DateFormatter().string(from: Date())
-        let url = folder.appendingPathComponent("\(dateStr).jpg")
-        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
-        if let data = image.jpegData(compressionQuality: 0.85) {
-            try? data.write(to: url)
+        Task { @MainActor in
+            do {
+                let photo = try await repository.savePhoto(image, date: Date())
+                photos.insert(photo, at: 0)
+            } catch {
+                print("[HabitOS] ProgressPhotos save error: \(error)")
+                errorMessage = error.localizedDescription
+            }
         }
-        loadPhotos()
     }
 
     // MARK: – Delete
 
     func delete(_ photo: ProgressPhoto) {
-        try? FileManager.default.removeItem(at: photo.url)
-        photos.removeAll { $0.id == photo.id }
+        Task { @MainActor in
+            do {
+                try await repository.deletePhoto(photo)
+                photos.removeAll { $0.id == photo.id }
+            } catch {
+                print("[HabitOS] ProgressPhotos delete error: \(error)")
+                errorMessage = error.localizedDescription
+            }
+        }
     }
 }

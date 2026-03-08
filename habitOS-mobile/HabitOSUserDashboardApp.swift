@@ -31,6 +31,7 @@ struct HabitOSUserDashboardApp: App {
                     // Not logged in
                     LoginView { user in
                         appState.currentUser = user
+                        appState.isDemo = (user.id == UUID(uuidString: "11111111-1111-1111-1111-111111111111"))
                         appState.isAuthenticated = true
                         if !user.onboardingCompleted {
                             appState.showOnboarding = true
@@ -52,6 +53,19 @@ struct HabitOSUserDashboardApp: App {
             .animation(.easeInOut(duration: 0.3), value: appState.isAuthenticated)
             .animation(.easeInOut(duration: 0.3), value: appState.showOnboarding)
             .environment(appState)
+            .onOpenURL { url in
+                Task {
+                    SupabaseManager.shared.client.auth.handle(url)
+                    try? await Task.sleep(for: .milliseconds(300))
+                    if let user = await authViewModel.checkSession() {
+                        appState.currentUser = user
+                        appState.isAuthenticated = true
+                        if !user.onboardingCompleted {
+                            appState.showOnboarding = true
+                        }
+                    }
+                }
+            }
             .task {
                 await checkSession()
             }

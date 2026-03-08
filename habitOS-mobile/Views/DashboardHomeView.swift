@@ -1,22 +1,27 @@
 import SwiftUI
 
 struct DashboardHomeView: View {
-    let user: UserProfile?
+    let user: AppUser?
+    let coachName: String
     let macroSummary: MacroSummary?
-    let dailyTasks: [DailyTask]
+    let dailyTasks: [DailyTaskItem]
     let dailyProgress: Double
     let completedCount: Int
     let totalCount: Int
     let nextMeal: NextMeal?
     let weeklySummary: WeeklySummary?
-    let lastCoachMessage: ChatMessage?
+    let lastCoachMessage: CoachMessage?
     let waterLiters: Double
     let waterTarget: Double
     let health: HealthKitManager
-    let onToggleTask: (DailyTask) -> Void
+    let onToggleTask: (DailyTaskItem) -> Void
     let onAddWater: (Double) -> Void
 
     @State private var isFABExpanded = false
+    @State private var showJournal = false
+    @State private var showMealLog = false
+    @State private var showWeightLog = false
+    @State private var showScanner = false
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -83,9 +88,32 @@ struct DashboardHomeView: View {
                     }
             }
 
-            HBFloatingActionButton(isExpanded: $isFABExpanded)
+            HBFloatingActionButton(isExpanded: $isFABExpanded) { action in
+                switch action {
+                case .journal:   showJournal = true
+                case .mealPhoto: showMealLog = true
+                case .weightLog: showWeightLog = true
+                case .scanner:   showScanner = true
+                }
+            }
                 .padding(.trailing, HBTokens.padScreen)
                 .padding(.bottom, 20)
+        }
+        .sheet(isPresented: $showJournal) {
+            if let uid = user?.id {
+                NavigationStack { JournalView(userId: uid) }
+            }
+        }
+        .sheet(isPresented: $showMealLog) {
+            NavigationStack { MealLogView(mealName: "Registro libre", mealItems: []) }
+        }
+        .sheet(isPresented: $showWeightLog) {
+            if let uid = user?.id {
+                NavigationStack { WeightLogView(userId: uid) }
+            }
+        }
+        .fullScreenCover(isPresented: $showScanner) {
+            BarcodeScannerView()
         }
     }
 
@@ -187,7 +215,7 @@ struct DashboardHomeView: View {
                                     .foregroundStyle(task.isCompleted ? Color.hbMuted2 : Color.hbInk)
                                     .strikethrough(task.isCompleted, color: Color.hbMuted2)
                                 Spacer()
-                                Image(systemName: catIcon(task.category))
+                                Image(systemName: catIcon(task.taskCategory))
                                     .font(.system(size: 12))
                                     .foregroundStyle(Color.hbSage.opacity(0.6))
                             }
@@ -267,7 +295,7 @@ struct DashboardHomeView: View {
     }
 
     // ═══ Coach ═══
-    private func coachSection(_ msg: ChatMessage) -> some View {
+    private func coachSection(_ msg: CoachMessage) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HBSectionHeader("Tu coach", icon: "message")
             HBCard {
@@ -282,7 +310,7 @@ struct DashboardHomeView: View {
                                     .foregroundStyle(Color.hbSage)
                             )
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(user?.coachName ?? "Coach")
+                            Text(coachName)
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundStyle(Color.hbInk)
                             Text("Hace 1h")
@@ -340,7 +368,7 @@ struct DashboardHomeView: View {
         f.dateFormat = "EEEE, d 'de' MMMM"; return f.string(from: Date()).capitalized
     }
 
-    private func catIcon(_ c: DailyTask.TaskCategory) -> String {
+    private func catIcon(_ c: DailyTaskItem.TaskCategory) -> String {
         switch c {
         case .nutrition: "leaf"; case .hydration: "drop"
         case .activity: "figure.walk"; case .sleep: "moon"

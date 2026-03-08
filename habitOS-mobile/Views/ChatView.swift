@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ChatView: View {
-    let messages: [ChatMessage]
+    let messages: [CoachMessage]
     let coachName: String
 
     @State private var newMessage: String = ""
@@ -97,11 +97,11 @@ struct ChatView: View {
         .background(Color.hbVanilla)
     }
 
-    private func messageBubble(_ message: ChatMessage) -> some View {
+    private func messageBubble(_ message: CoachMessage) -> some View {
         HStack(alignment: .bottom, spacing: 8) {
             if message.role == .user { Spacer(minLength: 48) }
 
-            if message.role == .coach {
+            if message.role == .assistant {
                 Circle()
                     .fill(Color.hbSageBg)
                     .frame(width: 28, height: 28)
@@ -112,7 +112,7 @@ struct ChatView: View {
                     )
             }
 
-            VStack(alignment: message.role == .coach ? .leading : .trailing, spacing: 4) {
+            VStack(alignment: message.role == .assistant ? .leading : .trailing, spacing: 4) {
                 Text(message.text)
                     .font(.system(size: 14))
                     .lineSpacing(3)
@@ -126,7 +126,7 @@ struct ChatView: View {
                         in: RoundedRectangle(cornerRadius: HBTokens.radiusLarge)
                     )
                     .overlay(
-                        message.role == .coach
+                        message.role == .assistant
                         ? RoundedRectangle(cornerRadius: HBTokens.radiusLarge).stroke(Color.hbLine, lineWidth: 1) : nil
                     )
                     .shadow(color: .black.opacity(0.04), radius: 8, y: 4)
@@ -137,7 +137,7 @@ struct ChatView: View {
                     .padding(.horizontal, 4)
             }
 
-            if message.role == .coach { Spacer(minLength: 48) }
+            if message.role == .assistant { Spacer(minLength: 48) }
         }
     }
 

@@ -35,10 +35,16 @@ final class DietViewModel {
         isLoading = true
         defer { isLoading = false }
 
-        // For demo mode, create a mock plan
-        if plan == nil {
-            plan = NutritionPlan.demoPlan(userId: userId)
+        do {
+            if let fetched = try await repository.fetchActivePlan(userId: userId) {
+                plan = fetched
+                return
+            }
+        } catch {
+            print("[HabitOS] DietViewModel load error: \(error.localizedDescription). Using demo plan.")
         }
+        // Fallback to demo plan when Supabase is unavailable or has no data
+        plan = NutritionPlan.demoPlan(userId: userId)
     }
 }
 

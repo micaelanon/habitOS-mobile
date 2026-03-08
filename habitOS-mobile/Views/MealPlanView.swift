@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct MealPlanView: View {
-    let mealPlan: MealPlan?
+    let plan: NutritionPlan?
     let macroSummary: MacroSummary?
     @State private var showShopping = false
-    @State private var selectedMealToLog: MealPlanEntry?
+    @State private var selectedMealToLog: MealDetail?
 
     @State private var selectedDay: Int = {
         let weekday = Calendar.current.component(.weekday, from: Date())
@@ -13,6 +13,15 @@ struct MealPlanView: View {
 
     private let dayLabels = ["L", "M", "X", "J", "V", "S", "D"]
     private let dayNames  = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+
+    /// Convert selectedDay (0=Mon..6=Sun) to Calendar weekday (2=Mon..1=Sun)
+    private var calendarWeekday: Int {
+        selectedDay == 6 ? 1 : selectedDay + 2
+    }
+
+    private var todayMeals: [(type: String, meal: MealDetail)] {
+        plan?.mealPlan.meals(for: calendarWeekday)?.allMeals ?? []
+    }
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -67,21 +76,27 @@ struct MealPlanView: View {
                     .staggered(index: 2)
                 }
 
-                // Meals
-                ForEach(Array((mealPlan?.meals ?? []).enumerated()), id: \.element.id) { index, meal in
+                // Meals for selected day
+                ForEach(Array(todayMeals.enumerated()), id: \.element.type) { index, entry in
+                    let (mealType, meal) = entry
                     HBCard {
                         VStack(alignment: .leading, spacing: 12) {
                             HStack(spacing: 8) {
-                                // Emoji in system font (serif can't render emoji)
-                                Text(mealEmoji(meal.mealName))
+                                Text(mealTypeEmoji(mealType))
                                     .font(.system(size: 16))
-                                // Meal name text in serif font (stripped of emoji)
-                                Text(mealTitle(meal.mealName))
-                                    .font(.hbSerif(16, weight: .bold))
-                                    .foregroundStyle(Color.hbInk)
-                                
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(mealType)
+                                        .font(.hbSerif(16, weight: .bold))
+                                        .foregroundStyle(Color.hbInk)
+                                    if let time = meal.time {
+                                        Text(time)
+                                            .font(.system(size: 12))
+                                            .foregroundStyle(Color.hbMuted2)
+                                    }
+                                }
+
                                 Spacer()
-                                
+
                                 Button {
                                     selectedMealToLog = meal
                                 } label: {
@@ -93,10 +108,11 @@ struct MealPlanView: View {
                                 }
                             }
                             VStack(alignment: .leading, spacing: 8) {
-                                ForEach(meal.items, id: \.self) { item in
+                                ForEach(meal.ingredients ?? [], id: \.name) { ingredient in
                                     HStack(spacing: 10) {
                                         Circle().fill(Color.hbSage.opacity(0.5)).frame(width: 4, height: 4)
-                                        Text(item).font(.system(size: 14)).foregroundStyle(Color.hbMuted)
+                                        Text(ingredient.displayText)
+                                            .font(.system(size: 14)).foregroundStyle(Color.hbMuted)
                                     }
                                 }
                             }
@@ -104,6 +120,16 @@ struct MealPlanView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .staggered(index: 3 + index)
+                }
+
+                if todayMeals.isEmpty {
+                    HBCard {
+                        Text("No hay comidas planificadas para este día.")
+                            .font(.system(size: 14))
+                            .foregroundStyle(Color.hbMuted)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .staggered(index: 3)
                 }
 
                 NavigationLink(destination: ShoppingListView()) {
@@ -119,7 +145,7 @@ struct MealPlanView: View {
         }
         .background(Color.hbVanilla.ignoresSafeArea())
         .sheet(item: $selectedMealToLog) { meal in
-            MealLogView(mealName: mealTitle(meal.mealName), mealItems: meal.items)
+            MealLogView(mealName: meal.name, mealItems: meal.ingredients?.map(\.displayText) ?? [])
         }
     }
 
@@ -138,23 +164,14 @@ struct MealPlanView: View {
         Rectangle().fill(Color.hbLine).frame(width: 1, height: 36)
     }
 
-    /// Extract leading emoji from meal name (e.g. "🌅 Desayuno · 08:00" → "🌅")
-    private func mealEmoji(_ name: String) -> String {
-        guard let first = name.unicodeScalars.first,
-              first.properties.isEmoji && first.value > 0x238C else {
-            return "🍴"
+    private func mealTypeEmoji(_ type: String) -> String {
+        switch type {
+        case "Desayuno": return "🌅"
+        case "Media Mañana": return "🍎"
+        case "Almuerzo": return "🍽"
+        case "Merienda": return "🍌"
+        case "Cena": return "🌙"
+        default: return "🍴"
         }
-        return String(first)
-    }
-
-    /// Strip leading emoji from meal name (e.g. "🌅 Desayuno · 08:00" → "Desayuno · 08:00")
-    private func mealTitle(_ name: String) -> String {
-        var result = name
-        // Remove leading emoji and whitespace
-        while let first = result.unicodeScalars.first,
-              first.properties.isEmoji && first.value > 0x238C {
-            result = String(result.dropFirst())
-        }
-        return result.trimmingCharacters(in: .whitespaces)
     }
 }

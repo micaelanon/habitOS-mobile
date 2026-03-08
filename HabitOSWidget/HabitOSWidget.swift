@@ -10,16 +10,16 @@ import SwiftUI
 
 struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> HabitOSEntry {
-        HabitOSEntry(date: Date(), configuration: ConfigurationAppIntent())
+        .placeholder()
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> HabitOSEntry {
-        HabitOSEntry(date: Date(), configuration: configuration)
+        .placeholder(configuration: configuration)
     }
     
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<HabitOSEntry> {
-        let entry = HabitOSEntry(date: Date(), configuration: configuration)
-        // Refresh every hour or so
+        // TODO: Read real data from shared App Group UserDefaults once available
+        let entry = HabitOSEntry.placeholder(configuration: configuration)
         let nextUpdate = Calendar.current.date(byAdding: .hour, value: 1, to: Date())!
         return Timeline(entries: [entry], policy: .after(nextUpdate))
     }
@@ -28,6 +28,22 @@ struct Provider: AppIntentTimelineProvider {
 struct HabitOSEntry: TimelineEntry {
     let date: Date
     let configuration: ConfigurationAppIntent
+    let progress: Double            // 0.0–1.0
+    let progressLabel: String       // e.g. "75%"
+    let nextMealLabel: String?      // e.g. "Almuerzo (14:30)"
+    let tasks: [(done: Bool, label: String)]
+
+    /// Placeholder entry used before real data is available
+    static func placeholder(configuration: ConfigurationAppIntent = ConfigurationAppIntent()) -> HabitOSEntry {
+        HabitOSEntry(
+            date: Date(),
+            configuration: configuration,
+            progress: 0,
+            progressLabel: "--",
+            nextMealLabel: nil,
+            tasks: []
+        )
+    }
 }
 
 // MARK: - Colors
@@ -58,15 +74,15 @@ struct HabitOSWidgetEntryView : View {
                 Circle()
                     .stroke(Color.hbSage.opacity(0.2), lineWidth: 12)
                 Circle()
-                    .trim(from: 0, to: 0.75) // Demo data
+                    .trim(from: 0, to: entry.progress)
                     .stroke(Color.hbSage, style: StrokeStyle(lineWidth: 12, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 
                 VStack(spacing: 2) {
-                    Text("75%")
+                    Text(entry.progressLabel)
                         .font(.system(size: 22, weight: .bold, design: .monospaced))
                         .foregroundColor(.hbInk)
-                    Text("COMPLETADO")
+                    Text(entry.progress > 0 ? "COMPLETADO" : "ABRE HABITOS")
                         .font(.system(size: 8, weight: .bold))
                         .foregroundColor(.hbSage)
                         .tracking(1)
@@ -83,12 +99,12 @@ struct HabitOSWidgetEntryView : View {
                 Circle()
                     .stroke(Color.hbSage.opacity(0.2), lineWidth: 14)
                 Circle()
-                    .trim(from: 0, to: 0.75)
+                    .trim(from: 0, to: entry.progress)
                     .stroke(Color.hbSage, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                     .rotationEffect(.degrees(-90))
                 
                 VStack(spacing: 2) {
-                    Text("75%")
+                    Text(entry.progressLabel)
                         .font(.system(size: 24, weight: .bold, design: .monospaced))
                         .foregroundColor(.hbInk)
                 }
@@ -97,26 +113,32 @@ struct HabitOSWidgetEntryView : View {
             .padding(.leading, 8)
             
             VStack(alignment: .leading, spacing: 10) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Siguiente Comida")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(.hbSage)
-                        .tracking(1)
-                    Text("Almuerzo (14:30)")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundColor(.hbInk)
+                if let meal = entry.nextMealLabel {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Siguiente Comida")
+                            .font(.system(size: 10, weight: .bold))
+                            .foregroundColor(.hbSage)
+                            .tracking(1)
+                        Text(meal)
+                            .font(.system(size: 15, weight: .semibold))
+                            .foregroundColor(.hbInk)
+                    }
+                    Divider().background(Color.hbSage.opacity(0.3))
                 }
                 
-                Divider().background(Color.hbSage.opacity(0.3))
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "checkmark.circle.fill").foregroundColor(.hbSage)
-                        Text("Beber 2L de agua").font(.system(size: 12)).foregroundColor(.hbInk)
-                    }
-                    HStack(spacing: 6) {
-                        Image(systemName: "circle").foregroundColor(.hbInk.opacity(0.3))
-                        Text("Entrenamiento").font(.system(size: 12)).foregroundColor(.hbInk)
+                if entry.tasks.isEmpty {
+                    Text("Abre HabitOS para sincronizar")
+                        .font(.system(size: 12))
+                        .foregroundColor(.hbInk.opacity(0.5))
+                } else {
+                    VStack(alignment: .leading, spacing: 4) {
+                        ForEach(Array(entry.tasks.prefix(3).enumerated()), id: \.offset) { _, task in
+                            HStack(spacing: 6) {
+                                Image(systemName: task.done ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(task.done ? .hbSage : .hbInk.opacity(0.3))
+                                Text(task.label).font(.system(size: 12)).foregroundColor(.hbInk)
+                            }
+                        }
                     }
                 }
             }
@@ -141,10 +163,24 @@ struct HabitOSWidget: Widget {
 #Preview(as: .systemSmall) {
     HabitOSWidget()
 } timeline: {
-    HabitOSEntry(date: .now, configuration: ConfigurationAppIntent())
+    HabitOSEntry(
+        date: .now,
+        configuration: ConfigurationAppIntent(),
+        progress: 0.75,
+        progressLabel: "75%",
+        nextMealLabel: "Almuerzo (14:30)",
+        tasks: [(true, "Beber 2L de agua"), (false, "Entrenamiento")]
+    )
 }
 #Preview(as: .systemMedium) {
     HabitOSWidget()
 } timeline: {
-    HabitOSEntry(date: .now, configuration: ConfigurationAppIntent())
+    HabitOSEntry(
+        date: .now,
+        configuration: ConfigurationAppIntent(),
+        progress: 0.75,
+        progressLabel: "75%",
+        nextMealLabel: "Almuerzo (14:30)",
+        tasks: [(true, "Beber 2L de agua"), (false, "Entrenamiento")]
+    )
 }

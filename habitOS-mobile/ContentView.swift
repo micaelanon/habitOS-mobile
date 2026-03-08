@@ -5,6 +5,7 @@ struct ContentView: View {
     @State private var hasLoaded = false
     @State private var selectedTab = 0
     @State private var showVideoCall = false
+    @Environment(AppState.self) private var appState
 
     init() {
         let appearance = UITabBarAppearance()
@@ -66,7 +67,7 @@ struct ContentView: View {
         .task {
             guard !hasLoaded else { return }
             hasLoaded = true
-            await viewModel.loadDashboard()
+            await viewModel.loadDashboard(user: appState.currentUser, isDemo: appState.isDemo)
         }
         .alert("Error", isPresented: .constant(viewModel.errorMessage != nil)) {
             Button("OK") { viewModel.errorMessage = nil }
@@ -80,6 +81,7 @@ struct ContentView: View {
         NavigationStack {
             DashboardHomeView(
                 user: viewModel.user,
+                coachName: viewModel.coachName,
                 macroSummary: viewModel.macroSummary,
                 dailyTasks: viewModel.dailyTasks,
                 dailyProgress: viewModel.dailyProgress,
@@ -103,7 +105,7 @@ struct ContentView: View {
     // MARK: – Tab 2: Dieta
     private var dietTab: some View {
         NavigationStack {
-            MealPlanView(mealPlan: viewModel.mealPlan, macroSummary: viewModel.macroSummary)
+            MealPlanView(plan: viewModel.activePlan, macroSummary: viewModel.macroSummary)
                 .navigationTitle("Dieta")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)
@@ -117,9 +119,9 @@ struct ContentView: View {
         NavigationStack {
             ChatView(
                 messages: viewModel.chatMessages,
-                coachName: viewModel.user?.coachName ?? "Coach"
+                coachName: viewModel.coachName
             )
-            .navigationTitle(viewModel.user?.coachName ?? "Chat")
+            .navigationTitle(viewModel.coachName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.hbPaper.opacity(0.95), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -133,7 +135,7 @@ struct ContentView: View {
             }
             .safeAreaInset(edge: .bottom) { Spacer().frame(height: 90) }
             .fullScreenCover(isPresented: $showVideoCall) {
-                VideoCallView(coachName: viewModel.user?.coachName ?? "Coach")
+                VideoCallView(coachName: viewModel.coachName)
             }
         }
     }
@@ -164,7 +166,7 @@ struct ContentView: View {
     // MARK: – Tab 5: Perfil
     private var profileTab: some View {
         NavigationStack {
-            ProfileView(user: viewModel.user)
+            ProfileView(user: viewModel.user, coachName: viewModel.coachName)
                 .navigationTitle("Perfil")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)

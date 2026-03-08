@@ -8,6 +8,11 @@ final class AppState {
     var currentUserId: UUID?
     var currentUser: AppUser?
 
+    // MARK: – Demo
+    /// True when the user explicitly entered demo mode from the login screen.
+    /// All ViewModels should check this instead of inferring demo from nil user.
+    var isDemo: Bool = false
+
     // MARK: – Navigation
     var selectedTab: Int = 0
     var showOnboarding: Bool = false
@@ -19,6 +24,7 @@ final class AppState {
     // MARK: – Methods
     func signOut() {
         isAuthenticated = false
+        isDemo = false
         currentUserId = nil
         currentUser = nil
         selectedTab = 0

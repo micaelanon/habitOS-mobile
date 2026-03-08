@@ -8,10 +8,10 @@ struct ProgressPhotosView: View {
     @State private var showCamera = false
     @State private var showLibrary = false
     @State private var selectedPickerItem: PhotosPickerItem?
-    @State private var selectedPhoto: ProgressPhotosViewModel.ProgressPhoto?
+    @State private var selectedPhoto: ProgressPhoto?
     @State private var compareMode = false
-    @State private var compareA: ProgressPhotosViewModel.ProgressPhoto?
-    @State private var compareB: ProgressPhotosViewModel.ProgressPhoto?
+    @State private var compareA: ProgressPhoto?
+    @State private var compareB: ProgressPhoto?
 
     private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
 
@@ -129,7 +129,7 @@ struct ProgressPhotosView: View {
 
     // MARK: – Subviews
 
-    private func photoCell(_ photo: ProgressPhotosViewModel.ProgressPhoto) -> some View {
+    private func photoCell(_ photo: ProgressPhoto) -> some View {
         Button {
             if compareMode {
                 if compareA == nil { compareA = photo }
@@ -187,7 +187,7 @@ struct ProgressPhotosView: View {
         .buttonStyle(.plain)
     }
 
-    private func photoDetailView(_ photo: ProgressPhotosViewModel.ProgressPhoto) -> some View {
+    private func photoDetailView(_ photo: ProgressPhoto) -> some View {
         NavigationStack {
             ZStack {
                 Color.black.ignoresSafeArea()
@@ -249,8 +249,8 @@ struct ProgressPhotosView: View {
 
 /// Side-by-side photo comparison with drag divider
 struct PhotoCompareView: View {
-    let photoA: ProgressPhotosViewModel.ProgressPhoto
-    let photoB: ProgressPhotosViewModel.ProgressPhoto
+    let photoA: ProgressPhoto
+    let photoB: ProgressPhoto
     @State private var dividerPosition: CGFloat = 0.5
     @Environment(\.dismiss) private var dismiss
 

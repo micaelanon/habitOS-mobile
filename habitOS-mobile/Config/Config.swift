@@ -14,6 +14,9 @@ enum Config {
     static let defaultTimezone: String = "Europe/Madrid"
     static let defaultLocale: String = "es"
 
+    // MARK: – Auth
+    static let authRedirectURL = URL(string: "habitos://auth-callback")!
+
     // MARK: – Open Food Facts API
     static let openFoodFactsBaseURL = "https://world.openfoodfacts.org/api/v2/product"
     static let openFoodFactsUserAgent = "habitOS-iOS/1.0 (contact@habitos.app)"

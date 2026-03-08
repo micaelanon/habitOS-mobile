@@ -45,8 +45,9 @@ final class ChatViewModel {
                 .value
             messages = fetched
         } catch {
+            print("[HabitOS] Chat load error: \(error.localizedDescription). Using demo messages.")
             errorMessage = "Error al cargar mensajes"
-            loadDemoMessages() // Fallback to demo
+            loadDemoMessages()
         }
 
         // Start realtime subscription

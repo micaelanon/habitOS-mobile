@@ -56,3 +56,17 @@ struct AppUser: Codable, Identifiable, Sendable {
         case updatedAt = "updated_at"
     }
 }
+
+// MARK: - View Compatibility
+
+extension AppUser {
+    /// Coach name — requires fetching CoachProfile via coachProfileId.
+    /// Returns nil when the relationship is not yet resolved.
+    var coachName: String? { nil }
+
+    /// Target weight — lives in the active NutritionPlan or user goals, not on app_users.
+    var targetWeightKg: Double? { nil }
+
+    /// Parsed avatar URL from the stored string.
+    var avatarURL: URL? { avatarUrl.flatMap { URL(string: $0) } }
+}
