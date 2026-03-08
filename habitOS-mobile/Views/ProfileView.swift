@@ -75,8 +75,10 @@ struct ProfileView: View {
                     VStack(spacing: 14) {
                         HBSectionHeader("Información", icon: "person")
                         infoRow("Correo", value: user?.email ?? "–")
-                        HBDivider()
-                        infoRow("Coach", value: coachName)
+                        if appState.accountMode == .coachConnected {
+                            HBDivider()
+                            infoRow("Nutricionista", value: coachName)
+                        }
                     }
                 }
                 .staggered(index: 2)
@@ -108,15 +110,15 @@ struct ProfileView: View {
                         }
                         .buttonStyle(.plain)
                         HBDivider(indent: 44)
-                        NavigationLink(destination: CoachMemoryView(userId: appState.currentUser?.id)) {
-                            navRowLabel(icon: "brain.head.profile", label: "Memoria del coach")
+                        NavigationLink(destination: CoachMemoryView(userId: appState.currentUser?.id, accountMode: appState.accountMode)) {
+                            navRowLabel(icon: "brain.head.profile", label: appState.accountMode == .coachConnected ? "Memoria del coach" : "Lo que habitOS sabe de ti")
                         }
                         HBDivider(indent: 44)
-                        NavigationLink(destination: placeholderView(title: "Privacidad", icon: "lock.shield", body: "Tu información está protegida. HabitOS solo comparte datos con tu coach asignado y nunca con terceros.")) {
+                        NavigationLink(destination: placeholderView(title: "Privacidad", icon: "lock.shield", body: "Tu información está protegida. HabitOS no comparte tus datos con terceros.")) {
                             navRowLabel(icon: "lock.shield", label: "Privacidad")
                         }
                         HBDivider(indent: 44)
-                        NavigationLink(destination: placeholderView(title: "Ayuda", icon: "questionmark.circle", body: "¿Necesitas ayuda? Escríbele a tu coach desde el chat. También puedes contactarnos en soporte@habitos.app.")) {
+                        NavigationLink(destination: placeholderView(title: "Ayuda", icon: "questionmark.circle", body: "¿Necesitas ayuda? Escríbenos desde el chat o a soporte@habitos.app.")) {
                             navRowLabel(icon: "questionmark.circle", label: "Ayuda")
                         }
                     }

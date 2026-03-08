@@ -81,7 +81,8 @@ struct ContentView: View {
         NavigationStack {
             DashboardHomeView(
                 user: viewModel.user,
-                coachName: viewModel.coachName,
+                coachName: viewModel.advisorDisplayName,
+                accountMode: viewModel.accountMode,
                 macroSummary: viewModel.macroSummary,
                 dailyTasks: viewModel.dailyTasks,
                 dailyProgress: viewModel.dailyProgress,
@@ -121,7 +122,8 @@ struct ContentView: View {
         NavigationStack {
             ChatView(
                 messages: viewModel.chatMessages,
-                coachName: viewModel.coachName,
+                coachName: viewModel.advisorDisplayName,
+                isCoachConnected: viewModel.accountMode == .coachConnected,
                 onSend: { text in
                     let userMsg = CoachMessage(
                         id: UUID(), profileId: viewModel.user?.id ?? UUID(),
@@ -141,15 +143,17 @@ struct ContentView: View {
                     }
                 }
             )
-            .navigationTitle(viewModel.coachName)
+            .navigationTitle(viewModel.advisorDisplayName)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.hbPaper.opacity(0.95), for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { showVideoCall = true } label: {
-                        Image(systemName: "video")
-                            .foregroundStyle(Color.hbSage)
+                if viewModel.accountMode == .coachConnected {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button { showVideoCall = true } label: {
+                            Image(systemName: "video")
+                                .foregroundStyle(Color.hbSage)
+                        }
                     }
                 }
             }
@@ -188,7 +192,7 @@ struct ContentView: View {
     // MARK: – Tab 5: Perfil
     private var profileTab: some View {
         NavigationStack {
-            ProfileView(user: viewModel.user, coachName: viewModel.coachName)
+            ProfileView(user: viewModel.user, coachName: viewModel.advisorDisplayName)
                 .navigationTitle("Perfil")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(Color.hbVanilla.opacity(0.95), for: .navigationBar)

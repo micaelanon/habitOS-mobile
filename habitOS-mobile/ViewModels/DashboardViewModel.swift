@@ -7,7 +7,7 @@ import Supabase
 final class DashboardViewModel {
     // MARK: – Published State (real types)
     var user: AppUser?
-    var coachName: String = "Coach"
+    var coachName: String = "Tu nutricionista"
     var macroSummary: MacroSummary?
     var activePlan: NutritionPlan?
     var habits: [Habit] = []
@@ -53,6 +53,17 @@ final class DashboardViewModel {
 
     var completedTasksCount: Int { dailyTasks.filter(\.isCompleted).count }
     var totalTasksCount: Int { dailyTasks.count }
+
+    var accountMode: AccountMode {
+        user?.accountMode ?? .soloAI
+    }
+
+    var advisorDisplayName: String {
+        switch accountMode {
+        case .soloAI, .hybridTransition: return "habitOS"
+        case .coachConnected: return coachName
+        }
+    }
 
     var lastCoachMessage: CoachMessage? {
         chatMessages.last(where: { $0.role == .assistant })
@@ -230,37 +241,44 @@ final class DashboardViewModel {
     // MARK: – Demo Fallback
 
     private func loadDemo() async {
-        let demoId = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+        // Preserve user from AppState if already set (chosen at login screen)
+        if user == nil {
+            let fallbackId = UUID(uuidString: "11111111-1111-1111-1111-111111111111")!
+            user = AppUser(
+                id: fallbackId,
+                authUserId: fallbackId,
+                coachProfileId: nil,
+                firstName: "Micael",
+                lastName: "García",
+                email: "micael@habitos.app",
+                phone: nil,
+                avatarUrl: nil,
+                sex: "male",
+                dateOfBirth: nil,
+                heightCm: 168,
+                currentWeightKg: 81.2,
+                goal: "Perder grasa, ganar energía",
+                activityLevel: "moderate",
+                foodAllergies: [],
+                foodDislikes: [],
+                dietType: nil,
+                medicalConditions: [],
+                timezone: "Europe/Madrid",
+                locale: "es",
+                notificationsEnabled: true,
+                healthkitEnabled: false,
+                onboardingCompleted: true,
+                createdAt: Date(),
+                updatedAt: Date()
+            )
+        }
 
-        user = AppUser(
-            id: demoId,
-            authUserId: demoId,
-            coachProfileId: nil,
-            firstName: "Micael",
-            lastName: "García",
-            email: "micael@habitos.app",
-            phone: nil,
-            avatarUrl: nil,
-            sex: "male",
-            dateOfBirth: nil,
-            heightCm: 168,
-            currentWeightKg: 81.2,
-            goal: "Perder grasa, ganar energía",
-            activityLevel: "moderate",
-            foodAllergies: nil,
-            foodDislikes: nil,
-            dietType: nil,
-            medicalConditions: nil,
-            timezone: "Europe/Madrid",
-            locale: "es",
-            notificationsEnabled: true,
-            healthkitEnabled: false,
-            onboardingCompleted: true,
-            createdAt: Date(),
-            updatedAt: Date()
-        )
+        // Coach name follows account mode
+        if accountMode == .coachConnected {
+            coachName = "Luis da Coruña"
+        }
 
-        coachName = "Luis da Coruña"
+        let demoId = user!.id
 
         activePlan = NutritionPlan.demoPlan(userId: demoId)
         macroSummary = MacroSummary(calories: 2200, protein: 165, carbs: 220, fats: 73)
