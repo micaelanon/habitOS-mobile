@@ -1,0 +1,105 @@
+name: iOS CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+    paths:
+      - '.github/workflows/ios-ci.yml'
+      - 'habitOS-mobile.xcodeproj/**'
+      - 'habitOS-mobile/**/*.swift'
+      - 'habitOS-mobile/**/*.plist'
+      - 'HabitOSWidget/**/*.swift'
+      - 'HabitOSWidget/**/*.plist'
+  push:
+    branches:
+      - develop
+    paths:
+      - '.github/workflows/ios-ci.yml'
+      - 'habitOS-mobile.xcodeproj/**'
+      - 'habitOS-mobile/**/*.swift'
+      - 'habitOS-mobile/**/*.plist'
+      - 'HabitOSWidget/**/*.swift'
+      - 'HabitOSWidget/**/*.plist'
+  workflow_dispatch:
+
+permissions: read-all
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-ios-project:
+    name: Validate iOS project structure and build
+    runs-on: macos-15
+    timeout-minutes: 30
+
+    env:
+      PROJECT_PATH: habitOS-mobile.xcodeproj
+      APP_TARGET: habitOS-mobile
+      TEST_TARGET: habitOS-mobileTests
+      WIDGET_TARGET: HabitOSWidgetExtension
+      XCODE_PATH: /Applications/Xcode_26.2.app
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Select Xcode 26.2
+        run: sudo xcode-select -switch "$XCODE_PATH"
+
+      - name: Show Xcode version
+        run: |
+          xcode-select -p
+          xcodebuild -version
+
+      - name: Inspect project
+        run: |
+          xcodebuild -list -project "$PROJECT_PATH"
+
+      - name: Build app target for iOS Simulator
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "$PROJECT_PATH" \
+            -target "$APP_TARGET" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build | xcbeautify
+
+      - name: Build unit-test target for iOS Simulator
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "$PROJECT_PATH" \
+            -target "$TEST_TARGET" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build | xcbeautify
+
+      - name: Build widget target for iOS Simulator
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project "$PROJECT_PATH" \
+            -target "$WIDGET_TARGET" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build | xcbeautify
+
+      - name: Report current CI limits
+        run: |
+          {
+            echo '## iOS CI bootstrap'
+            echo
+            echo '- Project inspection and simulator builds are now automated on GitHub Actions.'
+            echo '- Unit tests are not executed yet because no shared .xcscheme is versioned in the repository.'
+            echo '- Next CI step: add a shared scheme and promote build-only validation to test execution.'
+          } >> "$GITHUB_STEP_SUMMARY"

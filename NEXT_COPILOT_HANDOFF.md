@@ -99,23 +99,28 @@ At the time of this handoff (2026-03-08), ALL backlog tasks are DONE and merged 
 
 Zero open PRs remain. All work is unified on develop.
 
-The likely next-value areas are:
+The immediate next-value areas are now bug-fix and stability only:
 
-- **Supabase dashboard config** — Add `habitos://auth-callback` as allowed redirect URL (manual step)
-- **CI/CD** — Add GitHub Actions workflow for build + test execution
-- **Remote photo storage** — Create `SupabasePhotoStorageRepository` when `body-photos` bucket is provisioned
-- **ShoppingRepository implementation** — Protocol exists but no Supabase implementation
-- **App Group + widget data** — Widget shows placeholder until shared data layer is implemented
-- **Real chat integration** — Replace demo auto-reply in ContentView with ChatViewModel + Supabase real-time
-- **Time period filtering** — ProgressChartView time range buttons animate but do not filter data yet
+- **HBT-013 Dashboard false error** — `DashboardViewModel.loadDashboard()` currently raises `"No pudimos cargar tu dashboard"` on partial repository failure even after loading usable fallback/demo data. Next pass should degrade gracefully without blocking alert spam.
+- **HBT-014 Chat keyboard + spacing** — `ChatView` lacks focus dismissal / keyboard escape routes, which can trap navigation, and `ContentView` still applies a blunt `safeAreaInset(height: 90)` that creates excessive bottom spacing in chat.
+- **HBT-015 Avatar editing** — `ProfileView` still renders a static initials circle; there is no bounded path to update `app_users.avatar_url` yet.
+- **Supabase dashboard config** — Add `habitos://auth-callback` as allowed redirect URL (manual step).
+
+Secondary follow-ups after the bug pass:
+
+- **Shared scheme for tests** — CI is bootstrapped, but full test execution still needs a versioned shared `.xcscheme`.
+- **Remote photo storage** — Create `SupabasePhotoStorageRepository` when `body-photos` bucket is provisioned.
+- **ShoppingRepository implementation** — Protocol exists but no Supabase implementation.
+- **App Group + widget data** — Widget shows placeholder until shared data layer is implemented.
+- **Time period filtering** — `ProgressChartView` time range buttons animate but do not filter data yet.
 
 ## Git Branch State
 
-All work is on develop. NEVER merge to main.
+Active working branch for the next pass may differ, but `develop` contains all merged product work through HBT-016. NEVER merge to main.
 
-Zero open PRs. The develop branch contains all HBT-001 through HBT-012 work.
+Zero open PRs at the moment this handoff was updated. `develop` contains all HBT-001 through HBT-016 work.
 
-Note: PR #16 (SQL migrations) was a squash merge that included all stacked commits from HBT-001 through HBT-011. PRs #4, #6, #8, #10, #12, #14 were closed as their changes were already included. HBT-012 was rebased onto the new develop and merged via PR #19.
+Note: PR #16 (SQL migrations) was a squash merge that included all stacked commits from HBT-001 through HBT-011. PRs #4, #6, #8, #10, #12, #14 were closed as their changes were already included. HBT-012 was rebased onto the new develop and merged via PR #19. HBT-016 then added `.github/workflows/ios-ci.yml`, which performs GitHub Actions bootstrap validation with explicit Xcode 26.2 selection and simulator builds, but still does not run tests because no shared scheme is versioned in the repo.
 
 ## Final Requirement
 

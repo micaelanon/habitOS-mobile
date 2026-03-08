@@ -1,6 +1,6 @@
 # HabitOS Execution Ledger
 
-Last updated: 2026-03-08 06:00:00 CET
+Last updated: 2026-03-08 19:45:00 CET
 
 ## Purpose
 
@@ -51,10 +51,16 @@ Every Copilot or AI agent working in this repository must use this file as the s
 | HBT-009 | DONE | High | Project Governance | Create persistent Copilot operating rules, configuration guidance, and a mandatory execution ledger for future sessions. | 2026-03-07 18:33:46 CET | 2026-03-07 18:36:50 CET | Created `HABITOS_EXECUTION_LEDGER.md`, `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, and updated `HABITOS_PROJECT_INTELLIGENCE_REPORT.html`. |
 | HBT-010 | DONE | High | Project Governance | Create a direct handoff document for the next Copilot and require future agents to keep the handoff/context documents updated so switching agents stays seamless. | 2026-03-07 18:43:22 CET | 2026-03-07 18:44:14 CET | Created `NEXT_COPILOT_HANDOFF.md` and updated `.github/copilot-instructions.md`, `COPILOT_SETUP_HABITOS.md`, and `HABITOS_PROJECT_INTELLIGENCE_REPORT.html` so future agents keep the shared context current. |
 | HBT-012 | DONE | High | UI Wiring | Wire all dead/placeholder UI buttons across the app: chat send, FAB actions, dashboard shortcuts, shopping list, profile nav, progress weight log. | 2026-03-08 05:00:00 CET | 2026-03-08 06:00:00 CET | Fixed SettingsViewModel logout (always resets AppState). ChatView: onSend callback + sendCurrentMessage + auto-scroll. ContentView: onGoToChat/onGoToDiet + demo chat auto-reply using CoachMessage. DashboardHomeView: Ver receta→diet, Ya comí→MealLogView, Ir al chat→chat tab. MealPlanView: fixed nested Button in NavigationLink. ProfileView: Privacidad/Ayuda as NavigationLinks. ProgressChartView: Registrar peso→WeightLogView. PR #19 merged to develop. |
+| HBT-013 | TODO | High | Dashboard UX | Remove the false dashboard error state when repository fetches partially fail but the fallback/demo content is still usable. | 2026-03-08 19:30:00 CET |  | Diagnose which repository calls should degrade gracefully, avoid surfacing blocking alerts after successful fallback hydration, and preserve observability for real failures. |
+| HBT-014 | TODO | High | Chat UX | Fix chat text-entry usability: dismiss keyboard reliably, avoid trapping navigation, and reduce excessive bottom spacing above the tab bar. | 2026-03-08 19:30:00 CET |  | Add proper focus management / dismissal affordances in `ChatView` and remove the oversized fixed bottom inset in `ContentView` so chat sits one tab-bar height above the menu instead of multiple stacked gaps. |
+| HBT-015 | TODO | Medium | Profile UX | Enable changing the profile avatar instead of showing a static placeholder circle only. | 2026-03-08 19:30:00 CET |  | Add a bounded avatar-edit flow backed by `app_users.avatar_url` and update the profile header so the user can change their image without introducing wider profile-edit scope. |
+| HBT-016 | DONE | Medium | CI/CD | Bootstrap GitHub Actions validation for the iOS app and keep the stability backlog visible for the next execution pass. | 2026-03-08 19:30:00 CET | 2026-03-08 19:45:00 CET | Issue #20 opened. Added `.github/workflows/ios-ci.yml` with GitHub Actions bootstrap on `macos-15`, explicit Xcode 26.2 selection, project inspection, and simulator builds for app, tests target, and widget target without code signing. Current limitation documented: test execution still depends on adding a shared `.xcscheme` to the repo. |
 
 ## Session Change Log
 
 Use this section to append one flat entry per completed task. Newest entries first.
+
+- 2026-03-08 19:45:00 CET | HBT-016 | Added first GitHub Actions workflow for iOS validation on macOS runners. The workflow now checks out the repo, selects Xcode 26.2, runs `xcodebuild -list`, and builds app/test/widget targets for `iphonesimulator` with `CODE_SIGNING_ALLOWED=NO`. Also registered the new stability backlog (HBT-013/014/015). | Files: `.github/workflows/ios-ci.yml`, `HABITOS_EXECUTION_LEDGER.md`
 
 - 2026-03-08 06:00:00 CET | HBT-012 | Wired all dead UI buttons on converged architecture. SettingsViewModel logout fix. ChatView onSend + sendCurrentMessage + auto-scroll. ContentView demo chat auto-reply with CoachMessage. DashboardHomeView: Ver receta→diet, Ya comí→MealLogView, Ir al chat→chat. MealPlanView nested Button fix. ProfileView Privacidad/Ayuda as NavigationLinks. ProgressChartView Registrar peso→WeightLogView sheet. | Files: `ContentView.swift`, `SettingsViewModel.swift`, `ChatView.swift`, `DashboardHomeView.swift`, `MealPlanView.swift`, `ProfileView.swift`, `ProgressChartView.swift`
 - 2026-03-08 05:45:00 CET | PR-CONSOLIDATION | Discovered PR #16 squash merge had brought ALL HBT-001-011 work into develop (branches were stacked). Closed 6 obsolete PRs (#4,#6,#8,#10,#12,#14). Rebased HBT-012 onto new develop. Created PR #19, merged. Zero open PRs remain. | PRs closed: #4,#6,#8,#10,#12,#14,#18. PR merged: #19.
