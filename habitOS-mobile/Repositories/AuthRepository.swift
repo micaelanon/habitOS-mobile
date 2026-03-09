@@ -27,6 +27,8 @@ final class AuthRepository: AuthRepositoryProtocol {
 
     func fetchCurrentUser() async throws -> AppUser? {
         guard let authId = try await getCurrentSession() else { return nil }
+
+        // 1. Direct lookup by auth_user_id (fast path — already claimed)
         let users: [AppUser] = try await client.database
             .from("app_users")
             .select()
@@ -34,6 +36,17 @@ final class AuthRepository: AuthRepositoryProtocol {
             .limit(1)
             .execute()
             .value
-        return users.first
+
+        if let user = users.first { return user }
+
+        // 2. No match — try claiming an unclaimed profile by email.
+        //    The RPC uses SECURITY DEFINER to access rows with NULL auth_user_id
+        //    and links them to the current auth session.
+        let claimed: [AppUser] = try await client.database
+            .rpc("claim_profile_by_email")
+            .execute()
+            .value
+
+        return claimed.first
     }
 }
