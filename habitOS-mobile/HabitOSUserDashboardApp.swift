@@ -42,6 +42,16 @@ struct HabitOSUserDashboardApp: App {
                     // First time onboarding
                     OnboardingView {
                         appState.showOnboarding = false
+                        // Persist to DB so onboarding doesn't repeat on next launch
+                        if let userId = appState.currentUser?.id {
+                            Task {
+                                try? await SupabaseManager.shared.client.database
+                                    .from("app_users")
+                                    .update(["onboarding_completed": true, "updated_at": ISO8601DateFormatter().string(from: Date())])
+                                    .eq("id", value: userId.uuidString)
+                                    .execute()
+                            }
+                        }
                     }
                     .transition(.opacity)
                 } else {
